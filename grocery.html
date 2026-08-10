@@ -285,7 +285,8 @@
             <div class="header-actions">
                 <button class="btn btn-primary" onclick="openModal()">+ Add Product</button>
                 <button class="btn btn-info" onclick="openAddBatchModal()">+ Add Stock</button>
-                <button class="btn btn-danger" onclick="generateReceipt()">🧾 Receipt</button>
+                <button class="btn btn-danger" onclick="openConsumeModal()">➖ Consume Stock</button>
+                <button class="btn btn-warning" onclick="generateReceipt()">🧾 Receipt</button>
                 <button class="btn btn-warning" onclick="exportToCSV()">📤 CSV Backup</button>
                 <button class="btn btn-info" onclick="document.getElementById('import-csv-file').click()">📥 CSV Restore</button>
                 <input type="file" id="import-csv-file" accept=".csv" style="display:none;" onchange="importFromCSV(event)">
@@ -432,6 +433,43 @@
             <div class="modal-actions">
                 <button class="btn" style="background:#f1f2f6; color:#2f3542;" onclick="closeAddBatchModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="saveExistingBatch()">Add Stock Batch</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSUME / MINUS STOCK MODAL -->
+    <div class="modal-overlay" id="consumeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Consume Stock</h2>
+                <button class="close-btn" onclick="closeConsumeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Scan Barcode to Consume</label>
+                    <div class="input-with-btn">
+                        <input type="text" id="consume-barcode" placeholder="Scan or type barcode" oninput="checkConsumeBarcode()">
+                        <button class="btn btn-warning" style="padding:0 15px;" onclick="startScanner('consumeStock')">📷 Scan</button>
+                    </div>
+                    <p id="consume-product-name" style="margin-top: 12px; font-weight: 600; font-size: 0.95rem;"></p>
+                    <input type="hidden" id="consume-item-id">
+                </div>
+
+                <div class="form-group">
+                    <label>Select Batch to Deduct From</label>
+                    <select id="consume-batch-select">
+                        <option value="" disabled selected>-- Scan barcode first --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quantity to Consume</label>
+                    <input type="number" id="consume-qty" value="1" min="1">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn" style="background:#f1f2f6; color:#2f3542;" onclick="closeConsumeModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmConsumeStock()">Confirm Consumption</button>
             </div>
         </div>
     </div>
@@ -657,6 +695,15 @@
 
         function renderApp() {
             const container = document.getElementById('app-content');
+            
+            // Remember which category sections were open to preserve their state during quiet updates
+            const openCategoryIndexes = [];
+            document.querySelectorAll('.category-content').forEach((content, index) => {
+                if (content.style.display === 'block') {
+                    openCategoryIndexes.push(index);
+                }
+            });
+
             container.innerHTML = '';
 
             let alertBanner = document.getElementById('expiry-alert-banner');
@@ -675,6 +722,10 @@
                 const section = document.createElement('div');
                 section.className = 'category-section glass';
                 
+                const isOpen = openCategoryIndexes.includes(index);
+                const displayStyle = isOpen ? 'block' : 'none';
+                const rotationStyle = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+
                 const headerHTML = `
                     <div class="category-header" onclick="toggleCategory(${index})">
                         <div class="category-title">
@@ -682,11 +733,11 @@
                             <span class="badge">${categoryGroup.items.length}</span>
                             <button class="btn-delete" style="margin-left: 15px;" onclick="event.stopPropagation(); deleteCategory(${index})">Delete 🗑️</button>
                         </div>
-                        <div class="category-icon" id="icon-${index}" style="transform: rotate(0deg); transition: 0.3s;">▼</div>
+                        <div class="category-icon" id="icon-${index}" style="transform: ${rotationStyle}; transition: 0.3s;">▼</div>
                     </div>
                 `;
 
-                let gridHTML = `<div class="category-content" id="content-${index}" style="display:none;"><div class="grid">`;
+                let gridHTML = `<div class="category-content" id="content-${index}" style="display:${displayStyle};"><div class="grid">`;
                 
                 categoryGroup.items.forEach(item => { 
                     gridHTML += renderProductCard(item); 
@@ -1051,6 +1102,90 @@
             }
         }
 
+        // --- CONSUME / MINUS STOCK LOGIC ---
+        function openConsumeModal() {
+            document.getElementById('consumeModal').classList.add('active');
+        }
+
+        function closeConsumeModal() {
+            document.getElementById('consumeModal').classList.remove('active');
+            document.getElementById('consume-barcode').value = "";
+            document.getElementById('consume-product-name').innerText = "";
+            document.getElementById('consume-item-id').value = "";
+            document.getElementById('consume-qty').value = "1";
+            const batchSelect = document.getElementById('consume-batch-select');
+            batchSelect.innerHTML = '<option value="" disabled selected>-- Scan barcode first --</option>';
+        }
+
+        function checkConsumeBarcode() {
+            const barcode = document.getElementById('consume-barcode').value.trim();
+            const nameDisplay = document.getElementById('consume-product-name');
+            const idInput = document.getElementById('consume-item-id');
+            const batchSelect = document.getElementById('consume-batch-select');
+            
+            idInput.value = '';
+            batchSelect.innerHTML = '<option value="" disabled selected>-- Select Batch --</option>';
+
+            if (barcode.length < 3) {
+                nameDisplay.innerText = '';
+                return;
+            }
+
+            let foundItem = null;
+            for (let group of inventoryData) {
+                let item = group.items.find(i => i.barcode === barcode);
+                if (item) {
+                    foundItem = item;
+                    break;
+                }
+            }
+
+            if (foundItem) {
+                nameDisplay.innerHTML = `✅ Found: <span style="color:var(--primary);">${foundItem.name}</span>`;
+                nameDisplay.style.color = 'var(--success)';
+                idInput.value = foundItem.id;
+
+                foundItem.batches.forEach(batch => {
+                    const option = document.createElement('option');
+                    option.value = batch.exp;
+                    option.textContent = `Exp: ${batch.exp} (Available: ${batch.qty})`;
+                    batchSelect.appendChild(option);
+                });
+            } else {
+                nameDisplay.innerText = `❌ Product not found.`;
+                nameDisplay.style.color = 'var(--danger)';
+            }
+        }
+
+        function confirmConsumeStock() {
+            const itemId = document.getElementById('consume-item-id').value;
+            const batchExp = document.getElementById('consume-batch-select').value;
+            const consumeQty = parseInt(document.getElementById('consume-qty').value);
+
+            if (!itemId) return alert("Please select or scan a valid product first!");
+            if (!batchExp) return alert("Please select a target batch!");
+            if (isNaN(consumeQty) || consumeQty <= 0) return alert("Please enter a valid quantity to consume.");
+
+            for (let group of inventoryData) {
+                let item = group.items.find(i => i.id === itemId);
+                if (item) {
+                    let batch = item.batches.find(b => b.exp === batchExp);
+                    if (batch) {
+                        if (consumeQty > batch.qty) {
+                            return alert(`Cannot consume more than available stock (${batch.qty} pcs)!`);
+                        }
+                        batch.qty -= consumeQty;
+                        if (batch.qty < 0) batch.qty = 0;
+
+                        closeConsumeModal();
+                        autoSaveData();
+                        showToast(`Successfully consumed ${consumeQty} pcs! 📉`);
+                        return;
+                    }
+                }
+            }
+        }
+
         function updateBatchQty(itemId, batchExp, change) {
             for (let group of inventoryData) {
                 let item = group.items.find(i => i.id === itemId);
@@ -1069,6 +1204,10 @@
                             }
                         }
                         
+                        // Update storage and silently refresh counts without collapsing open category accordions
+                        localStorage.setItem('premiumInventoryDataV3', JSON.stringify(inventoryData));
+                        
+                        // Selectively update only the changed card display or update silently
                         autoSaveData(true);
                         return;
                     }
@@ -1166,6 +1305,9 @@
             } else if (currentScannerMode === 'addExisting') {
                 document.getElementById('exist-barcode').value = decodedText;
                 checkExistingBarcode();
+            } else if (currentScannerMode === 'consumeStock') {
+                document.getElementById('consume-barcode').value = decodedText;
+                checkConsumeBarcode();
             }
         }
 
@@ -1203,7 +1345,6 @@
             const isAddActive = document.getElementById('productModal').classList.contains('active');
             const isEditActive = document.getElementById('editProductModal').classList.contains('active');
             
-            // If no modal is open, ignore paste action
             if (!isAddActive && !isEditActive) return;
 
             const items = (e.clipboardData || e.originalEvent.clipboardData).items;
