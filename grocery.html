@@ -13,19 +13,20 @@
     
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
+            /* Theme Colors: Soft Golden Yellow & Deep Olive Black */
+            --primary: #E5C158; 
+            --primary-hover: #D4AF37;
             --danger: #ff4757;
             --success: #2ed573;
-            --warning: #ffa502;
-            --text-main: #2f3542;
-            --text-muted: #57606f;
+            --warning: #f1c40f;
+            --text-main: #F4F5F0;
+            --text-muted: #A8AE9D;
             --radius-md: 16px;
             --radius-lg: 24px;
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-card: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --glass-bg: rgba(26, 28, 20, 0.75);
+            --glass-card: rgba(34, 38, 28, 0.85);
+            --glass-border: rgba(229, 193, 88, 0.25);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -36,7 +37,8 @@
         }
 
         body {
-            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb);
+            /* Deep Olive Black Gradient */
+            background: linear-gradient(-45deg, #1A1C14, #262A1E, #14150F, #22251A);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             color: var(--text-main);
@@ -68,16 +70,16 @@
 
         header h1 {
             font-size: 2.2rem; font-weight: 700;
-            background: -webkit-linear-gradient(45deg, #4f46e5, #ff4757);
+            background: -webkit-linear-gradient(45deg, #E5C158, #FFF0B3);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 5px;
         }
 
         .user-badge {
-            background: var(--primary); color: white; padding: 6px 14px;
-            border-radius: 20px; font-size: 0.9rem; font-weight: 600;
+            background: var(--primary); color: #1A1C14; padding: 6px 14px;
+            border-radius: 20px; font-size: 0.9rem; font-weight: 700;
             display: none; align-items: center; gap: 6px; width: fit-content;
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 10px rgba(229, 193, 88, 0.2);
         }
 
         header p { color: var(--text-muted); font-size: 1rem; font-weight: 500; }
@@ -92,7 +94,7 @@
             display: none;
         }
         #expiry-alert-banner h3 { color: #ff4757; margin-bottom: 8px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .alert-item-list { display: flex; flex-direction: column; gap: 6px; font-size: 0.95rem; color: #2f3542; }
+        .alert-item-list { display: flex; flex-direction: column; gap: 6px; font-size: 0.95rem; color: var(--text-main); }
 
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
@@ -102,15 +104,15 @@
             backdrop-filter: blur(4px); gap: 6px;
         }
 
-        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; box-shadow: 0 4px 15px rgba(118, 75, 162, 0.3); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4); }
-        .btn-warning { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #2f3542; box-shadow: 0 4px 15px rgba(253, 160, 133, 0.3); }
+        .btn-primary { background: linear-gradient(135deg, #E5C158 0%, #D4AF37 100%); color: #1A1C14; box-shadow: 0 4px 15px rgba(229, 193, 88, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(229, 193, 88, 0.5); }
+        .btn-warning { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #1A1C14; box-shadow: 0 4px 15px rgba(253, 160, 133, 0.3); }
         .btn-warning:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(253, 160, 133, 0.4); }
-        .btn-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); }
+        .btn-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: #1A1C14; box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3); }
         .btn-info:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4); }
         .btn-danger { background: linear-gradient(135deg, #ff9a44 0%, #fc6076 100%); color: white; box-shadow: 0 4px 15px rgba(252, 96, 118, 0.3); }
         .btn-danger:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(252, 96, 118, 0.4); }
-        .btn-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #2f3542; box-shadow: 0 4px 15px rgba(56, 249, 215, 0.3); }
+        .btn-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #1A1C14; box-shadow: 0 4px 15px rgba(56, 249, 215, 0.3); }
         .btn-success:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(56, 249, 215, 0.4); }
 
         .btn-delete {
@@ -124,11 +126,11 @@
         .category-header {
             padding: 20px 30px; cursor: pointer; display: flex;
             justify-content: space-between; align-items: center;
-            background: rgba(255, 255, 255, 0.4); transition: background 0.3s ease;
+            background: rgba(0, 0, 0, 0.2); transition: background 0.3s ease;
         }
-        .category-header:hover { background: rgba(255, 255, 255, 0.7); }
-        .category-title { font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 12px; color: #2d3436; }
-        .badge { background: var(--primary); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
+        .category-header:hover { background: rgba(0, 0, 0, 0.4); }
+        .category-title { font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 12px; color: var(--primary); }
+        .badge { background: var(--primary); color: #1A1C14; padding: 2px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
         
         .category-content { display: none; padding: 25px; border-top: 1px solid var(--glass-border); }
 
@@ -150,23 +152,23 @@
 
         .card {
             background: var(--glass-card); border-radius: var(--radius-md);
-            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid var(--glass-border); display: flex; flex-direction: column;
         }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(229, 193, 88, 0.15); }
         
-        .card-img-wrapper { position: relative; height: 180px; background: #f1f2f6; padding: 10px; }
+        .card-img-wrapper { position: relative; height: 180px; background: rgba(0,0,0,0.3); padding: 10px; }
         .card img { width: 100%; height: 100%; object-fit: contain; border-radius: 10px; }
         
         .card-content { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; }
         .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-        .card-title { font-size: 1.05rem; font-weight: 600; color: #2f3542; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; }
+        .card-title { font-size: 1.05rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; }
         
         .barcode-badge {
-            font-size: 0.75rem; background: #e0e7ff; color: var(--primary);
+            font-size: 0.75rem; background: rgba(229, 193, 88, 0.15); color: var(--primary);
             padding: 2px 6px; border-radius: 6px; font-family: monospace;
-            display: inline-block; width: fit-content;
+            display: inline-block; width: fit-content; border: 1px solid var(--glass-border);
         }
 
         .batch-list {
@@ -175,61 +177,62 @@
         }
         .batch-item {
             display: flex; justify-content: space-between; align-items: center;
-            background: #f1f2f6; padding: 8px 12px; border-radius: 12px;
+            background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 12px;
             border-left: 4px solid var(--primary); flex-wrap: wrap; gap: 5px;
         }
-        .batch-item.no-exp { border-left-color: #00f2fe; background: #f0fbff; }
-        .batch-item.exp-warning { border-left-color: var(--warning); background: #fffdf0; }
-        .batch-item.exp-danger { border-left-color: var(--danger); background: #fff0f1; }
+        .batch-item.no-exp { border-left-color: #00f2fe; background: rgba(0, 242, 254, 0.05); }
+        .batch-item.exp-warning { border-left-color: var(--warning); background: rgba(241, 196, 15, 0.05); }
+        .batch-item.exp-danger { border-left-color: var(--danger); background: rgba(255, 71, 87, 0.05); }
 
         .batch-info-box { display: flex; flex-direction: column; }
-        .batch-exp { font-size: 0.85rem; font-weight: 600; color: #57606f; }
+        .batch-exp { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
         
         .controls { display: flex; align-items: center; gap: 10px; }
         .btn-qty {
-            background: #ffffff; border: 1px solid #dfe4ea; border-radius: 8px; width: 28px; height: 28px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; width: 28px; height: 28px;
             font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.2s; color: #2f3542; line-height: 0;
+            cursor: pointer; transition: 0.2s; color: var(--text-main); line-height: 0;
         }
-        .btn-qty:hover { background: var(--primary); color: white; border-color: var(--primary); }
-        .qty-display { font-size: 1rem; font-weight: 700; min-width: 20px; text-align: center; color: #2f3542;}
+        .btn-qty:hover { background: var(--primary); color: #1A1C14; border-color: var(--primary); }
+        .qty-display { font-size: 1rem; font-weight: 700; min-width: 20px; text-align: center; color: var(--text-main);}
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
             display: flex; align-items: center; justify-content: center;
             z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .modal-content {
-            background: rgba(255, 255, 255, 0.95); width: 100%; max-width: 480px;
-            padding: 35px; border-radius: var(--radius-lg); box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            background: rgba(26, 28, 20, 0.98); width: 100%; max-width: 480px;
+            padding: 35px; border-radius: var(--radius-lg); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             transform: translateY(30px); transition: transform 0.3s ease;
-            max-height: 90vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.8);
+            max-height: 90vh; overflow-y: auto; border: 1px solid var(--glass-border);
         }
         .modal-overlay.active .modal-content { transform: translateY(0); }
         
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .modal-header h2 { font-weight: 700; color: #2f3542; }
-        .close-btn { background: #f1f2f6; border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
-        .close-btn:hover { background: #dfe4ea; color: #ff4757;}
+        .modal-header h2 { font-weight: 700; color: var(--primary); }
+        .close-btn { background: rgba(255,255,255,0.05); border: none; font-size: 1.5rem; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+        .close-btn:hover { background: rgba(255,255,255,0.15); color: #ff4757;}
 
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: #2f3542;}
+        .form-group label { display: block; font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; color: var(--text-main);}
         .form-group input[type="text"], .form-group input[type="number"], .form-group input[type="email"], .form-group input[type="date"], .form-group select {
-            width: 100%; padding: 12px 16px; border: 2px solid #dfe4ea; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; background: #ffffff;
+            width: 100%; padding: 12px 16px; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-size: 1rem; outline: none; transition: 0.3s; background: rgba(255,255,255,0.05); color: var(--text-main);
         }
-        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(229, 193, 88, 0.15); background: rgba(255,255,255,0.08); }
         .form-group input[type="text"].capitalize { text-transform: capitalize; }
+        .form-group select option { background: #1A1C14; color: #fff; }
         
         .input-with-btn { display: flex; gap: 10px; }
         
         .file-upload-wrapper {
-            border: 2px dashed #a4b0be; padding: 25px 15px; text-align: center;
-            border-radius: 12px; background: #f1f2f6; cursor: pointer; transition: 0.3s; font-weight: 500; color: #57606f;
+            border: 2px dashed var(--glass-border); padding: 25px 15px; text-align: center;
+            border-radius: 12px; background: rgba(255,255,255,0.02); cursor: pointer; transition: 0.3s; font-weight: 500; color: var(--text-muted);
         }
-        .file-upload-wrapper:hover { border-color: var(--primary); background: #e0e7ff; color: var(--primary); }
+        .file-upload-wrapper:hover { border-color: var(--primary); background: rgba(229, 193, 88, 0.05); color: var(--primary); }
         
         #img-preview, #edit-img-preview { max-width: 100%; height: 140px; object-fit: contain; display: none; margin: 15px auto 0; border-radius: 10px; }
         #scanner-container { width: 100%; border-radius: 16px; overflow: hidden; background: #000; margin-bottom: 15px; position: relative;}
@@ -237,16 +240,16 @@
         .modal-actions { margin-top: 30px; display: flex; justify-content: flex-end; gap: 12px; }
 
         #toast {
-            visibility: hidden; min-width: 280px; background: rgba(47, 53, 66, 0.95); backdrop-filter: blur(5px); color: #fff;
+            visibility: hidden; min-width: 280px; background: rgba(229, 193, 88, 0.95); backdrop-filter: blur(5px); color: #1A1C14;
             text-align: center; border-radius: 50px; padding: 16px 24px; position: fixed; z-index: 2000;
-            left: 50%; top: 20px; transform: translateX(-50%) translateY(-20px); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            font-weight: 500; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            left: 50%; top: 20px; transform: translateX(-50%) translateY(-20px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-weight: 700; opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         #toast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); top: 30px; }
 
         #login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.3); backdrop-filter: blur(15px);
+            background: rgba(26, 28, 20, 0.8); backdrop-filter: blur(15px);
             z-index: 9999; display: flex; align-items: center; justify-content: center;
         }
         .login-box { padding: 40px; text-align: center; width: 90%; max-width: 450px; }
@@ -257,7 +260,7 @@
     <!-- Welcome / Login Overlay -->
     <div id="login-overlay">
         <div class="glass login-box">
-            <h2>👋 Welcome to Smart Inventory!</h2>
+            <h2 style="color: var(--primary);">👋 Welcome to Smart Inventory!</h2>
             <p style="margin: 15px 0; color: var(--text-muted);">Please enter your details before accessing your dashboard.</p>
             
             <div class="form-group" style="text-align: left;">
@@ -354,7 +357,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn" style="background:#f1f2f6; color:#2f3542;" onclick="closeModal()">Cancel</button>
+                <button class="btn" style="background:rgba(255,255,255,0.1); color:var(--text-main);" onclick="closeModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="saveNewProduct()">Save Product</button>
             </div>
         </div>
@@ -391,7 +394,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn" style="background:#f1f2f6; color:#2f3542;" onclick="closeEditModal()">Cancel</button>
+                <button class="btn" style="background:rgba(255,255,255,0.1); color:var(--text-main);" onclick="closeEditModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="saveEditedProduct()">Update Product</button>
             </div>
         </div>
@@ -431,7 +434,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn" style="background:#f1f2f6; color:#2f3542;" onclick="closeAddBatchModal()">Cancel</button>
+                <button class="btn" style="background:rgba(255,255,255,0.1); color:var(--text-main);" onclick="closeAddBatchModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="saveExistingBatch()">Add Stock Batch</button>
             </div>
         </div>
@@ -468,7 +471,7 @@
                 </div>
             </div>
             <div class="modal-actions">
-                <button class="btn" style="background:#f1f2f6; color:#2f3542;" onclick="closeConsumeModal()">Cancel</button>
+                <button class="btn" style="background:rgba(255,255,255,0.1); color:var(--text-main);" onclick="closeConsumeModal()">Cancel</button>
                 <button class="btn btn-danger" onclick="confirmConsumeStock()">Confirm Consumption</button>
             </div>
         </div>
@@ -494,7 +497,7 @@
     </div>
 
     <div id="toast">Data Auto-Saved!</div>
-    <div id="receipt-canvas" style="position:fixed; top:-9999px; width:420px; background:#fff; padding:40px; color:#000;"></div>
+    <div id="receipt-canvas" style="position:fixed; top:-9999px; width:420px; background:#1A1C14; padding:40px; color:#F4F5F0;"></div>
 
     <script>
         const EMAILJS_PUBLIC_KEY = "s9JVqJECJ6GtFy_70";  
@@ -733,7 +736,7 @@
                             <span class="badge">${categoryGroup.items.length}</span>
                             <button class="btn-delete" style="margin-left: 15px;" onclick="event.stopPropagation(); deleteCategory(${index})">Delete 🗑️</button>
                         </div>
-                        <div class="category-icon" id="icon-${index}" style="transform: ${rotationStyle}; transition: 0.3s;">▼</div>
+                        <div class="category-icon" id="icon-${index}" style="transform: ${rotationStyle}; transition: 0.3s; color: var(--primary);">▼</div>
                     </div>
                 `;
 
@@ -802,7 +805,7 @@
                         <div class="card-header-row">
                             <h3 class="card-title">${item.name}</h3>
                             <div style="display: flex; gap: 4px;">
-                                <button class="btn-delete" style="background: rgba(79, 70, 229, 0.1); color: var(--primary); border-color: rgba(79, 70, 229, 0.2);" onclick="openEditModal('${item.id}')" title="Edit Product">✏️</button>
+                                <button class="btn-delete" style="background: rgba(229, 193, 88, 0.1); color: var(--primary); border-color: rgba(229, 193, 88, 0.2);" onclick="openEditModal('${item.id}')" title="Edit Product">✏️</button>
                                 <button class="btn-delete" onclick="deleteProduct('${item.id}')" title="Delete Product">🗑️</button>
                             </div>
                         </div>
@@ -906,7 +909,7 @@
                 category = newCatName; 
             }
 
-            let finalImage = base64ImageString || "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" style="background:%23f1f2f6"><text x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="40" font-weight="bold" fill="%23a4b0be">${name.charAt(0).toUpperCase()}</text></svg>`);
+            let finalImage = base64ImageString || "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" style="background:%23262A1E"><text x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="40" font-weight="bold" fill="%23A8AE9D">${name.charAt(0).toUpperCase()}</text></svg>`);
             
             const newItem = { 
                 id: 'item_' + Date.now(), barcode: barcode, name: name, 
@@ -1367,7 +1370,7 @@
                             const x = (canvas.width / 2) - (img.width / 2) * scale;
                             const y = (canvas.height / 2) - (img.height / 2) * scale;
                             
-                            ctx.fillStyle = "#f1f2f6";
+                            ctx.fillStyle = "#262A1E";
                             ctx.fillRect(0, 0, canvas.width, canvas.height);
                             ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
                             
@@ -1410,15 +1413,15 @@
             const userNickname = localStorage.getItem('inventoryNickname') || 'Admin';
             
             let receiptHTML = `
-                <div style="text-align:center; border-bottom:3px dashed #2d3436; padding-bottom:20px; margin-bottom:20px;">
-                    <h2 style="margin:0; font-size:28px; font-weight:800; color:#2d3436;">${userNickname}'s Inventory Report</h2>
-                    <p style="margin:8px 0 0 0; color:#636e72; font-size:16px; font-weight:bold;">Powered by RML Smart Inventory</p>
-                    <p style="margin:4px 0 0 0; color:#636e72; font-size:14px;">${now.toLocaleDateString()} at ${now.toLocaleTimeString()}</p>
+                <div style="text-align:center; border-bottom:3px dashed #E5C158; padding-bottom:20px; margin-bottom:20px;">
+                    <h2 style="margin:0; font-size:28px; font-weight:800; color:#E5C158;">${userNickname}'s Inventory Report</h2>
+                    <p style="margin:8px 0 0 0; color:#A8AE9D; font-size:16px; font-weight:bold;">Powered by RML Smart Inventory</p>
+                    <p style="margin:4px 0 0 0; color:#A8AE9D; font-size:14px;">${now.toLocaleDateString()} at ${now.toLocaleTimeString()}</p>
                 </div>`;
 
             inventoryData.forEach(group => {
                 if (group.items.length === 0) return; 
-                receiptHTML += `<div style="margin-top:25px; font-weight:700; border-bottom:2px solid #dfe6e9; font-size:20px; padding-bottom:8px;">${group.category}</div>`;
+                receiptHTML += `<div style="margin-top:25px; font-weight:700; border-bottom:2px solid rgba(255,255,255,0.1); font-size:20px; padding-bottom:8px; color: #F4F5F0;">${group.category}</div>`;
                 group.items.forEach(item => {
                     let totalQty = item.batches.reduce((sum, batch) => sum + batch.qty, 0);
                     
@@ -1431,10 +1434,10 @@
                     
                     receiptHTML += `
                         <div style="display:flex; align-items:center; gap:15px; margin-top:12px;">
-                            <img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid #dfe6e9;" ${crossOriginAttr}>
-                            <div style="font-size:16px; font-weight:600;">
-                                ${item.name} <span style="font-size:14px; color:#636e72;">(Total: ${totalQty})</span> ${receiptStockLabel}
-                                <div style="font-size:13px; color:#636e72; font-weight:500;">${batchStrings}</div>
+                            <img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,0.1);" ${crossOriginAttr}>
+                            <div style="font-size:16px; font-weight:600; color: #F4F5F0;">
+                                ${item.name} <span style="font-size:14px; color:#A8AE9D;">(Total: ${totalQty})</span> ${receiptStockLabel}
+                                <div style="font-size:13px; color:#A8AE9D; font-weight:500;">${batchStrings}</div>
                             </div>
                         </div>`;
                 });
@@ -1444,7 +1447,7 @@
             showToast("Generating Receipt Image... ⏳");
 
             setTimeout(() => {
-                html2canvas(receiptDiv, { backgroundColor: '#ffffff', scale: 2, useCORS: true }).then(canvas => {
+                html2canvas(receiptDiv, { backgroundColor: '#1A1C14', scale: 2, useCORS: true }).then(canvas => {
                     const link = document.createElement('a');
                     link.download = getFormattedFileName("RML_Inventory_Report", "png");
                     link.href = canvas.toDataURL("image/png");
