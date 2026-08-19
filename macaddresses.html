@@ -323,12 +323,13 @@
         <div id="billingArea" class="hidden">
             <h2>BILLING MANAGEMENT</h2>
             <div class="input-group" style="margin-bottom: 20px;">
-                <label for="billingSearchInput">Quick Find by MAC Address</label>
-                <input type="text" id="billingSearchInput" placeholder="Type MAC Address here to filter...">
+                <label for="billingSearchInput">Quick Find by Owner or MAC Address</label>
+                <input type="text" id="billingSearchInput" placeholder="Type Owner or MAC Address here to filter...">
             </div>
             <table id="billingTable">
                 <thead>
                     <tr>
+                        <th>Owner</th>
                         <th>MAC Address</th>
                         <th>Device</th>
                         <th>Payment</th>
@@ -733,7 +734,11 @@
             });
 
             macGroupMap.forEach((items, mac) => {
-                if (searchTerm && !mac.toLowerCase().includes(searchTerm)) return;
+                // Extract Owner(s)
+                const owners = [...new Set(items.map(i => i.owner).filter(Boolean))].join(', ');
+
+                // Check search filter against MAC OR Owner
+                if (searchTerm && !mac.toLowerCase().includes(searchTerm) && !owners.toLowerCase().includes(searchTerm)) return;
 
                 const devices = [...new Set(items.map(i => i.device).filter(Boolean))].join(', ');
                 const payments = [...new Set(items.map(i => i.payment).filter(Boolean))].join(' | ');
@@ -765,6 +770,7 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
+                    <td style="font-weight:700; color:#cbd5e1;">${owners}</td>
                     <td class="mac-cell" title="Click to copy" onclick="copyMac('${mac}', this)">${mac}</td>
                     <td>${devices}</td>
                     <td>${payments}</td>
