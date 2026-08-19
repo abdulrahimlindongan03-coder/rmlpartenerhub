@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
-        /* Apply Poppins Bold to EVERYTHING */
+        /* Dark Mode Eye-Friendly Palette: Midnight Slate (#0f172a), Dark Slate (#1e293b), Soft Teal (#14b8a6) */
         * {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
@@ -18,15 +18,14 @@
         }
 
         body {
-            background-color: #f0f4f8;
-            color: #2d3748;
+            background-color: #0f172a; /* Midnight Slate */
+            color: #e2e8f0; /* Soft off-white text */
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Back Button Styling */
         .header-actions {
             width: 100%;
             max-width: 1050px;
@@ -36,26 +35,26 @@
         }
 
         .btn-back {
-            background-color: #718096;
-            color: white;
+            background-color: #334155;
+            color: #f8fafc;
             padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
             font-size: 0.9rem;
             text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(113, 128, 150, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }
 
         .btn-back:hover {
-            background-color: #4a5568;
+            background-color: #475569;
             transform: translateY(-2px);
         }
 
         h1 {
             text-align: center;
             font-size: 2.2rem;
-            color: #1a202c;
+            color: #f8fafc;
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -66,72 +65,66 @@
             max-width: 1050px;
         }
 
-        /* Top Action Buttons Container */
         .action-buttons {
             display: flex;
             gap: 12px;
             margin-bottom: 20px;
             width: 100%;
+            flex-wrap: wrap;
         }
 
         .action-buttons button {
             flex: 1;
-            min-width: 0; /* Allows buttons to shrink neatly in one row */
+            min-width: 0;
             padding: 12px 8px;
             font-size: 0.85rem;
             white-space: nowrap;
+            color: #ffffff;
         }
 
         .btn-save-data {
-            background-color: #805ad5;
-            box-shadow: 0 4px 14px rgba(128, 90, 213, 0.4);
+            background-color: #0d9488;
+            box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2);
         }
 
         .btn-save-data:hover {
-            background-color: #6b46c1;
+            background-color: #14b8a6;
             transform: translateY(-2px);
         }
 
-        .btn-export-csv {
-            background-color: #d69e2e;
-            box-shadow: 0 4px 14px rgba(214, 158, 46, 0.4);
+        .btn-export-csv, .btn-import-csv, .btn-save-png {
+            background-color: #334155;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
         }
 
-        .btn-export-csv:hover {
-            background-color: #b7791f;
+        .btn-export-csv:hover, .btn-import-csv:hover, .btn-save-png:hover {
+            background-color: #475569;
             transform: translateY(-2px);
         }
 
-        .btn-import-csv {
-            background-color: #ed8936;
-            box-shadow: 0 4px 14px rgba(237, 137, 54, 0.4);
+        .btn-toggle-billing {
+            background-color: #0d9488;
+            box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2);
         }
 
-        .btn-import-csv:hover {
-            background-color: #dd6b20;
+        .btn-toggle-billing:hover {
+            background-color: #14b8a6;
             transform: translateY(-2px);
         }
 
-        .btn-save-png {
-            background-color: #48bb78;
-            box-shadow: 0 4px 14px rgba(72, 187, 120, 0.4);
-        }
-
-        .btn-save-png:hover {
-            background-color: #38a169;
-            transform: translateY(-2px);
-        }
-
-        /* Form Styling & Desktop Columns */
-        .registration-form {
-            background: #ffffff;
+        .registration-form, .delete-owner-card, #capture-area, #billingArea {
+            background: #1e293b; /* Dark Slate Card Background */
             padding: 25px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #334155;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .registration-form {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-bottom: 20px;
         }
 
         .full-width {
@@ -147,28 +140,27 @@
         label {
             margin-bottom: 6px;
             font-size: 0.85rem;
-            color: #4a5568;
+            color: #94a3b8;
             text-transform: uppercase;
         }
 
         input[type="text"], input[type="number"], select {
             padding: 12px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #334155;
             border-radius: 10px;
             font-size: 0.95rem;
-            color: #2d3748;
-            background-color: #f7fafc;
+            color: #e2e8f0;
+            background-color: #0f172a; /* Inner dark input */
             transition: all 0.3s ease;
         }
 
         input[type="text"]:focus, input[type="number"]:focus, select:focus {
             outline: none;
-            border-color: #4299e1;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+            border-color: #14b8a6;
+            background-color: #1e293b;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
         }
 
-        /* Checkbox styling */
         .checkbox-container {
             display: flex;
             flex-wrap: wrap;
@@ -182,13 +174,14 @@
             gap: 10px;
             cursor: pointer;
             font-size: 0.95rem;
-            color: #2b6cb0;
+            color: #2dd4bf;
         }
 
         .checkbox-label input[type="checkbox"] {
             width: 20px;
             height: 20px;
             cursor: pointer;
+            accent-color: #14b8a6;
         }
 
         button {
@@ -196,7 +189,6 @@
             border: none;
             border-radius: 10px;
             font-size: 1rem;
-            color: #ffffff;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
@@ -204,25 +196,14 @@
         }
 
         .btn-register {
-            background-color: #4299e1;
-            box-shadow: 0 4px 14px rgba(66, 153, 225, 0.4);
+            background-color: #0d9488;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2);
         }
 
         .btn-register:hover {
-            background-color: #3182ce;
+            background-color: #14b8a6;
             transform: translateY(-2px);
-        }
-
-        /* Management Card (Search & Delete) */
-        .delete-owner-card {
-            background: #ffffff;
-            padding: 20px 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
         }
 
         .delete-owner-flex {
@@ -235,17 +216,17 @@
         }
 
         .btn-delete-owner {
-            background-color: #e53e3e;
-            box-shadow: 0 4px 14px rgba(229, 62, 62, 0.4);
+            background-color: #475569;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
             padding: 12px 24px;
         }
 
         .btn-delete-owner:hover {
-            background-color: #c53030;
+            background-color: #64748b;
             transform: translateY(-2px);
         }
 
-        /* Category Summary Bar */
         .category-summary-container {
             display: flex;
             gap: 12px;
@@ -255,36 +236,26 @@
         }
 
         .summary-badge {
-            background: #f7fafc;
+            background: #0f172a;
             padding: 10px 16px;
             border-radius: 10px;
             font-size: 0.85rem;
-            color: #4a5568;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-            border: 2px solid #e2e8f0;
+            color: #cbd5e1;
+            border: 2px solid #334155;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.2s ease;
         }
 
         .summary-badge span {
-            color: #2b6cb0;
+            color: #2dd4bf;
             margin-left: 4px;
         }
 
-        /* Table & Capture Area Styling */
-        #capture-area {
-            background: #ffffff;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            width: 100%;
-        }
-
-        #capture-area h2 {
+        #capture-area h2, #billingArea h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: #2d3748;
+            color: #f8fafc;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -297,13 +268,13 @@
         th, td {
             padding: 12px;
             text-align: left;
-            border-bottom: 2px solid #edf2f7;
+            border-bottom: 1px solid #334155;
             font-size: 0.88rem;
         }
 
         th {
-            background-color: #f7fafc;
-            color: #4a5568;
+            background-color: #0f172a;
+            color: #94a3b8;
             text-transform: uppercase;
             font-size: 0.78rem;
             letter-spacing: 1px;
@@ -311,17 +282,16 @@
 
         .mac-cell {
             cursor: pointer;
-            color: #2b6cb0;
+            color: #2dd4bf;
             transition: all 0.2s ease;
             user-select: all;
         }
 
         .mac-cell:hover {
             text-decoration: underline;
-            color: #3182ce;
+            color: #5eead4;
         }
 
-        /* Grouping Headers */
         .category-header {
             font-size: 1rem;
             text-align: center;
@@ -329,7 +299,6 @@
             padding: 15px;
         }
 
-        /* Status Badges */
         .badge {
             padding: 6px 10px;
             border-radius: 6px;
@@ -339,65 +308,59 @@
             text-transform: uppercase;
         }
 
+        /* Dark Mode Optimized Badges */
         .badge-paid {
-            background-color: #c6f6d5;
-            color: #22543d;
+            background-color: #115e59; /* Dark Teal */
+            color: #5eead4; /* Bright Teal Text */
         }
 
         .badge-disconnect {
-            background-color: #fed7d7;
-            color: #9b2c2c;
+            background-color: #7f1d1d; /* Dark Red */
+            color: #fca5a5; /* Bright Red Text */
+            border: 1px solid #991b1b;
         }
 
         .badge-warning {
-            background-color: #fefcbf;
-            color: #744210;
+            background-color: #78350f; /* Dark Amber */
+            color: #fde68a; /* Bright Yellow Text */
         }
 
         .badge-nodate {
-            background-color: #e2e8f0;
-            color: #4a5568;
+            background-color: #334155; /* Slate */
+            color: #94a3b8; /* Light Slate Text */
         }
 
         .btn-mark-paid {
             padding: 6px 12px;
             font-size: 0.75rem;
             border-radius: 6px;
-            background-color: #38a169;
+            background-color: #0d9488;
             color: #ffffff;
-            box-shadow: 0 2px 5px rgba(56, 161, 105, 0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             border: none;
             cursor: pointer;
         }
 
         .btn-mark-paid:hover {
-            background-color: #2f855a;
+            background-color: #14b8a6;
         }
 
-        .btn-delete-row {
-            padding: 6px 12px;
-            font-size: 0.75rem;
+        .date-edit-input {
+            padding: 6px;
+            border: 1px solid #334155;
             border-radius: 6px;
-            background-color: #e53e3e;
-            color: #ffffff;
-            box-shadow: 0 2px 5px rgba(229, 62, 62, 0.3);
-            border: none;
-            cursor: pointer;
-            margin-left: 5px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            background-color: #0f172a;
         }
 
-        .btn-delete-row:hover {
-            background-color: #c53030;
+        .hidden {
+            display: none !important;
         }
 
-        .text-not-due {
-            font-size: 0.75rem;
-            color: #a0aec0;
-        }
-
-        /* MOBILE STYLING */
         @media (max-width: 768px) {
-            /* Force Action Buttons into 1 row on Mobile */
             .action-buttons {
                 flex-direction: row;
                 gap: 5px;
@@ -422,7 +385,7 @@
                 flex-direction: column;
             }
 
-            #capture-area {
+            #capture-area, #billingArea {
                 padding: 10px;
                 overflow-x: auto;
             }
@@ -465,113 +428,134 @@
     <div class="main-container">
         <h1>MAC ADDRESSES</h1>
 
-        <!-- Action Buttons Moved to Top (Single Row Layout) -->
         <div class="action-buttons">
-            <button class="btn-save-data" id="btnSaveData" style="background-color: rgb(43, 108, 176);">SAVED!</button>
+            <button class="btn-save-data" id="btnSaveData">SAVED!</button>
             <button class="btn-export-csv" id="btnExportCsv">Export CSV</button>
             <button class="btn-import-csv" id="btnImportCsv">Import CSV</button>
             <button class="btn-save-png" id="btnSave">Save as PNG</button>
+            <button class="btn-toggle-billing" id="btnToggleBilling">BILLING</button>
         </div>
 
-        <div class="registration-form">
-            <div class="input-group full-width">
-                <label>Categories (Select Multiple)</label>
-                <div class="checkbox-container">
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="categoryCheckbox" value="RML"> RML
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="categoryCheckbox" value="INDOOR"> INDOOR
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="categoryCheckbox" value="OUTDOOR"> OUTDOOR
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="categoryCheckbox" value="EXTENDER"> EXTENDER
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="categoryCheckbox" value="AC1200"> AC1200
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="categoryCheckbox" value="ROUTER"> ROUTER
-                    </label>
+        <div id="dashboardArea">
+            <div class="registration-form">
+                <div class="input-group full-width">
+                    <label>Categories (Select Multiple)</label>
+                    <div class="checkbox-container">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categoryCheckbox" value="RML"> RML
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categoryCheckbox" value="INDOOR"> INDOOR
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categoryCheckbox" value="OUTDOOR"> OUTDOOR
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categoryCheckbox" value="EXTENDER"> EXTENDER
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categoryCheckbox" value="AC1200"> AC1200
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="categoryCheckbox" value="ROUTER"> ROUTER
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="macAddress">MAC Address</label>
+                    <input type="text" id="macAddress" placeholder="e.g. B8:3A:08:E5:21:C0" maxlength="17">
+                </div>
+
+                <div class="input-group">
+                    <label for="ownerName">Owner's Name</label>
+                    <input type="text" id="ownerName" placeholder="Enter owner name" list="ownerList">
+                    <datalist id="ownerList"></datalist>
+                </div>
+
+                <div class="input-group">
+                    <label for="device">Device</label>
+                    <input type="text" id="device" placeholder="e.g. Router, Smartphone">
+                </div>
+
+                <div class="input-group">
+                    <label for="payment">Payment</label>
+                    <input type="text" id="payment" placeholder="Enter payment amount/status">
+                </div>
+
+                <div class="input-group">
+                    <label for="dueDay">Due Day of Month (1-31)</label>
+                    <input type="number" id="dueDay" min="1" max="31" placeholder="e.g. 15">
+                </div>
+
+                <div class="input-group full-width">
+                    <div class="checkbox-container">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="noDueDate">
+                            No Due Date
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="isInitialPaid">
+                            Mark Initial Bill as Paid
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-register full-width" id="btnRegister">Register Device</button>
+            </div>
+
+            <div class="delete-owner-card">
+                <div class="input-group">
+                    <label for="searchInput">Search Records</label>
+                    <input type="text" id="searchInput" placeholder="Search by Owner Name or MAC Address...">
+                </div>
+
+                <div class="input-group">
+                    <label for="deleteMacSelect">Remove Device By MAC Address</label>
+                    <div class="delete-owner-flex">
+                        <select id="deleteMacSelect"><option value="">-- Select MAC Address to Delete --</option></select>
+                        <button class="btn-delete-owner" id="btnDeleteMac">Delete MAC</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="input-group">
-                <label for="macAddress">MAC Address</label>
-                <input type="text" id="macAddress" placeholder="e.g. B8:3A:08:E5:21:C0" maxlength="17">
-            </div>
-
-            <div class="input-group">
-                <label for="ownerName">Owner's Name</label>
-                <input type="text" id="ownerName" placeholder="Enter owner name" list="ownerList">
-                <datalist id="ownerList"></datalist>
-            </div>
-
-            <div class="input-group">
-                <label for="device">Device</label>
-                <input type="text" id="device" placeholder="e.g. Router, Smartphone">
-            </div>
-
-            <div class="input-group">
-                <label for="payment">Payment</label>
-                <input type="text" id="payment" placeholder="Enter payment amount/status">
-            </div>
-
-            <div class="input-group">
-                <label for="dueDay">Due Day of Month (1-31)</label>
-                <input type="number" id="dueDay" min="1" max="31" placeholder="e.g. 15" style="background-color: rgb(247, 250, 252);">
-            </div>
-
-            <div class="input-group full-width">
-                <div class="checkbox-container">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="noDueDate">
-                        No Due Date
-                    </label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="isInitialPaid">
-                        Mark Initial Bill as Paid
-                    </label>
-                </div>
-            </div>
-
-            <button class="btn-register full-width" id="btnRegister">Register Device</button>
-        </div>
-
-        <!-- Integrated Search & Delete Card -->
-        <div class="delete-owner-card">
-            <div class="input-group">
-                <label for="searchInput">Search Records</label>
-                <input type="text" id="searchInput" placeholder="Search by Owner Name or MAC Address...">
-            </div>
-
-            <div class="input-group">
-                <label for="deleteMacSelect">Remove Device By MAC Address</label>
-                <div class="delete-owner-flex">
-                    <select id="deleteMacSelect"><option value="">-- Select MAC Address to Delete --</option></select>
-                    <button class="btn-delete-owner" id="btnDeleteMac">Delete MAC</button>
-                </div>
+            <div id="capture-area">
+                <h2>Registered Devices</h2>
+                <div class="category-summary-container" id="categorySummary"></div>
+                <table id="deviceTable">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>MAC Address (Click to Copy)</th>
+                            <th>Device</th>
+                            <th>Payment</th>
+                            <th>Next Due Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
             </div>
         </div>
 
-        <div id="capture-area">
-            <h2>Registered Devices</h2>
-            <div class="category-summary-container" id="categorySummary"></div>
-            <table id="deviceTable">
+        <div id="billingArea" class="hidden">
+            <h2>BILLING MANAGEMENT</h2>
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label for="billingSearchInput">Quick Find by MAC Address</label>
+                <input type="text" id="billingSearchInput" placeholder="Type MAC Address here to filter...">
+            </div>
+            <table id="billingTable">
                 <thead>
                     <tr>
-                        <th>Category</th>
-                        <th>MAC Address (Click to Copy)</th>
+                        <th>MAC Address</th>
                         <th>Device</th>
                         <th>Payment</th>
-                        <th>Next Due Date</th>
+                        <th>Billing Date (Edit)</th>
                         <th>Status</th>
-                        <th class="action-col">Action</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody"></tbody>
+                <tbody id="billingTableBody"></tbody>
             </table>
         </div>
 
@@ -585,11 +569,12 @@
 
     <script>
         let recordsData = [];
-        let activeCategoryFilter = null; // New state variable for filtering
+        let activeCategoryFilter = null;
 
         const macInput = document.getElementById('macAddress');
         const btnRegister = document.getElementById('btnRegister');
         const tableBody = document.getElementById('tableBody');
+        const billingTableBody = document.getElementById('billingTableBody');
         const categorySummary = document.getElementById('categorySummary');
         const btnSaveData = document.getElementById('btnSaveData');
         const btnExportCsv = document.getElementById('btnExportCsv');
@@ -604,24 +589,44 @@
         const isInitialPaidCheckbox = document.getElementById('isInitialPaid');
         
         const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', renderTable);
+        const billingSearchInput = document.getElementById('billingSearchInput');
+        const btnToggleBilling = document.getElementById('btnToggleBilling');
+        const dashboardArea = document.getElementById('dashboardArea');
+        const billingArea = document.getElementById('billingArea');
 
-        // --- Toggle No Due Date UI Behavior ---
+        searchInput.addEventListener('input', renderTable);
+        billingSearchInput.addEventListener('input', renderBillingTable);
+
+        btnToggleBilling.addEventListener('click', () => {
+            if (billingArea.classList.contains('hidden')) {
+                dashboardArea.classList.add('hidden');
+                billingArea.classList.remove('hidden');
+                btnToggleBilling.textContent = 'BACK TO DASHBOARD';
+                btnToggleBilling.style.backgroundColor = '#334155';
+                renderBillingTable();
+            } else {
+                billingArea.classList.add('hidden');
+                dashboardArea.classList.remove('hidden');
+                btnToggleBilling.textContent = 'BILLING';
+                btnToggleBilling.style.backgroundColor = '#0d9488';
+                renderTable();
+            }
+        });
+
         noDueDateCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 dueDayInput.value = '';
                 dueDayInput.disabled = true;
-                dueDayInput.style.backgroundColor = '#edf2f7';
+                dueDayInput.style.backgroundColor = '#334155'; /* Dark slate for disabled */
                 isInitialPaidCheckbox.checked = false;
                 isInitialPaidCheckbox.disabled = true;
             } else {
                 dueDayInput.disabled = false;
-                dueDayInput.style.backgroundColor = '#f7fafc';
+                dueDayInput.style.backgroundColor = '#0f172a';
                 isInitialPaidCheckbox.disabled = false;
             }
         });
 
-        // --- Date Helper Functions ---
         function parseLocalDate(dateString) {
             const [y, m, d] = dateString.split('-').map(Number);
             return new Date(y, m - 1, d);
@@ -650,14 +655,12 @@
             const minutes = String(d.getMinutes()).padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             
-            // Convert 24-hour time to 12-hour time
             hours = hours % 12;
             hours = hours ? hours : 12;
             
             return `${month}. ${day}, ${year}_${hours}:${minutes}${ampm}`;
         }
 
-        // Add 1 month exactly to a given date, respecting the original day of month
         function addOneMonth(dateString, originalDueDay) {
             let [y, m, d] = dateString.split('-').map(Number);
             let nextMonthIndex = m; 
@@ -675,21 +678,14 @@
             return formatLocalDate(result);
         }
 
-        // --- Unique Color Generator per Owner ---
-        function getOwnerStyles(ownerName) {
-            let hash = 0;
-            for (let i = 0; i < ownerName.length; i++) {
-                hash = ownerName.charCodeAt(i) + ((hash << 5) - hash);
-            }
-            const hue = Math.abs(hash) % 360;
+        function getOwnerStyles() {
             return {
-                bg: `hsl(${hue}, 65%, 88%)`,
-                border: `hsl(${hue}, 65%, 72%)`,
-                text: `hsl(${hue}, 80%, 24%)`
+                bg: `#0f172a`,
+                border: `#14b8a6`,
+                text: `#2dd4bf`
             };
         }
 
-        // --- 1. Load Saved Data on Startup ---
         window.addEventListener('DOMContentLoaded', () => {
             let loaded = false;
             const embeddedScript = document.getElementById('embeddedData');
@@ -744,7 +740,6 @@
             renderTable();
         });
 
-        // --- 2. MAC Address Auto-formatting ---
         macInput.addEventListener('input', function (e) {
             let val = e.target.value.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
             let formatted = '';
@@ -755,11 +750,10 @@
             e.target.value = formatted.substring(0, 17);
         });
 
-        // --- Copy MAC Address Function ---
         window.copyMac = function(text, element) {
             navigator.clipboard.writeText(text).then(() => {
                 element.innerText = 'COPIED!';
-                element.style.color = '#38a169';
+                element.style.color = '#14b8a6';
                 setTimeout(() => {
                     element.innerText = text;
                     element.style.color = '';
@@ -769,7 +763,6 @@
             });
         };
 
-        // --- Populate Owner Datalist and Delete MAC Dropdown ---
         function updateChoices() {
             const currentSelectedMac = deleteMacSelect.value;
             deleteMacSelect.innerHTML = '<option value="">-- Select MAC Address to Delete --</option>';
@@ -799,7 +792,6 @@
             if (macMap.has(currentSelectedMac)) deleteMacSelect.value = currentSelectedMac;
         }
 
-        // --- Render Table & Summary ---
         function renderTable() {
             tableBody.innerHTML = '';
             categorySummary.innerHTML = '';
@@ -809,7 +801,6 @@
             
             const searchTerm = searchInput.value.trim().toLowerCase();
 
-            // Calculate Counts based on ALL data
             const categoryCounts = {};
             recordsData.forEach(r => {
                 if (r.category) {
@@ -820,7 +811,6 @@
             const defaultCategories = ['RML', 'INDOOR', 'OUTDOOR', 'EXTENDER', 'AC1200', 'ROUTER'];
             const allCategories = [...new Set([...defaultCategories, ...Object.keys(categoryCounts)])];
 
-            // Render Clickable Summary Badges
             allCategories.forEach(cat => {
                 const count = categoryCounts[cat] || 0;
                 const badge = document.createElement('div');
@@ -828,8 +818,8 @@
                 badge.style.cursor = 'pointer';
                 
                 if (activeCategoryFilter === cat) {
-                    badge.style.border = '2px solid #2b6cb0';
-                    badge.style.backgroundColor = '#e2e8f0';
+                    badge.style.border = '2px solid #14b8a6';
+                    badge.style.backgroundColor = '#134e4a';
                 }
 
                 badge.innerHTML = `${cat}: <span>${count} Connected</span>`;
@@ -842,7 +832,6 @@
                 categorySummary.appendChild(badge);
             });
 
-            // Filter data for table rendering (Category and Search filters applied)
             const recordsToDisplay = recordsData.filter(r => {
                 const matchesCategory = activeCategoryFilter ? r.category === activeCategoryFilter : true;
                 const matchesSearch = searchTerm ? (
@@ -858,87 +847,158 @@
                 const ownerRecords = recordsToDisplay.filter(r => r.owner === owner);
                 
                 if (ownerRecords.length > 0) {
-                    const styles = getOwnerStyles(owner);
+                    const styles = getOwnerStyles();
                     const headerTr = document.createElement('tr');
-                    headerTr.innerHTML = `<td colspan="7" class="category-header" style="background-color: ${styles.bg}; color: ${styles.text}; border-bottom: 3px solid ${styles.border};">OWNER: ${owner}</td>`;
+                    headerTr.innerHTML = `<td colspan="6" class="category-header" style="background-color: ${styles.bg}; color: ${styles.text}; border-bottom: 2px solid ${styles.border};">OWNER: ${owner}</td>`;
                     tableBody.appendChild(headerTr);
 
                     ownerRecords.forEach(item => {
-                        const mainIndex = recordsData.indexOf(item);
-
                         let badgeClass = 'badge-paid';
                         let statusLabel = 'PAID';
-                        let actionHtml = '';
                         let dueDateDisplay = item.nextDueDate;
-                        let deleteBtn = `<button class="btn-delete-row" onclick="deleteRecord(${mainIndex})">DELETE</button>`;
 
                         if (item.noDueDate) {
                             badgeClass = 'badge-nodate';
                             statusLabel = 'NO DUE DATE';
                             dueDateDisplay = 'N/A';
-                            actionHtml = `${deleteBtn}`;
                         } else {
                             let dueDateObj = parseLocalDate(item.nextDueDate);
                             let diffTime = dueDateObj.getTime() - today.getTime();
                             let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                             if (diffDays < 0) {
-                                badgeClass = 'badge-disconnect'; // Red label background used for overdue
+                                badgeClass = 'badge-disconnect';
                                 statusLabel = 'OVERDUE';
-                                actionHtml = `<button class="btn-mark-paid" onclick="markPaid(${mainIndex})">MARK PAID</button>${deleteBtn}`;
                             } else if (diffDays === 0) {
-                                badgeClass = 'badge-warning'; // Yellow label background
+                                badgeClass = 'badge-warning';
                                 statusLabel = 'DUE TODAY';
-                                actionHtml = `<button class="btn-mark-paid" onclick="markPaid(${mainIndex})">MARK PAID</button>${deleteBtn}`;
-                            } else {
-                                // Status remains PAID unless due date is reached/passed
-                                // ACTION visibility turns on starting 10 days before due date
-                                if (diffDays <= 10) {
-                                    actionHtml = `<button class="btn-mark-paid" onclick="markPaid(${mainIndex})">MARK PAID</button>${deleteBtn}`;
-                                } else {
-                                    actionHtml = `<span class="text-not-due">NOT DUE YET</span>${deleteBtn}`;
-                                }
                             }
                         }
 
                         const tr = document.createElement('tr');
-
                         tr.innerHTML = `
-                            <td><span class="badge badge-nodate" style="background:#e2e8f0; color:#2d3748;">${item.category}</span></td>
+                            <td><span class="badge badge-nodate">${item.category}</span></td>
                             <td class="mac-cell" title="Click to copy" onclick="copyMac('${item.mac}', this)">${item.mac}</td>
                             <td>${item.device}</td>
                             <td>${item.payment}</td>
                             <td>${dueDateDisplay}</td>
                             <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
-                            <td class="action-col">${actionHtml}</td>
                         `;
                         tableBody.appendChild(tr);
                     });
                 }
             });
-
             updateChoices();
         }
 
-        // --- Mark as Paid ---
-        window.markPaid = function(index) {
-            const item = recordsData[index];
-            if (!item.noDueDate) {
-                item.nextDueDate = addOneMonth(item.nextDueDate, item.originalDueDay);
+        // --- Render BILLING Table (Aggregated by Unique MAC Address) ---
+        function renderBillingTable() {
+            billingTableBody.innerHTML = '';
+            let today = new Date();
+            today.setHours(0,0,0,0);
+            
+            const searchTerm = billingSearchInput.value.trim().toLowerCase();
+
+            // Group records by unique MAC Address
+            const macGroupMap = new Map();
+            recordsData.forEach(item => {
+                if (!item.mac) return;
+                const macKey = item.mac.toUpperCase();
+                if (!macGroupMap.has(macKey)) {
+                    macGroupMap.set(macKey, []);
+                }
+                macGroupMap.get(macKey).push(item);
+            });
+
+            macGroupMap.forEach((items, mac) => {
+                if (searchTerm && !mac.toLowerCase().includes(searchTerm)) {
+                    return;
+                }
+
+                // Aggregate unique devices and payments
+                const devices = [...new Set(items.map(i => i.device).filter(Boolean))].join(', ');
+                const payments = [...new Set(items.map(i => i.payment).filter(Boolean))].join(' | ');
+
+                // Check if all instances have no due date
+                const allNoDueDate = items.every(i => i.noDueDate);
+
+                // Find representative item with earliest due date
+                let repItem = items[0];
+                if (!allNoDueDate) {
+                    const validItems = items.filter(i => !i.noDueDate && i.nextDueDate);
+                    if (validItems.length > 0) {
+                        validItems.sort((a, b) => a.nextDueDate.localeCompare(b.nextDueDate));
+                        repItem = validItems[0];
+                    }
+                }
+
+                let badgeClass = 'badge-paid';
+                let statusLabel = 'PAID';
+                let actionHtml = '';
+                let dueDateDisplay = '';
+
+                if (allNoDueDate) {
+                    badgeClass = 'badge-nodate';
+                    statusLabel = 'NO DUE DATE';
+                    dueDateDisplay = 'N/A';
+                    actionHtml = `<span style="font-size: 0.8rem; color:#64748b;">N/A</span>`;
+                } else {
+                    let dueDateObj = parseLocalDate(repItem.nextDueDate);
+                    let diffTime = dueDateObj.getTime() - today.getTime();
+                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays < 0) {
+                        badgeClass = 'badge-disconnect';
+                        statusLabel = 'OVERDUE';
+                    } else if (diffDays === 0) {
+                        badgeClass = 'badge-warning';
+                        statusLabel = 'DUE TODAY';
+                    }
+
+                    actionHtml = `<button class="btn-mark-paid" onclick="markPaidByMac('${mac}')">MARK PAID</button>`;
+                    dueDateDisplay = `<input type="date" class="date-edit-input" value="${repItem.nextDueDate}" onchange="updateBillingDateByMac('${mac}', this.value)">`;
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="mac-cell" title="Click to copy" onclick="copyMac('${mac}', this)">${mac}</td>
+                    <td>${devices}</td>
+                    <td>${payments}</td>
+                    <td>${dueDateDisplay}</td>
+                    <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
+                    <td>${actionHtml}</td>
+                `;
+                billingTableBody.appendChild(tr);
+            });
+        }
+
+        // --- Functions Triggered by Billing View (Updates all entries for the given MAC) ---
+        window.updateBillingDateByMac = function(mac, newVal) {
+            if (newVal) {
+                let newDateObj = parseLocalDate(newVal);
+                recordsData.forEach(item => {
+                    if (item.mac && item.mac.toUpperCase() === mac.toUpperCase()) {
+                        item.nextDueDate = newVal;
+                        item.originalDueDay = newDateObj.getDate();
+                    }
+                });
+                renderBillingTable();
                 renderTable();
             }
         };
 
-        // --- Delete Row ---
-        window.deleteRecord = function(index) {
-            const item = recordsData[index];
-            if (confirm(`Are you sure you want to delete the device "${item.device}" (${item.mac}) owned by "${item.owner}"?`)) {
-                recordsData.splice(index, 1);
-                renderTable();
+        window.markPaidByMac = function(mac) {
+            recordsData.forEach(item => {
+                if (item.mac && item.mac.toUpperCase() === mac.toUpperCase() && !item.noDueDate) {
+                    item.nextDueDate = addOneMonth(item.nextDueDate, item.originalDueDay);
+                }
+            });
+            renderTable();
+            if (!document.getElementById('billingArea').classList.contains('hidden')) {
+                renderBillingTable();
             }
         };
 
-        // --- Delete MAC ---
         btnDeleteMac.addEventListener('click', () => {
             const selectedMac = deleteMacSelect.value;
             if (!selectedMac) {
@@ -951,7 +1011,6 @@
             }
         });
 
-        // --- Register Device ---
         btnRegister.addEventListener('click', () => {
             const selectedCategories = Array.from(document.querySelectorAll('input[name="categoryCheckbox"]:checked')).map(cb => cb.value);
             const mac = document.getElementById('macAddress').value;
@@ -1024,24 +1083,22 @@
             dueDayInput.value = '';
             noDueDateCheckbox.checked = false;
             dueDayInput.disabled = false;
-            dueDayInput.style.backgroundColor = '#f7fafc';
+            dueDayInput.style.backgroundColor = '#0f172a';
             isInitialPaidCheckbox.checked = false;
             isInitialPaidCheckbox.disabled = false;
         });
 
-        // --- Save Changes to LocalStorage ---
         btnSaveData.addEventListener('click', () => {
             localStorage.setItem('mac_address_records', JSON.stringify(recordsData));
 
             btnSaveData.textContent = 'SAVED!';
-            btnSaveData.style.backgroundColor = '#2b6cb0';
+            btnSaveData.style.backgroundColor = '#14b8a6';
             setTimeout(() => {
                 btnSaveData.textContent = 'SAVE CHANGES';
-                btnSaveData.style.backgroundColor = '#805ad5';
+                btnSaveData.style.backgroundColor = '#0d9488';
             }, 2000);
         });
 
-        // --- Export CSV ---
         btnExportCsv.addEventListener('click', () => {
             if (recordsData.length === 0) {
                 alert("No records available to export!");
@@ -1074,14 +1131,13 @@
             URL.revokeObjectURL(link.href);
 
             btnExportCsv.textContent = 'EXPORTED!';
-            btnExportCsv.style.backgroundColor = '#975a16';
+            btnExportCsv.style.backgroundColor = '#475569';
             setTimeout(() => {
                 btnExportCsv.textContent = 'Export CSV';
-                btnExportCsv.style.backgroundColor = '#d69e2e';
+                btnExportCsv.style.backgroundColor = '#334155';
             }, 2000);
         });
 
-        // --- Import CSV ---
         btnImportCsv.addEventListener('click', () => {
             csvFileInput.click();
         });
@@ -1175,31 +1231,25 @@
                     recordsData = recordsData.concat(newRecords);
                 }
                 renderTable();
+                if (!billingArea.classList.contains('hidden')) renderBillingTable();
                 alert("CSV imported successfully!");
             } else {
                 alert("No valid records found in the CSV file.");
             }
         }
 
-        // --- Save as PNG ---
         btnSave.addEventListener('click', () => {
-            const captureArea = document.getElementById('capture-area');
-            const actionCols = captureArea.querySelectorAll('.action-col');
-            
-            actionCols.forEach(col => col.style.display = 'none');
-
-            html2canvas(captureArea, {
+            const targetArea = billingArea.classList.contains('hidden') ? document.getElementById('capture-area') : document.getElementById('billingArea');
+            html2canvas(targetArea, {
                 scale: 2,
-                backgroundColor: "#ffffff"
+                backgroundColor: "#0f172a" /* Dark Mode Background for PNG */
             }).then(canvas => {
                 const link = document.createElement('a');
                 const dateStr = getCurrentDateString();
                 
-                link.download = `MAC ADDRESS_${dateStr}.png`;
+                link.download = `MAC_ADDRESS_${dateStr}.png`;
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                
-                actionCols.forEach(col => col.style.display = '');
             });
         });
     </script>
