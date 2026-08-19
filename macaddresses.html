@@ -627,7 +627,6 @@
             const searchTerm = searchInput.value.trim().toLowerCase();
             const categoryCounts = {};
             
-            // Count only active (non-archived) devices
             recordsData.forEach(r => {
                 if (r.category && !r.isArchived) {
                     categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
@@ -655,7 +654,7 @@
             });
 
             const recordsToDisplay = recordsData.filter(r => {
-                if (r.isArchived) return false; // Hide archived from dashboard
+                if (r.isArchived) return false;
                 const matchesCategory = activeCategoryFilter ? r.category === activeCategoryFilter : true;
                 const matchesSearch = searchTerm ? (
                     (r.owner && r.owner.toLowerCase().includes(searchTerm)) ||
@@ -723,7 +722,6 @@
             const macGroupMap = new Map();
             
             recordsData.forEach(item => {
-                // EXCLUDE NO DUE DATE AND ARCHIVED ITEMS
                 if (!item.mac || item.isArchived || item.noDueDate) return; 
                 
                 const macKey = item.mac.toUpperCase();
@@ -734,10 +732,8 @@
             });
 
             macGroupMap.forEach((items, mac) => {
-                // Extract Owner(s)
                 const owners = [...new Set(items.map(i => i.owner).filter(Boolean))].join(', ');
 
-                // Check search filter against MAC OR Owner
                 if (searchTerm && !mac.toLowerCase().includes(searchTerm) && !owners.toLowerCase().includes(searchTerm)) return;
 
                 const devices = [...new Set(items.map(i => i.device).filter(Boolean))].join(', ');
@@ -786,10 +782,7 @@
         function renderArchiveTable() {
             archiveTableBody.innerHTML = '';
             
-            // Only group archived elements
             const archivedRecords = recordsData.filter(r => r.isArchived);
-            
-            // Render by flat list of MACs to easily activate
             const archivedMacs = [...new Set(archivedRecords.map(r => r.mac))];
 
             archivedMacs.forEach(mac => {
@@ -809,18 +802,17 @@
             });
         }
 
-        // Activate MAC Address (Return to Dashboard)
         window.activateMac = function(mac) {
             let todayStr = formatLocalDate(new Date());
             recordsData.forEach(item => {
                 if (item.mac === mac && item.isArchived) {
                     item.isArchived = false;
                     if (!item.noDueDate) {
-                        item.nextDueDate = todayStr; // Prevent immediate re-archiving
+                        item.nextDueDate = todayStr;
                     }
                 }
             });
-            renderArchiveTable(); // Update archive
+            renderArchiveTable();
         };
 
         window.updateBillingDateByMac = function(mac, newVal) {
