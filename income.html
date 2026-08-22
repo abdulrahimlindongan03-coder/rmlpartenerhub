@@ -137,7 +137,7 @@
         .acc-name { font-size: 16px; color: #fff; letter-spacing: 1px; }
         .acc-balance { font-size: 18px; color: #00f2fe; }
 
-        /* Detail View Styles (Compact Back Button override) */
+        /* Detail View Styles */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -147,19 +147,29 @@
             width: 100%;
         }
 
-        .btn-back {
-            background: rgba(255, 255, 255, 0.05);
+        .btn-back, .btn-delete {
             padding: 4px 10px;
             border-radius: 6px;
             font-size: 10px;
-            color: #a3b8cc;
-            border: 1px solid rgba(255, 255, 255, 0.08);
             cursor: pointer;
             transition: all 0.2s;
             width: auto !important;
             flex: unset !important;
         }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            color: #a3b8cc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
         .btn-back:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
+
+        .btn-delete {
+            background: rgba(255, 8, 68, 0.1);
+            color: #ff0844;
+            border: 1px solid rgba(255, 8, 68, 0.3);
+        }
+        .btn-delete:hover { background: rgba(255, 8, 68, 0.8); color: #fff; border-color: rgba(255, 8, 68, 1); }
 
         .current-acc-title { 
             font-size: 18px; 
@@ -167,6 +177,8 @@
             text-transform: uppercase; 
             letter-spacing: 1px;
             text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+            text-align: center;
+            flex: 1;
         }
 
         /* Balance Cards */
@@ -312,6 +324,7 @@
         <div class="top-bar">
             <button class="btn-back" onclick="showDashboard()">← Back</button>
             <div class="current-acc-title" id="currentAccountTitle">Account Name</div>
+            <button class="btn-delete" onclick="deleteAccount()">Delete</button>
         </div>
 
         <!-- Left Column on Desktop -->
@@ -517,6 +530,24 @@
         saveData();
         updateAccountUI();
         amountInput.value = ''; 
+    }
+
+    // New deleteAccount function
+    function deleteAccount() {
+        const acc = getCurrentAccount();
+        if (!acc) return;
+        
+        // Ask for confirmation before deleting
+        const isConfirmed = confirm(`Are you sure you want to delete the account "${acc.name}"? This action cannot be undone.`);
+        
+        if (isConfirmed) {
+            // Remove the account from the accounts array
+            accounts = accounts.filter(a => a.id !== currentAccountId);
+            
+            // Save updated data and go back to dashboard
+            saveData();
+            showDashboard();
+        }
     }
 
     init();

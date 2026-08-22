@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenfast Vouchers Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg-base: #030014;
+            --surface: rgba(255, 255, 255, 0.02);
+            --surface-hover: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-primary: #a855f7; /* Purple */
+            --neon-secondary: #06b6d4; /* Cyan */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --sold-color: #f43f5e;
+            --money-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-primary); }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 4rem;
+        }
+
+        /* Epic Background Grid & Orbs */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -2;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(150px);
+            z-index: -1;
+            opacity: 0.15;
+            animation: pulse-glow 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        body::before { background: var(--neon-primary); top: -200px; left: -200px; }
+        body::after { background: var(--neon-secondary); bottom: -200px; right: -200px; animation-delay: -5s; }
+
+        @keyframes pulse-glow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.1; }
+            100% { transform: scale(1.2) translate(50px, 50px); opacity: 0.25; }
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--neon-primary), transparent);
+        }
+
+        header h1 {
+            font-weight: 900;
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #fff 0%, #a855f7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+        
+        .header-actions { display: flex; gap: 12px; }
+
+        /* Premium Glassmorphic Panel */
+        .glass-panel {
+            background: var(--surface);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.01), 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .sales-panel {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.01));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sales-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--money-color), transparent);
+            opacity: 0.5;
+        }
+
+        /* Staggered View Animations */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .animate-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Inputs & Buttons */
+        .input-group { display: flex; gap: 1rem; }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--neon-secondary);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 15px rgba(6, 182, 212, 0.2);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            font-weight: 700;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+        }
+
+        .btn-primary:active { transform: translateY(1px); }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-danger { background: linear-gradient(135deg, #f43f5e, #be123c); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .category-card {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 160px;
+            text-align: center;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--neon-primary);
+            box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.3);
+            background: var(--surface-hover);
+        }
+
+        .category-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .category-card span.stock {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.5);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .category-card .sales-badge {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--money-color);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            width: 90%;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Vouchers Grid Layout */
+        .bulk-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--neon-secondary);
+            cursor: pointer;
+        }
+
+        .vouchers-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .voucher-card {
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            padding: 0;
+        }
+        
+        .voucher-selector {
+            background: rgba(0,0,0,0.5);
+            padding: 0 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid var(--glass-border);
+        }
+
+        .voucher-brand {
+            background: rgba(255,255,255,0.02);
+            border-right: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            color: var(--neon-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+        }
+
+        .voucher-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            flex-grow: 1;
+            padding: 1.5rem;
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .data-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+            font-weight: 700;
+        }
+
+        .data-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fff;
+            word-break: break-all;
+        }
+        
+        .price-value { color: var(--money-color) !important; font-size: 1.2rem; }
+
+        .voucher-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.25rem;
+            border-left: 1px solid var(--glass-border);
+            min-width: 150px;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .voucher-actions button { padding: 0.75rem; font-size: 0.85rem; width: 100%; }
+
+        /* Epic Sold State */
+        .voucher-card.sold { opacity: 0.65; filter: grayscale(20%); }
+        .voucher-card.sold .voucher-actions:not(.archive-actions) { display: none; }
+
+        .sold-badge {
+            display: none;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg) scale(2);
+            color: var(--sold-color);
+            border: 4px solid var(--sold-color);
+            padding: 0.5rem 2rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            border-radius: 12px;
+            letter-spacing: 4px;
+            pointer-events: none;
+            text-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
+            box-shadow: inset 0 0 15px rgba(244, 63, 94, 0.4), 0 0 20px rgba(244, 63, 94, 0.3);
+            z-index: 5;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            animation: stampIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes stampIn {
+            0% { transform: translate(-50%, -50%) rotate(-15deg) scale(2); opacity: 0; }
+            100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); opacity: 1; }
+        }
+
+        .voucher-card.sold .sold-badge { display: block; }
+
+        .sold-date-info {
+            grid-column: 1 / -1;
+            font-size: 0.8rem;
+            color: #fda4af;
+            background: rgba(244, 63, 94, 0.1);
+            border: 1px dashed rgba(244, 63, 94, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+        }
+
+        #toast.show { bottom: 30px; }
+
+        /* Upload area */
+        .upload-section {
+            border: 2px dashed rgba(255,255,255,0.2);
+            text-align: center;
+            margin-bottom: 2rem;
+            background: rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .upload-section:hover { border-color: var(--neon-secondary); background: rgba(6, 182, 212, 0.05); }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .voucher-card { flex-direction: column; }
+            .voucher-brand { writing-mode: horizontal-tb; transform: none; min-width: auto; border-right: none; border-bottom: 1px solid var(--glass-border); }
+            .voucher-selector { padding: 1rem; border-right: none; border-bottom: 1px solid var(--glass-border); justify-content: flex-start;}
+            .voucher-details { grid-template-columns: 1fr 1fr; }
+            .voucher-actions { border-left: none; border-top: 1px solid var(--glass-border); flex-direction: row; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <header class="animate-up">
+            <h1>Zenfast Hotspot</h1>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="openArchiveView()" id="archiveBtn">Vault / Archive</button>
+                <button class="btn-outline" onclick="goHome()" id="homeBtn" style="display: none;">Return Home</button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD VIEW -->
+        <div id="dashboardView" class="view active">
+            
+            <div class="glass-panel sales-panel animate-up" style="animation-delay: 0.1s;">
+                <div>
+                    <h2 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif;">Net Global Revenue</h2>
+                    <div id="globalTotalDisplay" style="font-size: 2.8rem; font-weight: 900; color: var(--money-color); font-family: 'Outfit', sans-serif;">₱0.00</div>
+                </div>
+            </div>
+
+            <div class="glass-panel animate-up" style="margin-bottom: 2rem; animation-delay: 0.2s;">
+                <h2 style="margin-bottom: 1rem; font-weight: 700; font-size: 1.2rem;">Deploy New Category</h2>
+                <div class="input-group">
+                    <input type="text" id="newCategoryName" placeholder="e.g., VIP Access, 3 Days Unlimited..." autocomplete="off">
+                    <button class="btn-primary" onclick="addCategory()">Initialize</button>
+                </div>
+            </div>
+
+            <h2 class="animate-up" style="margin-bottom: 1.5rem; font-weight: 700; font-size: 1.3rem; animation-delay: 0.3s;">Active Databases</h2>
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Categories render here -->
+            </div>
+        </div>
+
+        <!-- CATEGORY VIEW -->
+        <div id="categoryView" class="view">
+            <div class="animate-up" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2 id="currentCategoryTitle" style="font-size: 1.8rem; font-weight: 900; color: #fff;">Category Name</h2>
+                    <div id="categorySalesTracker" style="color: var(--money-color); font-weight: 700; font-size: 1rem; margin-top: 0.4rem; font-family: 'JetBrains Mono', monospace;">Revenue: ₱0.00</div>
+                </div>
+                <span id="voucherCount" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px;">0 Records</span>
+            </div>
+
+            <div class="glass-panel upload-section animate-up" style="animation-delay: 0.1s;">
+                <h3 style="margin-bottom: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--neon-secondary);">Batch Import Credentials</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Format: Username,Password,Duration,Validity,Price</p>
+                <input type="file" id="csvFileInput" accept=".csv" style="margin-top: 1rem; font-family: 'Plus Jakarta Sans'; color: var(--text-muted);">
+            </div>
+
+            <div class="bulk-actions-bar animate-up" id="bulkActionBar" style="display: none; animation-delay: 0.2s;">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll('voucher-checkbox', this)">
+                    <span style="font-size: 0.95rem; font-weight: 600;">Select All Visible</span>
+                </label>
+                <button class="btn-warning" id="archiveSelectedBtn" style="display: none; padding: 0.6rem 1.25rem;" onclick="archiveSelectedVouchers()">
+                    Send to Vault
+                </button>
+            </div>
+
+            <div class="vouchers-grid" id="vouchersGrid">
+                <!-- Vouchers render here -->
+            </div>
+        </div>
+        
+        <!-- ARCHIVE VIEW -->
+        <div id="archiveView" class="view">
+            <div class="animate-up" style="margin-bottom: 2rem;">
+                <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--sold-color);">The Vault</h2>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;">Records permanently deleted here will be deducted from your total revenue.</div>
+            </div>
+
+            <div class="bulk-actions-bar animate-up" id="archiveBulkActionBar" style="display: none; animation-delay: 0.1s;">
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="selectAllArchiveCheckbox" onchange="toggleSelectAll('archive-checkbox', this)">
+                    <span style="font-size: 0.95rem; font-weight: 600;">Select All Vaulted</span>
+                </label>
+                <button class="btn-danger" id="deleteSelectedArchiveBtn" style="display: none; padding: 0.6rem 1.25rem;" onclick="permanentlyDeleteSelected()">
+                    Erase Permanently
+                </button>
+            </div>
+
+            <div id="archiveContent"></div>
+        </div>
+    </div>
+
+    <div id="toast">Data successfully processed!</div>
+
+    <script>
+        let appData = JSON.parse(localStorage.getItem('zenfast_db')) || [];
+        let activeCategoryId = null;
+
+        function init() { renderDashboard(); }
+        function saveData() { localStorage.setItem('zenfast_db', JSON.stringify(appData)); }
+        
+        function switchView(viewId) {
+            document.getElementById('dashboardView').classList.remove('active');
+            document.getElementById('categoryView').classList.remove('active');
+            document.getElementById('archiveView').classList.remove('active');
+            
+            document.getElementById(viewId).classList.add('active');
+            
+            if (viewId === 'dashboardView') {
+                document.getElementById('homeBtn').style.display = 'none';
+                document.getElementById('archiveBtn').style.display = 'block';
+            } else {
+                document.getElementById('homeBtn').style.display = 'block';
+                document.getElementById('archiveBtn').style.display = 'none';
+            }
+        }
+
+        // --- DASHBOARD ---
+        function renderDashboard() {
+            switchView('dashboardView');
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = '';
+            
+            let globalTotalSales = 0;
+
+            if (appData.length === 0) {
+                grid.innerHTML = `<div class="glass-panel animate-up" style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-style: italic; animation-delay: 0.4s;">No databases deployed yet. Initialize one above.</div>`;
+                document.getElementById('globalTotalDisplay').textContent = "₱0.00";
+                return;
+            }
+
+            let delayIndex = 4; // Start delay after static elements
+            appData.forEach(cat => {
+                let categorySales = 0;
+                cat.vouchers.forEach(v => {
+                    if (v.sold) {
+                        const price = parseFloat(v.price) || 0;
+                        categorySales += price;
+                        globalTotalSales += price;
+                    }
+                });
+
+                const unarchivedVouchers = cat.vouchers.filter(v => !v.archived);
+                const available = unarchivedVouchers.filter(v => !v.sold).length;
+                const total = unarchivedVouchers.length;
+
+                const card = document.createElement('div');
+                card.className = 'glass-panel category-card animate-up';
+                card.style.animationDelay = `${delayIndex * 0.05}s`;
+                card.onclick = () => openCategory(cat.id);
+                card.innerHTML = `
+                    <h3>${escapeHtml(cat.name)}</h3>
+                    <span class="stock">${available} / ${total} Available</span>
+                    <div class="sales-badge">₱${categorySales.toFixed(2)}</div>
+                `;
+                grid.appendChild(card);
+                delayIndex++;
+            });
+            
+            document.getElementById('globalTotalDisplay').textContent = `₱${globalTotalSales.toFixed(2)}`;
+        }
+
+        function addCategory() {
+            const input = document.getElementById('newCategoryName');
+            const name = input.value.trim();
+            if (!name) return;
+            appData.push({ id: Date.now().toString(), name: name, vouchers: [] });
+            saveData();
+            input.value = '';
+            renderDashboard();
+        }
+
+        function goHome() { activeCategoryId = null; renderDashboard(); }
+
+        // --- CATEGORY ---
+        function openCategory(id) {
+            activeCategoryId = id;
+            switchView('categoryView');
+            renderCategoryVouchers();
+        }
+
+        function renderCategoryVouchers() {
+            const category = appData.find(c => c.id === activeCategoryId);
+            if (!category) return;
+            
+            let categoryTotal = 0;
+            category.vouchers.forEach(v => { if (v.sold) categoryTotal += (parseFloat(v.price) || 0); });
+            const unarchivedVouchers = category.vouchers.filter(v => !v.archived);
+
+            document.getElementById('currentCategoryTitle').textContent = category.name;
+            document.getElementById('voucherCount').textContent = `${unarchivedVouchers.length} Records`;
+            document.getElementById('categorySalesTracker').textContent = `Revenue: ₱${categoryTotal.toFixed(2)}`;
+
+            const grid = document.getElementById('vouchersGrid');
+            const bulkBar = document.getElementById('bulkActionBar');
+            grid.innerHTML = '';
+            document.getElementById('selectAllCheckbox').checked = false;
+            document.getElementById('archiveSelectedBtn').style.display = 'none';
+
+            bulkBar.style.display = unarchivedVouchers.length > 0 ? 'flex' : 'none';
+
+            unarchivedVouchers.forEach((voucher, index) => {
+                const card = document.createElement('div');
+                card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
+                card.style.animationDelay = `${(index * 0.05) + 0.3}s`;
+                
+                const safeUsername = (voucher.username || '').replace(/'/g, "\\'");
+                const safePassword = (voucher.password || '').replace(/'/g, "\\'");
+                const safeDuration = (voucher.duration || '').replace(/'/g, "\\'");
+                const safeValidity = (voucher.validity || '').replace(/'/g, "\\'");
+                
+                const displayPrice = (parseFloat(voucher.price) || 0).toFixed(2);
+                const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
+
+                card.innerHTML = `
+                    <div class="sold-badge">SOLD</div>
+                    <div class="voucher-selector">
+                        <input type="checkbox" class="voucher-checkbox" value="${voucher.id}" onchange="updateBulkActions('voucher-checkbox', 'selectAllCheckbox', 'archiveSelectedBtn')">
+                    </div>
+                    <div class="voucher-brand">ZENFAST</div>
+                    <div class="voucher-details">
+                        <div>
+                            <div class="data-label">Username</div>
+                            <div class="data-value">${escapeHtml(voucher.username)}</div>
+                        </div>
+                        <div>
+                            <div class="data-label">Password</div>
+                            <div class="data-value">${escapeHtml(voucher.password)}</div>
+                        </div>
+                        <div>
+                            <div class="data-label">Duration</div>
+                            <div class="data-value">${escapeHtml(voucher.duration || 'N/A')}</div>
+                        </div>
+                        <div>
+                            <div class="data-label">Validity</div>
+                            <div class="data-value">${escapeHtml(voucher.validity || 'N/A')}</div>
+                        </div>
+                        <div>
+                            <div class="data-label">Price</div>
+                            <div class="data-value price-value">₱${displayPrice}</div>
+                        </div>
+                        ${soldDateHtml}
+                    </div>
+                    <div class="voucher-actions">
+                        <button class="btn-outline" onclick="copyCombo('${safeUsername}', '${safePassword}', '${safeDuration}', '${safeValidity}')">Copy Combo</button>
+                        <button class="btn-primary" onclick="markSold('${voucher.id}')">Mark Sold</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        // --- ARCHIVE ---
+        function openArchiveView() {
+            activeCategoryId = null;
+            switchView('archiveView');
+            renderArchive();
+        }
+        
+        function renderArchive() {
+            const container = document.getElementById('archiveContent');
+            const bulkBar = document.getElementById('archiveBulkActionBar');
+            
+            container.innerHTML = '';
+            document.getElementById('selectAllArchiveCheckbox').checked = false;
+            document.getElementById('deleteSelectedArchiveBtn').style.display = 'none';
+            
+            let hasAnyArchived = false;
+            let delayIndex = 2;
+
+            appData.forEach(category => {
+                const archivedVouchers = category.vouchers.filter(v => v.archived);
+                
+                if (archivedVouchers.length > 0) {
+                    hasAnyArchived = true;
+                    
+                    const catTitle = document.createElement('h3');
+                    catTitle.className = 'animate-up';
+                    catTitle.style.cssText = `font-size: 1.2rem; font-weight: 800; margin: 2rem 0 1rem 0; color: var(--neon-secondary); border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem; animation-delay: ${delayIndex * 0.05}s`;
+                    catTitle.textContent = `Database: ${category.name}`;
+                    container.appendChild(catTitle);
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'vouchers-grid';
+                    
+                    archivedVouchers.forEach(voucher => {
+                        const card = document.createElement('div');
+                        card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
+                        delayIndex++;
+                        card.style.animationDelay = `${delayIndex * 0.05}s`;
+                        
+                        const displayPrice = (parseFloat(voucher.price) || 0).toFixed(2);
+                        const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
+
+                        card.innerHTML = `
+                            <div class="sold-badge">SOLD</div>
+                            <div class="voucher-selector">
+                                <input type="checkbox" class="archive-checkbox" data-catid="${category.id}" value="${voucher.id}" onchange="updateBulkActions('archive-checkbox', 'selectAllArchiveCheckbox', 'deleteSelectedArchiveBtn', 'Erase Permanently')">
+                            </div>
+                            <div class="voucher-brand" style="color: var(--text-muted);">VAULTED</div>
+                            <div class="voucher-details">
+                                <div><div class="data-label">Username</div><div class="data-value">${escapeHtml(voucher.username)}</div></div>
+                                <div><div class="data-label">Password</div><div class="data-value">${escapeHtml(voucher.password)}</div></div>
+                                <div><div class="data-label">Price</div><div class="data-value price-value">₱${displayPrice}</div></div>
+                                ${soldDateHtml}
+                            </div>
+                            <div class="voucher-actions archive-actions">
+                                <button class="btn-outline" style="border-color: var(--neon-secondary); color: var(--neon-secondary);" onclick="restoreVoucher('${category.id}', '${voucher.id}')">Restore</button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    container.appendChild(grid);
+                }
+            });
+            
+            if (hasAnyArchived) {
+                bulkBar.style.display = 'flex';
+            } else {
+                bulkBar.style.display = 'none';
+                container.innerHTML = `<div class="glass-panel animate-up" style="text-align: center; padding: 3rem; color: var(--text-muted); font-style: italic; animation-delay: 0.2s;">The vault is currently empty.</div>`;
+            }
+        }
+
+        // --- BULK ACTIONS ---
+        function toggleSelectAll(checkboxClass, sourceElement) {
+            document.querySelectorAll(`.${checkboxClass}`).forEach(cb => cb.checked = sourceElement.checked);
+            if (checkboxClass === 'voucher-checkbox') updateBulkActions('voucher-checkbox', 'selectAllCheckbox', 'archiveSelectedBtn', 'Send to Vault');
+            else updateBulkActions('archive-checkbox', 'selectAllArchiveCheckbox', 'deleteSelectedArchiveBtn', 'Erase Permanently');
+        }
+
+        function updateBulkActions(checkboxClass, selectAllId, btnId, defaultText = "") {
+            const checkboxes = document.querySelectorAll(`.${checkboxClass}`);
+            const checkedBoxes = document.querySelectorAll(`.${checkboxClass}:checked`);
+            document.getElementById(selectAllId).checked = (checkboxes.length > 0 && checkboxes.length === checkedBoxes.length);
+            const btn = document.getElementById(btnId);
+            if (checkedBoxes.length > 0) {
+                btn.style.display = 'block';
+                btn.textContent = `${defaultText} (${checkedBoxes.length})`;
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
+        function archiveSelectedVouchers() {
+            const checkedBoxes = document.querySelectorAll('.voucher-checkbox:checked');
+            if (checkedBoxes.length === 0) return;
+            const category = appData.find(c => c.id === activeCategoryId);
+            if (!category) return;
+            const ids = Array.from(checkedBoxes).map(cb => cb.value);
+            category.vouchers.forEach(v => { if (ids.includes(v.id)) v.archived = true; });
+            saveData(); renderCategoryVouchers(); showToast(`Sent ${ids.length} records to vault.`);
+        }
+        
+        function permanentlyDeleteSelected() {
+            const checkedBoxes = document.querySelectorAll('.archive-checkbox:checked');
+            if (checkedBoxes.length === 0) return;
+            if (!confirm(`CRITICAL WARNING: Erasing these records will permanently alter your revenue calculations. Proceed?`)) return;
+
+            const toDelete = {};
+            checkedBoxes.forEach(cb => {
+                const catId = cb.getAttribute('data-catid');
+                if (!toDelete[catId]) toDelete[catId] = [];
+                toDelete[catId].push(cb.value);
+            });
+
+            Object.keys(toDelete).forEach(catId => {
+                const category = appData.find(c => c.id === catId);
+                if (category) category.vouchers = category.vouchers.filter(v => !toDelete[catId].includes(v.id));
+            });
+
+            saveData(); renderArchive(); showToast(`Records permanently erased.`);
+        }
+        
+        function restoreVoucher(categoryId, voucherId) {
+            const category = appData.find(c => c.id === categoryId);
+            if (!category) return;
+            const voucher = category.vouchers.find(v => v.id === voucherId);
+            if (voucher) {
+                voucher.archived = false; saveData(); renderArchive(); showToast(`Record restored.`);
+            }
+        }
+
+        // --- CSV ---
+        document.getElementById('csvFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file || !activeCategoryId) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                processCSV(event.target.result); e.target.value = '';
+            };
+            reader.readAsText(file);
+        });
+
+        function processCSV(csvText) {
+            const category = appData.find(c => c.id === activeCategoryId);
+            if (!category) return;
+            const lines = csvText.split(/\r?\n/);
+            lines.forEach((line) => {
+                const parts = line.split(',');
+                if (parts.length >= 2) {
+                    const username = parts[0] ? parts[0].trim() : '';
+                    const password = parts[1] ? parts[1].trim() : '';
+                    if (username && password) {
+                        category.vouchers.push({
+                            id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                            username: username, password: password,
+                            duration: parts[2] ? parts[2].trim() : '',
+                            validity: parts[3] ? parts[3].trim() : '',
+                            price: parts[4] ? parseFloat(parts[4].trim()) || 0 : 0,
+                            sold: false, soldDate: null, archived: false
+                        });
+                    }
+                }
+            });
+            saveData(); renderCategoryVouchers(); showToast("Batch import successful.");
+        }
+
+        // --- UTILS ---
+        function copyCombo(username, password, duration, validity) {
+            const text = `USERNAME: ${username} & PASSWORD: ${password} DURATION: ${duration} VALIDITY: ${validity}`;
+            navigator.clipboard.writeText(text).then(() => showToast("Credentials copied to clipboard.")).catch(() => alert("Failed to copy."));
+        }
+
+        function markSold(voucherId) {
+            const category = appData.find(c => c.id === activeCategoryId);
+            if (!category) return;
+            const voucher = category.vouchers.find(v => v.id === voucherId);
+            if (voucher) {
+                voucher.sold = true;
+                const now = new Date();
+                voucher.soldDate = now.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+                saveData(); renderCategoryVouchers(); showToast("Record marked as SOLD.");
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.classList.add("show");
+            if (window.toastTimeout) clearTimeout(window.toastTimeout);
+            window.toastTimeout = setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        init();
+    </script>
+</body>
+</html>
