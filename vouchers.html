@@ -5,19 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zenfast Vouchers Dashboard</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Outfit:wght@400;600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Outfit:wght@400;600;800;900&family=Poppins:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
         :root {
-            --bg-base: #030014;
+            --bg-base: #060103;
             --surface: rgba(255, 255, 255, 0.02);
-            --surface-hover: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --neon-primary: #a855f7; /* Purple */
-            --neon-secondary: #06b6d4; /* Cyan */
+            --surface-hover: rgba(239, 68, 68, 0.06);
+            --glass-border: rgba(239, 68, 68, 0.2);
+            --neon-primary: #ef4444; /* Neon Crimson */
+            --neon-secondary: #f87171; /* Soft Coral Red */
             --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --sold-color: #f43f5e;
-            --money-color: #10b981;
+            --text-muted: #fca5a5;
+            --sold-color: #dc2626;
+            --money-color: #ef4444;
         }
 
         * {
@@ -29,7 +29,7 @@
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(239, 68, 68, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-primary); }
 
         body {
@@ -42,15 +42,15 @@
             padding-bottom: 4rem;
         }
 
-        /* Epic Background Grid & Orbs */
+        /* Background Grid */
         .bg-grid {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: -2;
             background-size: 50px 50px;
             background-image: 
-                linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px);
+                linear-gradient(to right, rgba(239, 68, 68, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
             mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
             -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 100%);
         }
@@ -58,21 +58,21 @@
         body::before, body::after {
             content: '';
             position: fixed;
-            width: 600px;
-            height: 600px;
+            width: 650px;
+            height: 650px;
             border-radius: 50%;
-            filter: blur(150px);
+            filter: blur(160px);
             z-index: -1;
-            opacity: 0.15;
+            opacity: 0.18;
             animation: pulse-glow 10s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
 
-        body::before { background: var(--neon-primary); top: -200px; left: -200px; }
-        body::after { background: var(--neon-secondary); bottom: -200px; right: -200px; animation-delay: -5s; }
+        body::before { background: #ef4444; top: -200px; left: -200px; }
+        body::after { background: #7f1d1d; bottom: -200px; right: -200px; animation-delay: -5s; }
 
         @keyframes pulse-glow {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.1; }
+            0% { transform: scale(1) translate(0, 0); opacity: 0.12; }
             100% { transform: scale(1.2) translate(50px, 50px); opacity: 0.25; }
         }
 
@@ -82,7 +82,7 @@
             padding: 2rem 1.5rem;
         }
 
-        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+        h1, h2, h3 { font-family: 'Poppins', 'Outfit', sans-serif; font-weight: 800; }
 
         /* Header */
         header {
@@ -100,15 +100,14 @@
             position: absolute;
             bottom: -1px;
             left: 0;
-            width: 100px;
-            height: 1px;
+            width: 120px;
+            height: 2px;
             background: linear-gradient(90deg, var(--neon-primary), transparent);
         }
 
         header h1 {
-            font-weight: 900;
             font-size: 2.2rem;
-            background: linear-gradient(135deg, #fff 0%, #a855f7 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #ef4444 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
@@ -116,7 +115,7 @@
         
         .header-actions { display: flex; gap: 12px; }
 
-        /* Premium Glassmorphic Panel */
+        /* Glassmorphic Panel */
         .glass-panel {
             background: var(--surface);
             backdrop-filter: blur(20px);
@@ -124,13 +123,13 @@
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 1.5rem;
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.01), 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.02), 0 8px 32px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
         }
         
         .sales-panel {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.01));
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(127, 29, 29, 0.02));
+            border: 1px solid rgba(239, 68, 68, 0.3);
             margin-bottom: 2rem;
             position: relative;
             overflow: hidden;
@@ -140,11 +139,11 @@
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--money-color), transparent);
-            opacity: 0.5;
+            background: linear-gradient(90deg, transparent, var(--neon-primary), transparent);
+            opacity: 0.7;
         }
 
-        /* Staggered View Animations */
+        /* View Transitions */
         .view { display: none; }
         .view.active { display: block; }
 
@@ -161,9 +160,8 @@
         /* Inputs & Buttons */
         .input-group { display: flex; gap: 1rem; }
 
-        input[type="text"] {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
+        input[type="text"], input[type="number"] {
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
             padding: 1rem 1.25rem;
@@ -172,12 +170,13 @@
             font-size: 1rem;
             outline: none;
             transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+            width: 100%;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--neon-secondary);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2), 0 0 15px rgba(6, 182, 212, 0.2);
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--neon-primary);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
         button {
@@ -194,18 +193,16 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
+            background: linear-gradient(135deg, #ef4444, #991b1b);
             color: white;
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);
             border: 1px solid rgba(255,255,255,0.1);
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
         }
-
-        .btn-primary:active { transform: translateY(1px); }
 
         .btn-outline {
             background: rgba(255, 255, 255, 0.03);
@@ -214,17 +211,67 @@
         }
 
         .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--neon-primary);
         }
         
-        .btn-danger { background: linear-gradient(135deg, #f43f5e, #be123c); color: white; }
-        .btn-warning { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #dc2626, #7f1d1d); color: white; }
+        .btn-warning { background: linear-gradient(135deg, #b91c1c, #450a0a); color: white; }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .modal-card {
+            max-width: 450px;
+            width: 100%;
+            background: #0d0205;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2);
+        }
+
+        .modal-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.25rem;
+            color: var(--neon-primary);
+        }
+
+        .modal-card .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-card label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-card .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            margin-top: 1.75rem;
+        }
 
         /* Categories Grid */
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 1.25rem;
         }
 
@@ -234,29 +281,61 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 160px;
+            min-height: 200px;
             text-align: center;
+            position: relative;
         }
 
         .category-card:hover {
             transform: translateY(-5px) scale(1.02);
             border-color: var(--neon-primary);
-            box-shadow: 0 10px 30px -10px rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.4);
             background: var(--surface-hover);
         }
 
         .category-card h3 {
             font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            font-weight: 800;
+            margin-bottom: 0.25rem;
             letter-spacing: 0.5px;
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+
+        .edit-cat-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.35rem 0.7rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .edit-cat-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--neon-primary);
+            color: #fff;
+        }
+
+        .category-card .vault-info {
+            font-size: 0.75rem;
+            color: var(--neon-secondary);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            border: 1px solid rgba(239, 68, 68, 0.25);
         }
 
         .category-card span.stock {
             font-size: 0.8rem;
             font-weight: 600;
             color: var(--text-muted);
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             padding: 0.35rem 0.85rem;
             border-radius: 20px;
             margin-bottom: 0.75rem;
@@ -264,13 +343,13 @@
         }
         
         .category-card .sales-badge {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 800;
             color: var(--money-color);
-            background: rgba(16, 185, 129, 0.1);
+            background: rgba(239, 68, 68, 0.12);
             padding: 0.4rem 0.75rem;
             border-radius: 8px;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
             width: 90%;
             font-family: 'JetBrains Mono', monospace;
         }
@@ -280,7 +359,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             padding: 1rem 1.25rem;
             border-radius: 14px;
             margin-bottom: 1.5rem;
@@ -297,7 +376,7 @@
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
-            accent-color: var(--neon-secondary);
+            accent-color: var(--neon-primary);
             cursor: pointer;
         }
 
@@ -313,10 +392,11 @@
             flex-direction: row;
             overflow: hidden;
             padding: 0;
+            position: relative;
         }
         
         .voucher-selector {
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             padding: 0 1.25rem;
             display: flex;
             align-items: center;
@@ -325,7 +405,7 @@
         }
 
         .voucher-brand {
-            background: rgba(255,255,255,0.02);
+            background: rgba(239, 68, 68, 0.05);
             border-right: 1px solid var(--glass-border);
             padding: 1rem 1.5rem;
             display: flex;
@@ -333,8 +413,8 @@
             justify-content: center;
             min-width: 120px;
             font-weight: 900;
-            font-family: 'Outfit', sans-serif;
-            color: var(--neon-secondary);
+            font-family: 'Poppins', sans-serif;
+            color: var(--neon-primary);
             letter-spacing: 2px;
             text-transform: uppercase;
             font-size: 1rem;
@@ -375,44 +455,38 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 0.75rem;
+            gap: 0.6rem;
             padding: 1.25rem;
             border-left: 1px solid var(--glass-border);
-            min-width: 150px;
-            background: rgba(0,0,0,0.2);
+            min-width: 165px;
+            background: rgba(0,0,0,0.3);
         }
 
-        .voucher-actions button { padding: 0.75rem; font-size: 0.85rem; width: 100%; }
+        .voucher-actions button { padding: 0.65rem; font-size: 0.85rem; width: 100%; }
 
-        /* Epic Sold State */
-        .voucher-card.sold { opacity: 0.65; filter: grayscale(20%); }
+        /* Sold State */
+        .voucher-card.sold { opacity: 0.65; filter: grayscale(30%); }
         .voucher-card.sold .voucher-actions:not(.archive-actions) { display: none; }
 
         .sold-badge {
             display: none;
             position: absolute;
             top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg) scale(2);
+            transform: translate(-50%, -50%) rotate(-15deg) scale(1);
             color: var(--sold-color);
             border: 4px solid var(--sold-color);
             padding: 0.5rem 2rem;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Poppins', sans-serif;
             font-size: 2.5rem;
             font-weight: 900;
             border-radius: 12px;
             letter-spacing: 4px;
             pointer-events: none;
-            text-shadow: 0 0 15px rgba(244, 63, 94, 0.6);
-            box-shadow: inset 0 0 15px rgba(244, 63, 94, 0.4), 0 0 20px rgba(244, 63, 94, 0.3);
+            text-shadow: 0 0 15px rgba(220, 38, 38, 0.8);
+            box-shadow: inset 0 0 15px rgba(220, 38, 38, 0.4), 0 0 25px rgba(220, 38, 38, 0.4);
             z-index: 5;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(4px);
-            animation: stampIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes stampIn {
-            0% { transform: translate(-50%, -50%) rotate(-15deg) scale(2); opacity: 0; }
-            100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); opacity: 1; }
         }
 
         .voucher-card.sold .sold-badge { display: block; }
@@ -420,45 +494,44 @@
         .sold-date-info {
             grid-column: 1 / -1;
             font-size: 0.8rem;
-            color: #fda4af;
-            background: rgba(244, 63, 94, 0.1);
-            border: 1px dashed rgba(244, 63, 94, 0.3);
+            color: #fca5a5;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px dashed rgba(220, 38, 38, 0.3);
             padding: 0.5rem 1rem;
             border-radius: 8px;
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Toast */
+        /* Toast Notification */
         #toast {
             position: fixed;
             bottom: -100px;
             left: 50%;
             transform: translateX(-50%);
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ef4444, #991b1b);
             color: white;
             padding: 1rem 2rem;
             border-radius: 50px;
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 0.95rem;
             font-weight: 700;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
             transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 1000;
+            z-index: 3000;
         }
 
         #toast.show { bottom: 30px; }
 
-        /* Upload area */
         .upload-section {
-            border: 2px dashed rgba(255,255,255,0.2);
+            border: 2px dashed rgba(239, 68, 68, 0.3);
             text-align: center;
             margin-bottom: 2rem;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
             transition: all 0.3s ease;
         }
-        .upload-section:hover { border-color: var(--neon-secondary); background: rgba(6, 182, 212, 0.05); }
+        .upload-section:hover { border-color: var(--neon-primary); background: rgba(239, 68, 68, 0.05); }
 
-        /* Mobile */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .voucher-card { flex-direction: column; }
             .voucher-brand { writing-mode: horizontal-tb; transform: none; min-width: auto; border-right: none; border-bottom: 1px solid var(--glass-border); }
@@ -487,19 +560,20 @@
             <div class="glass-panel sales-panel animate-up" style="animation-delay: 0.1s;">
                 <div>
                     <h2 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif;">Net Global Revenue</h2>
-                    <div id="globalTotalDisplay" style="font-size: 2.8rem; font-weight: 900; color: var(--money-color); font-family: 'Outfit', sans-serif;">₱0.00</div>
+                    <div id="globalTotalDisplay" style="font-size: 2.8rem; font-weight: 900; color: var(--money-color); font-family: 'Poppins', sans-serif;">₱0.00</div>
                 </div>
             </div>
 
             <div class="glass-panel animate-up" style="margin-bottom: 2rem; animation-delay: 0.2s;">
-                <h2 style="margin-bottom: 1rem; font-weight: 700; font-size: 1.2rem;">Deploy New Category</h2>
-                <div class="input-group">
-                    <input type="text" id="newCategoryName" placeholder="e.g., VIP Access, 3 Days Unlimited..." autocomplete="off">
+                <h2 style="margin-bottom: 1rem; font-weight: 800; font-size: 1.2rem;">Deploy New Category</h2>
+                <div class="input-group" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <input type="text" id="newCategoryName" placeholder="e.g., VIP Access, 3 Days Unlimited..." autocomplete="off" style="flex: 2;">
+                    <input type="number" id="newCategoryDays" placeholder="Auto Vault (Days)" min="0" autocomplete="off" style="flex: 1; min-width: 160px;">
                     <button class="btn-primary" onclick="addCategory()">Initialize</button>
                 </div>
             </div>
 
-            <h2 class="animate-up" style="margin-bottom: 1.5rem; font-weight: 700; font-size: 1.3rem; animation-delay: 0.3s;">Active Databases</h2>
+            <h2 class="animate-up" style="margin-bottom: 1.5rem; font-weight: 800; font-size: 1.3rem; animation-delay: 0.3s;">Active Databases</h2>
             <div class="categories-grid" id="categoriesGrid">
                 <!-- Categories render here -->
             </div>
@@ -507,16 +581,35 @@
 
         <!-- CATEGORY VIEW -->
         <div id="categoryView" class="view">
-            <div class="animate-up" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div class="animate-up" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
                 <div>
-                    <h2 id="currentCategoryTitle" style="font-size: 1.8rem; font-weight: 900; color: #fff;">Category Name</h2>
-                    <div id="categorySalesTracker" style="color: var(--money-color); font-weight: 700; font-size: 1rem; margin-top: 0.4rem; font-family: 'JetBrains Mono', monospace;">Revenue: ₱0.00</div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                        <h2 id="currentCategoryTitle" style="font-size: 1.8rem; font-weight: 900; color: #fff;">Category Name</h2>
+                        <button class="btn-outline" onclick="triggerCurrentCategoryEdit()" style="padding: 0.4rem 0.88rem; font-size: 0.8rem;">✏️ Edit Category Details</button>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; align-items: center;">
+                        <div id="categorySalesTracker" style="color: var(--money-color); font-weight: 800; font-size: 1rem; font-family: 'JetBrains Mono', monospace;">Revenue: ₱0.00</div>
+                        <div id="categoryVaultDaysDisplay" style="color: var(--neon-secondary); font-weight: 700; font-size: 0.85rem; background: rgba(239, 68, 68, 0.1); padding: 0.2rem 0.6rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.25);">Auto-Vault: 0 Days</div>
+                    </div>
                 </div>
-                <span id="voucherCount" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 20px;">0 Records</span>
+                <span id="voucherCount" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 20px;">0 Records</span>
+            </div>
+
+            <!-- HEADER PNG BANNER UPLOADER SECTION -->
+            <div class="glass-panel animate-up" style="margin-bottom: 1.5rem; animation-delay: 0.05s;">
+                <h3 style="font-size: 1rem; font-weight: 800; color: var(--neon-primary); margin-bottom: 0.5rem;">🖼️ Voucher Header Banner PNG</h3>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">Upload a custom banner image to automatically render on top of generated voucher images.</p>
+                <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <input type="file" id="headerImageFileInput" accept="image/png, image/jpeg, image/webp" style="font-size: 0.85rem; color: var(--text-muted);">
+                    <button class="btn-outline" onclick="clearHeaderImage()" id="clearHeaderBtn" style="display: none; padding: 0.5rem 1rem; font-size: 0.8rem; border-color: var(--sold-color); color: var(--sold-color);">Remove Header PNG</button>
+                </div>
+                <div id="headerPreviewContainer" style="margin-top: 0.75rem; display: none;">
+                    <img id="headerPreviewImg" style="max-width: 100%; height: 65px; border-radius: 8px; border: 1px solid var(--glass-border); object-fit: contain; background: #000;">
+                </div>
             </div>
 
             <div class="glass-panel upload-section animate-up" style="animation-delay: 0.1s;">
-                <h3 style="margin-bottom: 0.5rem; font-weight: 700; font-size: 1.1rem; color: var(--neon-secondary);">Batch Import Credentials</h3>
+                <h3 style="margin-bottom: 0.5rem; font-weight: 800; font-size: 1.1rem; color: var(--neon-primary);">Batch Import Credentials</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Format: Username,Password,Duration,Validity,Price</p>
                 <input type="file" id="csvFileInput" accept=".csv" style="margin-top: 1rem; font-family: 'Plus Jakarta Sans'; color: var(--text-muted);">
             </div>
@@ -539,7 +632,7 @@
         <!-- ARCHIVE VIEW -->
         <div id="archiveView" class="view">
             <div class="animate-up" style="margin-bottom: 2rem;">
-                <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--sold-color);">The Vault</h2>
+                <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--neon-primary);">The Vault</h2>
                 <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;">Records permanently deleted here will be deducted from your total revenue.</div>
             </div>
 
@@ -557,15 +650,67 @@
         </div>
     </div>
 
+    <!-- EDIT CATEGORY MODAL -->
+    <div id="editCategoryModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3>Edit Category Settings</h3>
+            <div class="form-group">
+                <label>Category Name</label>
+                <input type="text" id="editModalNameInput" placeholder="Enter Category Name">
+            </div>
+            <div class="form-group">
+                <label>Auto-Vault Duration (Days after sold, 0 to disable)</label>
+                <input type="number" id="editModalDaysInput" min="0" placeholder="0">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-outline" onclick="closeEditModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveCategoryEdits()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast">Data successfully processed!</div>
 
     <script>
         let appData = JSON.parse(localStorage.getItem('zenfast_db')) || [];
         let activeCategoryId = null;
+        let editingCategoryId = null;
 
-        function init() { renderDashboard(); }
-        function saveData() { localStorage.setItem('zenfast_db', JSON.stringify(appData)); }
-        
+        function init() { 
+            autoArchiveVouchers();
+            renderDashboard(); 
+        }
+
+        function saveData() { 
+            localStorage.setItem('zenfast_db', JSON.stringify(appData)); 
+        }
+
+        // --- AUTO-ARCHIVE LOGIC ---
+        function autoArchiveVouchers() {
+            let changed = false;
+            const now = Date.now();
+            const MS_PER_DAY = 86400000;
+
+            appData.forEach(category => {
+                const targetDays = parseInt(category.archiveDays) || 0;
+                
+                if (targetDays > 0) {
+                    const archiveThresholdMs = targetDays * MS_PER_DAY;
+                    
+                    category.vouchers.forEach(v => {
+                        if (v.sold && !v.archived && v.soldTimestamp) {
+                            if (now - v.soldTimestamp >= archiveThresholdMs) {
+                                v.archived = true;
+                                changed = true;
+                            }
+                        }
+                    });
+                }
+            });
+
+            if (changed) saveData();
+        }
+
         function switchView(viewId) {
             document.getElementById('dashboardView').classList.remove('active');
             document.getElementById('categoryView').classList.remove('active');
@@ -582,8 +727,58 @@
             }
         }
 
-        // --- DASHBOARD ---
+        // --- UNIFIED MODAL EDIT FOR CATEGORY NAME & AUTO-VAULT DAYS ---
+        function editCategory(categoryId) {
+            const category = appData.find(c => c.id === categoryId);
+            if (!category) return;
+
+            editingCategoryId = categoryId;
+            document.getElementById('editModalNameInput').value = category.name || '';
+            document.getElementById('editModalDaysInput').value = category.archiveDays !== undefined ? category.archiveDays : 0;
+            
+            document.getElementById('editCategoryModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            editingCategoryId = null;
+            document.getElementById('editCategoryModal').style.display = 'none';
+        }
+
+        function saveCategoryEdits() {
+            if (!editingCategoryId) return;
+            const category = appData.find(c => c.id === editingCategoryId);
+            if (!category) return;
+
+            const newName = document.getElementById('editModalNameInput').value.trim();
+            const newDays = parseInt(document.getElementById('editModalDaysInput').value, 10);
+
+            if (!newName) {
+                alert("Category name cannot be empty.");
+                return;
+            }
+
+            category.name = newName;
+            category.archiveDays = isNaN(newDays) || newDays < 0 ? 0 : newDays;
+
+            saveData();
+            closeEditModal();
+
+            if (activeCategoryId === category.id) {
+                renderCategoryVouchers();
+            }
+            renderDashboard();
+            showToast("Category & Auto-Vault updated!");
+        }
+
+        function triggerCurrentCategoryEdit() {
+            if (activeCategoryId) {
+                editCategory(activeCategoryId);
+            }
+        }
+
+        // --- DASHBOARD RENDER ---
         function renderDashboard() {
+            autoArchiveVouchers();
             switchView('dashboardView');
             const grid = document.getElementById('categoriesGrid');
             grid.innerHTML = '';
@@ -596,7 +791,7 @@
                 return;
             }
 
-            let delayIndex = 4; // Start delay after static elements
+            let delayIndex = 4;
             appData.forEach(cat => {
                 let categorySales = 0;
                 cat.vouchers.forEach(v => {
@@ -610,13 +805,17 @@
                 const unarchivedVouchers = cat.vouchers.filter(v => !v.archived);
                 const available = unarchivedVouchers.filter(v => !v.sold).length;
                 const total = unarchivedVouchers.length;
+                const vaultDays = cat.archiveDays || 0;
+                const archiveDaysText = vaultDays > 0 ? `Auto-Vault: ${vaultDays} Days` : `Auto-Vault: Disabled`;
 
                 const card = document.createElement('div');
                 card.className = 'glass-panel category-card animate-up';
                 card.style.animationDelay = `${delayIndex * 0.05}s`;
                 card.onclick = () => openCategory(cat.id);
                 card.innerHTML = `
+                    <button class="edit-cat-btn" title="Edit Category Details" onclick="event.stopPropagation(); editCategory('${cat.id}')">✏️ Edit</button>
                     <h3>${escapeHtml(cat.name)}</h3>
+                    <div class="vault-info">⚡ ${archiveDaysText}</div>
                     <span class="stock">${available} / ${total} Available</span>
                     <div class="sales-badge">₱${categorySales.toFixed(2)}</div>
                 `;
@@ -628,18 +827,31 @@
         }
 
         function addCategory() {
-            const input = document.getElementById('newCategoryName');
-            const name = input.value.trim();
+            const nameInput = document.getElementById('newCategoryName');
+            const daysInput = document.getElementById('newCategoryDays');
+            const name = nameInput.value.trim();
+            const days = parseInt(daysInput.value, 10) || 0;
+
             if (!name) return;
-            appData.push({ id: Date.now().toString(), name: name, vouchers: [] });
+
+            appData.push({ 
+                id: Date.now().toString(), 
+                name: name, 
+                archiveDays: days < 0 ? 0 : days,
+                headerImage: null,
+                vouchers: [] 
+            });
+
             saveData();
-            input.value = '';
+            nameInput.value = '';
+            daysInput.value = '';
             renderDashboard();
+            showToast("Category deployed successfully.");
         }
 
         function goHome() { activeCategoryId = null; renderDashboard(); }
 
-        // --- CATEGORY ---
+        // --- CATEGORY VIEW ---
         function openCategory(id) {
             activeCategoryId = id;
             switchView('categoryView');
@@ -647,6 +859,7 @@
         }
 
         function renderCategoryVouchers() {
+            autoArchiveVouchers();
             const category = appData.find(c => c.id === activeCategoryId);
             if (!category) return;
             
@@ -657,6 +870,23 @@
             document.getElementById('currentCategoryTitle').textContent = category.name;
             document.getElementById('voucherCount').textContent = `${unarchivedVouchers.length} Records`;
             document.getElementById('categorySalesTracker').textContent = `Revenue: ₱${categoryTotal.toFixed(2)}`;
+            
+            const vaultDays = category.archiveDays || 0;
+            document.getElementById('categoryVaultDaysDisplay').textContent = vaultDays > 0 ? `Auto-Vault: ${vaultDays} Days` : `Auto-Vault: Disabled`;
+
+            // Header PNG Banner UI
+            const previewContainer = document.getElementById('headerPreviewContainer');
+            const previewImg = document.getElementById('headerPreviewImg');
+            const clearBtn = document.getElementById('clearHeaderBtn');
+
+            if (category.headerImage) {
+                previewImg.src = category.headerImage;
+                previewContainer.style.display = 'block';
+                clearBtn.style.display = 'inline-block';
+            } else {
+                previewContainer.style.display = 'none';
+                clearBtn.style.display = 'none';
+            }
 
             const grid = document.getElementById('vouchersGrid');
             const bulkBar = document.getElementById('bulkActionBar');
@@ -710,14 +940,181 @@
                     </div>
                     <div class="voucher-actions">
                         <button class="btn-outline" onclick="copyCombo('${safeUsername}', '${safePassword}', '${safeDuration}', '${safeValidity}')">Copy Combo</button>
+                        <button class="btn-outline" style="border-color: var(--neon-primary); color: var(--neon-primary);" onclick="generateImage('${safeUsername}', '${safePassword}', '${safeDuration}', '${safeValidity}', '${voucher.price}')">Voucher Image</button>
                         <button class="btn-primary" onclick="markSold('${voucher.id}')">Mark Sold</button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
-        
-        // --- ARCHIVE ---
+
+        // --- HEADER PNG IMAGE UPLOADER ---
+        document.getElementById('headerImageFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file || !activeCategoryId) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const category = appData.find(c => c.id === activeCategoryId);
+                if (category) {
+                    category.headerImage = event.target.result;
+                    saveData();
+                    renderCategoryVouchers();
+                    showToast("Header PNG loaded!");
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function clearHeaderImage() {
+            const category = appData.find(c => c.id === activeCategoryId);
+            if (category) {
+                category.headerImage = null;
+                saveData();
+                document.getElementById('headerImageFileInput').value = '';
+                renderCategoryVouchers();
+                showToast("Header PNG removed.");
+            }
+        }
+
+        // --- CANVAS IMAGE GENERATOR (STRICT POPPINS BOLD/BLACK FONTS + COMPLEMENTARY MESSAGE) ---
+        function generateImage(username, password, duration, validity, price) {
+            const category = appData.find(c => c.id === activeCategoryId);
+            const headerImageSrc = category ? category.headerImage : null;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 800;
+            canvas.height = 540;
+            const ctx = canvas.getContext('2d');
+
+            function renderFullVoucher() {
+                ctx.fillStyle = '#080103';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.04)';
+                ctx.lineWidth = 1;
+                for (let x = 0; x < canvas.width; x += 30) {
+                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+                }
+                for (let y = 0; y < canvas.height; y += 30) {
+                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+                }
+
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(15, 15, 770, 510);
+
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(22, 22, 756, 496);
+
+                if (headerImageSrc) {
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.onload = function() {
+                        ctx.drawImage(img, 28, 28, 744, 160);
+                        drawVoucherBody();
+                        exportCanvas();
+                    };
+                    img.onerror = function() {
+                        drawFallbackHeader();
+                        drawVoucherBody();
+                        exportCanvas();
+                    };
+                    img.src = headerImageSrc;
+                } else {
+                    drawFallbackHeader();
+                    drawVoucherBody();
+                    exportCanvas();
+                }
+            }
+
+            function drawFallbackHeader() {
+                const grad = ctx.createLinearGradient(28, 28, 772, 188);
+                grad.addColorStop(0, '#2e0508');
+                grad.addColorStop(0.5, '#120204');
+                grad.addColorStop(1, '#080103');
+                ctx.fillStyle = grad;
+                ctx.fillRect(28, 28, 744, 160);
+
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
+                ctx.beginPath(); ctx.moveTo(40, 186); ctx.lineTo(760, 186); ctx.stroke();
+
+                ctx.font = '900 36px "Poppins", sans-serif';
+                ctx.fillStyle = '#ef4444';
+                ctx.textAlign = 'center';
+                ctx.fillText('ZENFAST HOTSPOT', 400, 98);
+
+                ctx.font = '700 15px "Poppins", sans-serif';
+                ctx.fillStyle = '#f87171';
+                ctx.fillText('HIGH-SPEED PREPAID INTERNET VOUCHER', 400, 138);
+            }
+
+            function drawVoucherBody() {
+                drawDataCard(ctx, 40, 205, 340, 95, 'USERNAME', username, '#ef4444');
+                drawDataCard(ctx, 420, 205, 340, 95, 'PASSWORD', password, '#f87171');
+                drawDataCard(ctx, 40, 318, 340, 85, 'DURATION', duration || 'N/A', '#fca5a5');
+                drawDataCard(ctx, 420, 318, 340, 85, 'VALIDITY', validity || 'N/A', '#fca5a5');
+
+                // Price Section
+                const priceGrad = ctx.createLinearGradient(40, 420, 760, 420);
+                priceGrad.addColorStop(0, 'rgba(239, 68, 68, 0.15)');
+                priceGrad.addColorStop(1, 'rgba(127, 29, 29, 0.05)');
+                ctx.fillStyle = priceGrad;
+                ctx.fillRect(40, 420, 720, 56);
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(40, 420, 720, 56);
+
+                ctx.font = '800 14px "Poppins", sans-serif';
+                ctx.fillStyle = '#fca5a5';
+                ctx.textAlign = 'left';
+                ctx.fillText('VOUCHER PRICE', 60, 454);
+
+                ctx.font = '900 28px "Poppins", sans-serif';
+                ctx.fillStyle = '#ef4444';
+                ctx.textAlign = 'right';
+                ctx.fillText('₱' + (parseFloat(price) || 0).toFixed(2), 740, 458);
+
+                // Complementary Message Footer
+                ctx.font = '900 13px "Poppins", sans-serif';
+                ctx.fillStyle = '#f87171';
+                ctx.textAlign = 'center';
+                ctx.fillText('Thank you for purchasing voucher!', 400, 502);
+            }
+
+            function drawDataCard(context, x, y, w, h, label, value, accentColor) {
+                context.fillStyle = 'rgba(255, 255, 255, 0.02)';
+                context.fillRect(x, y, w, h);
+                context.strokeStyle = 'rgba(239, 68, 68, 0.2)';
+                context.lineWidth = 1;
+                context.strokeRect(x, y, w, h);
+
+                context.fillStyle = accentColor;
+                context.fillRect(x, y, 5, h);
+
+                context.font = '800 12px "Poppins", sans-serif';
+                context.fillStyle = '#fca5a5';
+                context.textAlign = 'left';
+                context.fillText(label, x + 20, y + 28);
+
+                context.font = '900 22px "Poppins", sans-serif';
+                context.fillStyle = '#ffffff';
+                context.fillText(value, x + 20, y + 62);
+            }
+
+            function exportCanvas() {
+                const link = document.createElement('a');
+                link.download = `Voucher_${username || 'Zenfast'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("Voucher image generated!");
+            }
+
+            renderFullVoucher();
+        }
+
+        // --- ARCHIVE / VAULT VIEW ---
         function openArchiveView() {
             activeCategoryId = null;
             switchView('archiveView');
@@ -725,6 +1122,7 @@
         }
         
         function renderArchive() {
+            autoArchiveVouchers();
             const container = document.getElementById('archiveContent');
             const bulkBar = document.getElementById('archiveBulkActionBar');
             
@@ -772,7 +1170,7 @@
                                 ${soldDateHtml}
                             </div>
                             <div class="voucher-actions archive-actions">
-                                <button class="btn-outline" style="border-color: var(--neon-secondary); color: var(--neon-secondary);" onclick="restoreVoucher('${category.id}', '${voucher.id}')">Restore</button>
+                                <button class="btn-outline" style="border-color: var(--neon-primary); color: var(--neon-primary);" onclick="restoreVoucher('${category.id}', '${voucher.id}')">Restore</button>
                             </div>
                         `;
                         grid.appendChild(card);
@@ -789,7 +1187,7 @@
             }
         }
 
-        // --- BULK ACTIONS ---
+        // --- BULK SELECTION ---
         function toggleSelectAll(checkboxClass, sourceElement) {
             document.querySelectorAll(`.${checkboxClass}`).forEach(cb => cb.checked = sourceElement.checked);
             if (checkboxClass === 'voucher-checkbox') updateBulkActions('voucher-checkbox', 'selectAllCheckbox', 'archiveSelectedBtn', 'Send to Vault');
@@ -822,7 +1220,7 @@
         function permanentlyDeleteSelected() {
             const checkedBoxes = document.querySelectorAll('.archive-checkbox:checked');
             if (checkedBoxes.length === 0) return;
-            if (!confirm(`CRITICAL WARNING: Erasing these records will permanently alter your revenue calculations. Proceed?`)) return;
+            if (!confirm(`CRITICAL WARNING: Erasing these records permanently removes them from calculations. Proceed?`)) return;
 
             const toDelete = {};
             checkedBoxes.forEach(cb => {
@@ -848,7 +1246,7 @@
             }
         }
 
-        // --- CSV ---
+        // --- CSV IMPORT ---
         document.getElementById('csvFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file || !activeCategoryId) return;
@@ -875,7 +1273,7 @@
                             duration: parts[2] ? parts[2].trim() : '',
                             validity: parts[3] ? parts[3].trim() : '',
                             price: parts[4] ? parseFloat(parts[4].trim()) || 0 : 0,
-                            sold: false, soldDate: null, archived: false
+                            sold: false, soldTimestamp: null, soldDate: null, archived: false
                         });
                     }
                 }
@@ -895,9 +1293,12 @@
             const voucher = category.vouchers.find(v => v.id === voucherId);
             if (voucher) {
                 voucher.sold = true;
+                voucher.soldTimestamp = Date.now();
                 const now = new Date();
                 voucher.soldDate = now.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
-                saveData(); renderCategoryVouchers(); showToast("Record marked as SOLD.");
+                saveData(); 
+                renderCategoryVouchers(); 
+                showToast("Record marked as SOLD.");
             }
         }
 
