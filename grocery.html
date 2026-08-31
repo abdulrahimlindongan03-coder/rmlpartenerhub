@@ -163,12 +163,13 @@
         
         .card-content { padding: 18px; flex-grow: 1; display: flex; flex-direction: column; }
         .card-header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
-        .card-title { font-size: 1.05rem; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: capitalize; }
+        .card-title { font-size: 1.05rem; font-weight: 600; color: var(--text-main); white-space: normal; word-break: break-word; text-transform: capitalize; }
         
         .barcode-badge {
             font-size: 0.75rem; background: rgba(229, 193, 88, 0.15); color: var(--primary);
             padding: 2px 6px; border-radius: 6px; font-family: monospace;
             display: inline-block; width: fit-content; border: 1px solid var(--glass-border);
+            word-break: break-all;
         }
 
         .batch-list {
