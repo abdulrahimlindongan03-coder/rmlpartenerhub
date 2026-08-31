@@ -2,372 +2,324 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RML Income Tracker</title>
-    <!-- Favicon feature -->
     <link rel="icon" href="income.png" type="image/png">
     
     <style>
-        /* Import strictly Poppins Bold (700) and Regular (400) for the notice */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-        /* Apply Poppins Bold to EVERYTHING by default */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif !important;
-            font-weight: 700 !important;
+            -webkit-tap-highlight-color: transparent;
         }
 
+        /* Mobile-Native Black App Background with Animated Grid */
         body {
-            /* Premium Dark Aurora Background */
-            background-color: #0b0f19;
+            background-color: #000000;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: 0 0;
+            animation: gridScroll 15s linear infinite;
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            color: #ffffff;
+            justify-content: center; /* Centers the app on desktop view */
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* Aesthetic Glowing Orbs */
-        .aurora-1, .aurora-2, .aurora-3 {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.5;
-            z-index: -1;
-            animation: float 20s infinite alternate ease-in-out;
-        }
-        .aurora-1 {
-            width: 400px; height: 400px;
-            background: #00f2fe; 
-            top: -100px; left: -100px;
-        }
-        .aurora-2 {
-            width: 500px; height: 500px;
-            background: #4facfe; 
-            bottom: -150px; right: -100px;
-            animation-delay: -5s;
-        }
-        .aurora-3 {
-            width: 300px; height: 300px;
-            background: #ff0844; 
-            top: 40%; left: 50%;
-            transform: translate(-50%, -50%);
-            animation-delay: -10s;
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
         }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.1); }
-        }
-
-        /* Glassmorphism Container */
-        .glass-container {
-            background: rgba(20, 25, 35, 0.45);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            border-left: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            padding: 30px 20px;
+        /* Enforced Mobile Portrait Container */
+        .app-container {
             width: 100%;
-            max-width: 450px; 
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
+            max-width: 430px; /* Locks width to standard large mobile size */
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 20px 15px 40px 15px;
             display: flex;
             flex-direction: column;
             gap: 20px;
             position: relative;
             z-index: 10;
+            background: transparent; /* Ensures the inside of the app stays pure black */
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.05); /* Subtle edge separation if on desktop */
         }
 
         .header-image {
             display: block;
-            margin: 0 auto;
-            max-width: 220px;
-            max-height: 100px;
+            margin: 10px auto 20px auto;
+            max-width: 180px;
             object-fit: contain;
-            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6));
+            filter: drop-shadow(0px 4px 12px rgba(0, 242, 254, 0.2));
         }
 
         /* View Toggling */
-        .view { display: none; flex-direction: column; gap: 20px; width: 100%; }
-        .view.active { display: flex; animation: fadeIn 0.4s ease forwards; }
+        .view { display: none; flex-direction: column; gap: 20px; width: 100%; flex: 1; }
+        .view.active { display: flex; animation: slideUp 0.3s ease forwards; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Dashboard Styles */
+        /* Native App Inputs */
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px; 
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 14px;
+            color: #fff;
+            text-align: center;
+            outline: none;
+            font-weight: 600 !important;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
+        }
+        input:focus { 
+            border-color: #00f2fe; 
+            background: #1a1a1a; 
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+        }
+
+        /* Chunky Mobile Buttons */
+        button {
+            width: 100%;
+            min-height: 54px;
+            font-size: 14px;
+            font-weight: 700 !important;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.1s ease, filter 0.2s;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button:active { transform: scale(0.97); filter: brightness(1.2); }
+
+        .btn-create { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+        .btn-balance-nav { background: #222222; border: 1px solid #444; color: #00f2fe !important; margin-top: 15px; }
+        .btn-add-balance { background: linear-gradient(135deg, #ff0844, #ffb199); }
+        
+        .button-group { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
+        .button-group button { margin-top: 0; flex: 1; font-size: 12px; }
+        .btn-deposit { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+        .btn-pay { background: linear-gradient(135deg, #42e695, #3bb2b8); } 
+        .btn-borrow { background: linear-gradient(135deg, #ff0844, #ffb199); }
+
+        /* Sleek Account Lists */
         .account-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            max-height: 350px;
+            gap: 12px;
+            flex: 1;
             overflow-y: auto;
-            padding-right: 5px;
+            padding-bottom: 20px;
         }
 
-        .account-list::-webkit-scrollbar { width: 5px; }
-        .account-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .account-list::-webkit-scrollbar { display: none; } /* Hide scrollbar for native app feel */
 
         .account-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0a0a0a;
+            border: 1px solid #222;
             padding: 20px;
             border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
         }
-        .account-card:hover {
-            background: rgba(255,255,255,0.12);
-            transform: translateY(-2px);
-            border-color: #00f2fe;
+        .account-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: #00f2fe; border-radius: 4px 0 0 4px;
         }
+        .balance-card::before { background: #ff0844; } 
         
-        .acc-name { font-size: 16px; color: #fff; letter-spacing: 1px; }
-        .acc-balance { font-size: 18px; color: #00f2fe; }
+        .acc-name { font-size: 15px; font-weight: 600 !important; color: #eee; }
+        .acc-balance { font-size: 18px; font-weight: 700 !important; color: #00f2fe; }
+        .bal-amount { color: #ff0844; font-size: 16px; font-weight: 700 !important; }
 
-        /* Detail View Styles */
+        /* Detail View Headers */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 12px;
-            width: 100%;
+            background: #111;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #222;
+            margin-bottom: 10px;
         }
 
-        .btn-back, .btn-delete {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: auto !important;
-            flex: unset !important;
+        .top-bar button {
+            width: auto; min-height: 36px; padding: 0 15px; margin: 0; font-size: 11px;
         }
-
-        .btn-back {
-            background: rgba(255, 255, 255, 0.05);
-            color: #a3b8cc;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .btn-back:hover { background: rgba(255, 255, 255, 0.15); color: #fff; }
-
-        .btn-delete {
-            background: rgba(255, 8, 68, 0.1);
-            color: #ff0844;
-            border: 1px solid rgba(255, 8, 68, 0.3);
-        }
-        .btn-delete:hover { background: rgba(255, 8, 68, 0.8); color: #fff; border-color: rgba(255, 8, 68, 1); }
+        .btn-back { background: transparent; border: 1px solid #444; color: #aaa; }
+        .btn-delete { background: rgba(255, 8, 68, 0.15); color: #ff0844; }
+        .btn-item-paid { background: rgba(66, 230, 149, 0.15); color: #42e695; width: auto; min-height: 36px; margin: 0; padding: 0 15px;}
 
         .current-acc-title { 
-            font-size: 18px; 
-            color: #00f2fe; 
+            font-size: 15px; 
+            color: #fff; 
             text-transform: uppercase; 
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
             text-align: center;
             flex: 1;
         }
 
-        /* Balance Cards */
-        .balances-wrapper { display: flex; gap: 15px; width: 100%; }
+        /* Stats Blocks */
+        .balances-wrapper { display: flex; gap: 10px; width: 100%; }
         .card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.0));
+            background: #0a0a0a;
             padding: 20px 10px;
-            border-radius: 15px;
+            border-radius: 16px;
             flex: 1;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border: 1px solid #222;
         }
-
-        .card-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #a3b8cc; margin-bottom: 8px; }
-        .savings-amount { font-size: 22px; color: #00f2fe; text-shadow: 0 0 10px rgba(0, 242, 254, 0.4); }
-        .borrowed-amount { font-size: 22px; color: #ff0844; text-shadow: 0 0 10px rgba(255, 8, 68, 0.4); }
-
-        /* Inputs & Buttons */
-        input[type="number"], input[type="text"] {
-            padding: 16px;
-            font-size: 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #fff;
-            text-align: center;
-            outline: none;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        input:focus { border-color: #00f2fe; background: rgba(0, 0, 0, 0.5); }
-
-        .button-group { display: flex; gap: 8px; margin-top: 10px; width: 100%; }
-        button {
-            flex: 1; padding: 12px; font-size: 11px; border: none; border-radius: 10px;
-            cursor: pointer; color: white; text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-        button:active { transform: scale(0.96); }
-
-        .btn-create { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); width: 100%; margin-top: 10px; }
-        .btn-deposit { background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); }
-        .btn-pay { background: linear-gradient(135deg, #42e695 0%, #3bb2b8 100%); } /* Added style for the Pay button */
-        .btn-borrow { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
-
-        .actions-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-        }
+        .card-title { font-size: 10px; text-transform: uppercase; color: #888; margin-bottom: 8px; font-weight: 600 !important;}
+        .savings-amount { font-size: 20px; color: #00f2fe; }
+        .borrowed-amount { font-size: 20px; color: #ff0844; }
 
         /* History */
         .history {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
+            background: #0a0a0a;
+            border-radius: 16px;
             padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            width: 100%;
+            border: 1px solid #222;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         .history h3 {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px; margin-bottom: 10px; font-size: 12px;
-            text-transform: uppercase; color: #a3b8cc; text-align: center;
+            font-size: 12px; color: #666; text-align: center;
+            margin-bottom: 15px; font-weight: 600 !important;
         }
-        .history-list { list-style: none; max-height: 130px; overflow-y: auto; padding-right: 5px; }
-        .history-list::-webkit-scrollbar { width: 4px; }
-        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .history-list { list-style: none; overflow-y: auto; flex: 1; max-height: 250px; }
+        .history-list::-webkit-scrollbar { display: none; }
+        
         .history-list li {
-            padding: 8px 0; border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
-            display: flex; justify-content: space-between; align-items: center; font-size: 12px;
+            padding: 12px 0; border-bottom: 1px solid #1a1a1a;
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600 !important;
         }
         .history-list li:last-child { border-bottom: none; }
-        .text-green { color: #00f2fe; } .text-orange { color: #ffb199; }
-        .time-label { font-size: 10px; color: #78909c; display: block; }
+        .text-green { color: #00f2fe; } 
+        .text-orange { color: #ff0844; }
+        .time-label { font-size: 11px; color: #666; display: block; font-weight: 400 !important;}
 
-        /* Beta Notice */
         .beta-notice {
-            font-weight: 400 !important; 
-            font-size: 11px;
-            color: #78909c;
-            text-align: center;
-            margin-top: 5px;
-            padding-top: 12px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.1);
-            line-height: 1.4;
-            width: 100%;
+            font-weight: 400 !important; font-size: 11px; color: #555;
+            text-align: center; margin-top: auto; padding-top: 20px;
         }
+        .beta-notice strong { color: #ffb199; font-weight: 600 !important; }
 
-        .beta-notice strong {
-            color: #ffb199;
-            font-weight: 700 !important;
-        }
-
-        /* Desktop Adjustments */
-        @media (min-width: 850px) {
-            .glass-container { max-width: 820px; padding: 40px; }
-            .header-image { max-width: 320px; margin-bottom: 10px; }
-            
-            #accountView.active {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 25px;
-                align-items: start;
-            }
-            .top-bar { grid-column: span 2; margin-bottom: 0; }
-            .balances-wrapper { flex-direction: column; gap: 20px; height: 100%; justify-content: center; }
-            .card { padding: 30px 20px; }
-            .savings-amount, .borrowed-amount { font-size: 32px; }
-            .actions-wrapper { display: flex; flex-direction: column; gap: 20px; }
-            
-            .beta-notice { grid-column: span 2; margin-top: 10px; }
-        }
     </style>
 </head>
 <body>
 
-<!-- Aesthetic Background Elements -->
-<div class="aurora-1"></div>
-<div class="aurora-2"></div>
-<div class="aurora-3"></div>
-
-<div class="glass-container">
+<div class="app-container">
     <img src="income.png" alt="Income Header" class="header-image">
     
     <!-- DASHBOARD VIEW -->
     <div id="dashboardView" class="view active">
         <div>
             <input type="text" id="newAccountName" placeholder="NEW ACCOUNT NAME">
-            <button class="btn-create" onclick="createAccount()">+ Create Account</button>
+            <button class="btn-create" onclick="createAccount()">Create Account</button>
+            <button class="btn-balance-nav" onclick="openBalanceView()">View Balances To Pay</button>
         </div>
+        
         <div class="account-list" id="accountListContainer">
             <!-- Accounts populate here -->
         </div>
         
         <div class="beta-notice">
-            <strong>Beta Notice:</strong> This application stores data locally in your browser. Clearing your browser's site data (e.g., in Chrome, Safari) or formatting your device will permanently delete all saved accounts and transactions.
+            <strong>Beta Notice:</strong> Data is stored locally. Clearing site data removes accounts.
+        </div>
+    </div>
+
+    <!-- BALANCE ITEMS VIEW -->
+    <div id="balanceView" class="view">
+        <div class="top-bar">
+            <button class="btn-back" onclick="showDashboard()">Back</button>
+            <div class="current-acc-title" style="color: #ff0844;">Balances Due</div>
+            <div style="width: 55px;"></div>
+        </div>
+
+        <div>
+            <input type="text" id="balanceTitleInput" placeholder="DESCRIPTION" style="margin-bottom: 10px;">
+            <input type="number" id="balanceAmountInput" placeholder="AMOUNT (₱)" min="0.01" step="0.01">
+            <button class="btn-add-balance" onclick="addBalanceItem()">Add Due Balance</button>
+        </div>
+
+        <div class="card" style="padding: 20px; background: #111; border-color: #333;">
+            <div class="card-title">Total Pending</div>
+            <div class="borrowed-amount" id="totalBalanceDisplay" style="font-size: 28px;">₱0.00</div>
+        </div>
+
+        <div class="account-list" id="balanceListContainer">
+            <!-- Balance Items populate here -->
         </div>
     </div>
 
     <!-- ACCOUNT DETAIL VIEW -->
     <div id="accountView" class="view">
         <div class="top-bar">
-            <button class="btn-back" onclick="showDashboard()">← Back</button>
-            <div class="current-acc-title" id="currentAccountTitle">Account Name</div>
+            <button class="btn-back" onclick="showDashboard()">Back</button>
+            <div class="current-acc-title" id="currentAccountTitle">Account</div>
             <button class="btn-delete" onclick="deleteAccount()">Delete</button>
         </div>
 
-        <!-- Left Column on Desktop -->
         <div class="balances-wrapper">
             <div class="card">
-                <div class="card-title">Total Savings</div>
+                <div class="card-title">Savings</div>
                 <div class="savings-amount" id="savingsDisplay">₱0.00</div>
             </div>
             <div class="card">
-                <div class="card-title">Total Borrowed</div>
+                <div class="card-title">Borrowed</div>
                 <div class="borrowed-amount" id="borrowedDisplay">₱0.00</div>
             </div>
         </div>
 
-        <!-- Right Column on Desktop -->
-        <div class="actions-wrapper">
-            <div>
-                <input type="number" id="amountInput" placeholder="ENTER AMOUNT (₱)" min="0.01" step="0.01">
-                <div class="button-group">
-                    <button class="btn-deposit" onclick="handleTransaction('deposit')">Deposit</button>
-                    <button class="btn-pay" onclick="handleTransaction('pay')">Pay</button>
-                    <button class="btn-borrow" onclick="handleTransaction('borrow')">Borrow</button>
-                </div>
-            </div>
-
-            <div class="history">
-                <h3>Transaction History</h3>
-                <ul class="history-list" id="historyList">
-                    <!-- History loads here -->
-                </ul>
+        <div>
+            <input type="number" id="amountInput" placeholder="ENTER AMOUNT (₱)" min="0.01" step="0.01">
+            <div class="button-group">
+                <button class="btn-deposit" onclick="handleTransaction('deposit')">Deposit</button>
+                <button class="btn-pay" onclick="handleTransaction('pay')">Pay</button>
+                <button class="btn-borrow" onclick="handleTransaction('borrow')">Borrow</button>
             </div>
         </div>
-        
-        <div class="beta-notice">
-            <strong>Beta Notice:</strong> This application stores data locally in your browser. Clearing your browser's site data (e.g., in Chrome, Safari) or formatting your device will permanently delete all saved accounts and transactions.
+
+        <div class="history">
+            <h3>Recent Transactions</h3>
+            <ul class="history-list" id="historyList">
+                <!-- History loads here -->
+            </ul>
         </div>
     </div>
 </div>
 
 <script>
-    const STORAGE_KEY = 'vault_premium_accounts_v1';
+    const STORAGE_KEY = 'vault_premium_accounts_v2';
+    const BALANCE_STORAGE_KEY = 'vault_balance_items_v2';
+    
     let accounts = [];
+    let balanceItems = [];
     let currentAccountId = null;
 
     const phpFormatter = new Intl.NumberFormat('en-PH', {
@@ -378,28 +330,27 @@
     function init() {
         const storedData = localStorage.getItem(STORAGE_KEY);
         if (storedData) {
-            try {
-                accounts = JSON.parse(storedData);
-            } catch(e) {
-                accounts = [];
-            }
+            try { accounts = JSON.parse(storedData); } catch(e) { accounts = []; }
+        }
+        const storedBalances = localStorage.getItem(BALANCE_STORAGE_KEY);
+        if (storedBalances) {
+            try { balanceItems = JSON.parse(storedBalances); } catch(e) { balanceItems = []; }
         }
         renderDashboard();
     }
 
     function saveData() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+        localStorage.setItem(BALANCE_STORAGE_KEY, JSON.stringify(balanceItems));
     }
 
     function renderDashboard() {
         const container = document.getElementById('accountListContainer');
         container.innerHTML = '';
-
         if (accounts.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:#78909c; font-size: 13px; margin-top:20px; font-weight:400 !important;">No accounts yet. Create one above.</p>';
+            container.innerHTML = '<p style="text-align:center; color:#555; font-size: 13px; margin-top:20px; font-weight:400 !important;">No accounts yet.</p>';
             return;
         }
-
         accounts.forEach(acc => {
             const div = document.createElement('div');
             div.className = 'account-card';
@@ -415,20 +366,8 @@
     function createAccount() {
         const input = document.getElementById('newAccountName');
         const name = input.value.trim();
-        
-        if (!name) {
-            alert("Please enter a valid account name.");
-            return;
-        }
-
-        const newAccount = {
-            id: Date.now().toString(),
-            name: name,
-            savings: 0,
-            borrowed: 0,
-            history: []
-        };
-
+        if (!name) { alert("Please enter a valid account name."); return; }
+        const newAccount = { id: Date.now().toString(), name: name, savings: 0, borrowed: 0, history: [] };
         accounts.push(newAccount);
         saveData();
         input.value = '';
@@ -436,65 +375,97 @@
     }
 
     function showDashboard() {
-        document.getElementById('accountView').classList.remove('active');
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById('dashboardView').classList.add('active');
         currentAccountId = null;
         renderDashboard();
     }
 
+    function openBalanceView() {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('balanceView').classList.add('active');
+        renderBalanceItems();
+    }
+
+    function addBalanceItem() {
+        const titleInput = document.getElementById('balanceTitleInput');
+        const amountInput = document.getElementById('balanceAmountInput');
+        const title = titleInput.value.trim();
+        const amount = parseFloat(amountInput.value);
+
+        if (!title) { alert("Please enter a description."); return; }
+        if (isNaN(amount) || amount <= 0) { alert("Enter a valid amount greater than ₱0."); return; }
+
+        balanceItems.push({ id: Date.now().toString(), title: title, amount: amount });
+        saveData();
+        titleInput.value = ''; amountInput.value = '';
+        renderBalanceItems();
+    }
+
+    function removeBalanceItem(id) {
+        balanceItems = balanceItems.filter(item => item.id !== id);
+        saveData();
+        renderBalanceItems();
+    }
+
+    function renderBalanceItems() {
+        const container = document.getElementById('balanceListContainer');
+        container.innerHTML = '';
+        let totalDue = 0;
+
+        if (balanceItems.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#555; font-size: 13px; margin-top:20px; font-weight:400 !important;">All caught up!</p>';
+        } else {
+            balanceItems.forEach(item => {
+                totalDue += item.amount;
+                const div = document.createElement('div');
+                div.className = 'account-card balance-card';
+                div.innerHTML = `
+                    <div>
+                        <div class="acc-name">${item.title}</div>
+                        <div class="bal-amount">${phpFormatter.format(item.amount)}</div>
+                    </div>
+                    <button class="btn-item-paid" onclick="removeBalanceItem('${item.id}')">Done</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+        document.getElementById('totalBalanceDisplay').innerText = phpFormatter.format(totalDue);
+    }
+
     function openAccount(id) {
         currentAccountId = id;
-        document.getElementById('dashboardView').classList.remove('active');
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById('accountView').classList.add('active');
         updateAccountUI();
     }
 
-    function getCurrentAccount() {
-        return accounts.find(acc => acc.id === currentAccountId);
-    }
+    function getCurrentAccount() { return accounts.find(acc => acc.id === currentAccountId); }
 
     function updateAccountUI() {
         const acc = getCurrentAccount();
         if (!acc) return;
-
         document.getElementById('currentAccountTitle').innerText = acc.name;
         document.getElementById('savingsDisplay').innerText = phpFormatter.format(acc.savings);
         document.getElementById('borrowedDisplay').innerText = phpFormatter.format(acc.borrowed);
-        
         renderHistory(acc.history);
     }
 
     function renderHistory(historyArray) {
         const historyList = document.getElementById('historyList');
         historyList.innerHTML = '';
-
         if (!historyArray || historyArray.length === 0) {
-            historyList.innerHTML = '<li style="justify-content:center; color:#78909c; font-weight:400 !important;">No transactions yet</li>';
+            historyList.innerHTML = '<li style="justify-content:center; color:#555; border:none; font-weight:400 !important;">No transactions</li>';
             return;
         }
-
         for (let i = historyArray.length - 1; i >= 0; i--) {
             const item = historyArray[i];
             const li = document.createElement('li');
-            
-            let typeText = '';
-            let colorClass = '';
-            let sign = '';
+            let typeText = '', colorClass = '', sign = '';
 
-            // Update display names for the specific actions
-            if (item.type === 'deposit') {
-                typeText = 'Deposited';
-                colorClass = 'text-green';
-                sign = '+';
-            } else if (item.type === 'pay') {
-                typeText = 'Paid';
-                colorClass = 'text-green'; // Payments add back to savings
-                sign = '+';
-            } else if (item.type === 'borrow') {
-                typeText = 'Borrowed';
-                colorClass = 'text-orange';
-                sign = '-';
-            }
+            if (item.type === 'deposit') { typeText = 'Deposited'; colorClass = 'text-green'; sign = '+'; } 
+            else if (item.type === 'pay') { typeText = 'Paid'; colorClass = 'text-green'; sign = '+'; } 
+            else if (item.type === 'borrow') { typeText = 'Borrowed'; colorClass = 'text-orange'; sign = '-'; }
 
             li.innerHTML = `
                 <div>
@@ -512,74 +483,36 @@
         let amount = parseFloat(amountInput.value);
         const acc = getCurrentAccount();
 
-        if (isNaN(amount) || amount <= 0) {
-            alert("Please enter a valid amount greater than ₱0.");
-            return;
-        }
+        if (isNaN(amount) || amount <= 0) { alert("Enter a valid amount."); return; }
 
-        if (type === 'deposit') {
-            // Only adds to savings, does NOT reduce borrowed amount
-            acc.savings += amount;
-        } 
+        if (type === 'deposit') { acc.savings += amount; } 
         else if (type === 'pay') {
-            if (acc.borrowed <= 0) {
-                alert("You do not have any borrowed amount to pay.");
-                return;
-            }
-            if (amount > acc.borrowed) {
-                alert("You cannot pay more than your total borrowed amount.");
-                return;
-            }
-            // Paying reduces the borrowed amount and adds the money back into savings
-            acc.borrowed -= amount;
-            acc.savings += amount;
+            if (acc.borrowed <= 0) { alert("No borrowed amount to pay."); return; }
+            if (amount > acc.borrowed) { alert("Cannot pay more than borrowed."); return; }
+            acc.borrowed -= amount; acc.savings += amount;
         }
         else if (type === 'borrow') {
-            if (amount > acc.savings) {
-                alert("You don't have enough savings in this account to borrow that amount!");
-                return;
-            }
-            // Borrowing reduces savings and adds to borrowed debt
-            acc.savings -= amount;
-            acc.borrowed += amount;
+            if (amount > acc.savings) { alert("Not enough savings."); return; }
+            acc.savings -= amount; acc.borrowed += amount;
         }
 
         const dateStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        acc.history.push({
-            type: type,
-            amount: amount,
-            date: dateStr
-        });
+        acc.history.push({ type: type, amount: amount, date: dateStr });
+        if (acc.history.length > 50) acc.history.shift();
 
-        if (acc.history.length > 50) {
-            acc.history.shift();
-        }
-
-        saveData();
-        updateAccountUI();
-        amountInput.value = ''; 
+        saveData(); updateAccountUI(); amountInput.value = ''; 
     }
 
-    // New deleteAccount function
     function deleteAccount() {
         const acc = getCurrentAccount();
         if (!acc) return;
-        
-        // Ask for confirmation before deleting
-        const isConfirmed = confirm(`Are you sure you want to delete the account "${acc.name}"? This action cannot be undone.`);
-        
-        if (isConfirmed) {
-            // Remove the account from the accounts array
+        if (confirm(`Delete account "${acc.name}" forever?`)) {
             accounts = accounts.filter(a => a.id !== currentAccountId);
-            
-            // Save updated data and go back to dashboard
-            saveData();
-            showDashboard();
+            saveData(); showDashboard();
         }
     }
 
     init();
 </script>
-
 </body>
 </html>
