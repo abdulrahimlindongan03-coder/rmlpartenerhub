@@ -12,8 +12,8 @@
             --surface: rgba(255, 255, 255, 0.02);
             --surface-hover: rgba(239, 68, 68, 0.06);
             --glass-border: rgba(239, 68, 68, 0.2);
-            --neon-primary: #ef4444; /* Neon Crimson */
-            --neon-secondary: #f87171; /* Soft Coral Red */
+            --neon-primary: #ef4444; 
+            --neon-secondary: #f87171; 
             --text-main: #f8fafc;
             --text-muted: #fca5a5;
             --sold-color: #dc2626;
@@ -26,7 +26,6 @@
             padding: 0;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-base); }
         ::-webkit-scrollbar-thumb { background: rgba(239, 68, 68, 0.2); border-radius: 10px; }
@@ -42,7 +41,6 @@
             padding-bottom: 4rem;
         }
 
-        /* Background Grid */
         .bg-grid {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -76,462 +74,147 @@
             100% { transform: scale(1.2) translate(50px, 50px); opacity: 0.25; }
         }
 
-        .container {
-            max-width: 1050px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-        }
-
+        .container { max-width: 1050px; margin: 0 auto; padding: 2rem 1.5rem; }
         h1, h2, h3 { font-family: 'Poppins', 'Outfit', sans-serif; font-weight: 800; }
 
-        /* Header */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--glass-border);
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border);
             position: relative;
         }
 
         header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 120px;
-            height: 2px;
+            content: ''; position: absolute; bottom: -1px; left: 0; width: 120px; height: 2px;
             background: linear-gradient(90deg, var(--neon-primary), transparent);
         }
 
         header h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(135deg, #ffffff 0%, #ef4444 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
+            font-size: 2.2rem; background: linear-gradient(135deg, #ffffff 0%, #ef4444 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px;
         }
         
         .header-actions { display: flex; gap: 12px; }
 
-        /* Glassmorphic Panel */
         .glass-panel {
-            background: var(--surface);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 1.5rem;
+            background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 1.5rem;
             box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.02), 0 8px 32px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
         }
         
         .sales-panel {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(127, 29, 29, 0.02));
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(239, 68, 68, 0.3); margin-bottom: 2rem; position: relative; overflow: hidden;
         }
 
         .sales-panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-primary), transparent);
-            opacity: 0.7;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-primary), transparent); opacity: 0.7;
         }
 
-        /* View Transitions */
         .view { display: none; }
         .view.active { display: block; }
+        .animate-up { opacity: 0; transform: translateY(20px); animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-        .animate-up {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes slideUpFade {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Inputs & Buttons */
         .input-group { display: flex; gap: 1rem; }
-
-        input[type="text"], input[type="number"] {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
-            width: 100%;
+        input[type="text"], input[type="number"], select {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 12px;
+            padding: 1rem 1.25rem; color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1rem; outline: none; transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); width: 100%;
         }
 
-        input[type="text"]:focus, input[type="number"]:focus {
-            border-color: var(--neon-primary);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(239, 68, 68, 0.3);
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: var(--neon-primary); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
         button {
-            cursor: pointer;
-            border: none;
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            font-weight: 700;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.95rem;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            cursor: pointer; border: none; border-radius: 12px; padding: 1rem 1.5rem;
+            font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #ef4444, #991b1b);
-            color: white;
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
-        }
-
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: var(--neon-primary);
-        }
-        
+        .btn-primary { background: linear-gradient(135deg, #ef4444, #991b1b); color: white; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5); }
+        .btn-outline { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); color: var(--text-main); }
+        .btn-outline:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--neon-primary); }
         .btn-danger { background: linear-gradient(135deg, #dc2626, #7f1d1d); color: white; }
         .btn-warning { background: linear-gradient(135deg, #b91c1c, #450a0a); color: white; }
 
-        /* Modal Overlay */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 1.5rem;
         }
 
-        .modal-card {
-            max-width: 450px;
-            width: 100%;
-            background: #0d0205;
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2);
-        }
+        .modal-card { max-width: 450px; width: 100%; background: #0d0205; border: 1px solid var(--glass-border); border-radius: 20px; padding: 2rem; box-shadow: 0 10px 40px rgba(239, 68, 68, 0.2); }
+        .modal-card h3 { font-size: 1.3rem; margin-bottom: 1.25rem; color: var(--neon-primary); }
+        .modal-card .form-group { margin-bottom: 1.25rem; }
+        .modal-card label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .modal-card .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem; }
 
-        .modal-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.25rem;
-            color: var(--neon-primary);
-        }
-
-        .modal-card .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .modal-card label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .modal-card .modal-actions {
-            display: flex;
-            gap: 0.75rem;
-            justify-content: flex-end;
-            margin-top: 1.75rem;
-        }
-
-        /* Categories Grid */
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 1.25rem;
-        }
-
-        .category-card {
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-            text-align: center;
-            position: relative;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            border-color: var(--neon-primary);
-            box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.4);
-            background: var(--surface-hover);
-        }
-
-        .category-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.5px;
-            padding-right: 20px;
-            padding-left: 20px;
-        }
-
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
+        .category-card { cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 200px; text-align: center; position: relative; }
+        .category-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--neon-primary); box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.4); background: var(--surface-hover); }
+        .category-card h3 { font-size: 1.25rem; margin-bottom: 0.25rem; letter-spacing: 0.5px; padding-right: 20px; padding-left: 20px; }
+        
         .edit-cat-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 0.35rem 0.7rem;
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
+            position: absolute; top: 12px; right: 12px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border);
+            border-radius: 8px; padding: 0.35rem 0.7rem; font-size: 0.75rem; color: var(--text-muted); transition: all 0.2s ease;
         }
-
-        .edit-cat-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-            border-color: var(--neon-primary);
-            color: #fff;
-        }
-
-        .category-card .vault-info {
-            font-size: 0.75rem;
-            color: var(--neon-secondary);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: rgba(239, 68, 68, 0.1);
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            border: 1px solid rgba(239, 68, 68, 0.25);
-        }
-
-        .category-card span.stock {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            background: rgba(0,0,0,0.6);
-            padding: 0.35rem 0.85rem;
-            border-radius: 20px;
-            margin-bottom: 0.75rem;
-            border: 1px solid var(--glass-border);
-        }
+        .edit-cat-btn:hover { background: rgba(239, 68, 68, 0.2); border-color: var(--neon-primary); color: #fff; }
         
-        .category-card .sales-badge {
-            font-size: 0.95rem;
-            font-weight: 800;
-            color: var(--money-color);
-            background: rgba(239, 68, 68, 0.12);
-            padding: 0.4rem 0.75rem;
-            border-radius: 8px;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            width: 90%;
-            font-family: 'JetBrains Mono', monospace;
-        }
+        .category-card .vault-info { font-size: 0.75rem; color: var(--neon-secondary); font-weight: 700; margin-bottom: 0.5rem; background: rgba(239, 68, 68, 0.1); padding: 0.2rem 0.6rem; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .category-card span.stock { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: rgba(0,0,0,0.6); padding: 0.35rem 0.85rem; border-radius: 20px; margin-bottom: 0.75rem; border: 1px solid var(--glass-border); }
+        .category-card .sales-badge { font-size: 0.95rem; font-weight: 800; color: var(--money-color); background: rgba(239, 68, 68, 0.12); padding: 0.4rem 0.75rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); width: 90%; font-family: 'JetBrains Mono', monospace; }
 
-        /* Vouchers Grid Layout */
-        .bulk-actions-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.4);
-            padding: 1rem 1.25rem;
-            border-radius: 14px;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--glass-border);
-        }
+        .bulk-actions-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(0, 0, 0, 0.4); padding: 1rem 1.25rem; border-radius: 14px; margin-bottom: 1.5rem; border: 1px solid var(--glass-border); }
+        .checkbox-wrapper { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--neon-primary); cursor: pointer; }
 
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-        }
-        
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--neon-primary);
-            cursor: pointer;
-        }
-
-        .vouchers-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            margin-bottom: 2rem;
-        }
-
-        .voucher-card {
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            padding: 0;
-            position: relative;
-        }
-        
-        .voucher-selector {
-            background: rgba(0,0,0,0.6);
-            padding: 0 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-right: 1px solid var(--glass-border);
-        }
+        .vouchers-grid { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2rem; }
+        .voucher-card { display: flex; flex-direction: row; overflow: hidden; padding: 0; position: relative; }
+        .voucher-selector { background: rgba(0,0,0,0.6); padding: 0 1.25rem; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--glass-border); }
 
         .voucher-brand {
-            background: rgba(239, 68, 68, 0.05);
-            border-right: 1px solid var(--glass-border);
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 120px;
-            font-weight: 900;
-            font-family: 'Poppins', sans-serif;
-            color: var(--neon-primary);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            font-size: 1rem;
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            transform: rotate(180deg);
+            background: rgba(239, 68, 68, 0.05); border-right: 1px solid var(--glass-border); padding: 1rem 1.5rem;
+            display: flex; align-items: center; justify-content: center; min-width: 120px; font-weight: 900;
+            font-family: 'Poppins', sans-serif; color: var(--neon-primary); letter-spacing: 2px; text-transform: uppercase;
+            font-size: 1rem; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
         }
 
-        .voucher-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            flex-grow: 1;
-            padding: 1.5rem;
-            gap: 1.25rem;
-            align-items: center;
-        }
-
-        .data-label {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.4rem;
-            font-weight: 700;
-        }
-
-        .data-value {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #fff;
-            word-break: break-all;
-        }
-        
+        .voucher-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); flex-grow: 1; padding: 1.5rem; gap: 1.25rem; align-items: center; }
+        .data-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.4rem; font-weight: 700; }
+        .data-value { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 700; color: #fff; word-break: break-all; }
         .price-value { color: var(--money-color) !important; font-size: 1.2rem; }
 
-        .voucher-actions {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0.6rem;
-            padding: 1.25rem;
-            border-left: 1px solid var(--glass-border);
-            min-width: 165px;
-            background: rgba(0,0,0,0.3);
-        }
-
+        .voucher-actions { display: flex; flex-direction: column; justify-content: center; gap: 0.6rem; padding: 1.25rem; border-left: 1px solid var(--glass-border); min-width: 165px; background: rgba(0,0,0,0.3); }
         .voucher-actions button { padding: 0.65rem; font-size: 0.85rem; width: 100%; }
 
-        /* Sold State */
         .voucher-card.sold { opacity: 0.65; filter: grayscale(30%); }
         .voucher-card.sold .voucher-actions:not(.archive-actions) { display: none; }
 
         .sold-badge {
-            display: none;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg) scale(1);
-            color: var(--sold-color);
-            border: 4px solid var(--sold-color);
-            padding: 0.5rem 2rem;
-            font-family: 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            border-radius: 12px;
-            letter-spacing: 4px;
-            pointer-events: none;
-            text-shadow: 0 0 15px rgba(220, 38, 38, 0.8);
-            box-shadow: inset 0 0 15px rgba(220, 38, 38, 0.4), 0 0 25px rgba(220, 38, 38, 0.4);
-            z-index: 5;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(4px);
+            display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-15deg) scale(1);
+            color: var(--sold-color); border: 4px solid var(--sold-color); padding: 0.5rem 2rem; font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem; font-weight: 900; border-radius: 12px; letter-spacing: 4px; pointer-events: none;
+            text-shadow: 0 0 15px rgba(220, 38, 38, 0.8); box-shadow: inset 0 0 15px rgba(220, 38, 38, 0.4), 0 0 25px rgba(220, 38, 38, 0.4);
+            z-index: 5; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
         }
 
         .voucher-card.sold .sold-badge { display: block; }
+        .sold-date-info { grid-column: 1 / -1; font-size: 0.8rem; color: #fca5a5; background: rgba(220, 38, 38, 0.1); border: 1px dashed rgba(220, 38, 38, 0.3); padding: 0.5rem 1rem; border-radius: 8px; font-family: 'JetBrains Mono', monospace; }
 
-        .sold-date-info {
-            grid-column: 1 / -1;
-            font-size: 0.8rem;
-            color: #fca5a5;
-            background: rgba(220, 38, 38, 0.1);
-            border: 1px dashed rgba(220, 38, 38, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Toast Notification */
         #toast {
-            position: fixed;
-            bottom: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ef4444, #991b1b);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 700;
-            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
-            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 3000;
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ef4444, #991b1b);
+            color: white; padding: 1rem 2rem; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.95rem;
+            font-weight: 700; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4); transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 3000;
         }
-
         #toast.show { bottom: 30px; }
 
-        .upload-section {
-            border: 2px dashed rgba(239, 68, 68, 0.3);
-            text-align: center;
-            margin-bottom: 2rem;
-            background: rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-        }
+        .upload-section { border: 2px dashed rgba(239, 68, 68, 0.3); text-align: center; margin-bottom: 2rem; background: rgba(0,0,0,0.3); transition: all 0.3s ease; }
         .upload-section:hover { border-color: var(--neon-primary); background: rgba(239, 68, 68, 0.05); }
 
-        /* Mobile Responsive */
         @media (max-width: 768px) {
             .voucher-card { flex-direction: column; }
             .voucher-brand { writing-mode: horizontal-tb; transform: none; min-width: auto; border-right: none; border-bottom: 1px solid var(--glass-border); }
@@ -556,7 +239,6 @@
 
         <!-- DASHBOARD VIEW -->
         <div id="dashboardView" class="view active">
-            
             <div class="glass-panel sales-panel animate-up" style="animation-delay: 0.1s;">
                 <div>
                     <h2 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; font-family: 'Plus Jakarta Sans', sans-serif;">Net Global Revenue</h2>
@@ -574,9 +256,7 @@
             </div>
 
             <h2 class="animate-up" style="margin-bottom: 1.5rem; font-weight: 800; font-size: 1.3rem; animation-delay: 0.3s;">Active Databases</h2>
-            <div class="categories-grid" id="categoriesGrid">
-                <!-- Categories render here -->
-            </div>
+            <div class="categories-grid" id="categoriesGrid"></div>
         </div>
 
         <!-- CATEGORY VIEW -->
@@ -595,7 +275,7 @@
                 <span id="voucherCount" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 20px;">0 Records</span>
             </div>
 
-            <!-- HEADER PNG BANNER UPLOADER SECTION -->
+            <!-- HEADER PNG BANNER UPLOADER -->
             <div class="glass-panel animate-up" style="margin-bottom: 1.5rem; animation-delay: 0.05s;">
                 <h3 style="font-size: 1rem; font-weight: 800; color: var(--neon-primary); margin-bottom: 0.5rem;">🖼️ Voucher Header Banner PNG</h3>
                 <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem;">Upload a custom banner image to automatically render on top of generated voucher images.</p>
@@ -608,10 +288,15 @@
                 </div>
             </div>
 
+            <!-- BATCH IMPORT -->
             <div class="glass-panel upload-section animate-up" style="animation-delay: 0.1s;">
                 <h3 style="margin-bottom: 0.5rem; font-weight: 800; font-size: 1.1rem; color: var(--neon-primary);">Batch Import Credentials</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">Format: Username,Password,Duration,Validity,Price</p>
-                <input type="file" id="csvFileInput" accept=".csv" style="margin-top: 1rem; font-family: 'Plus Jakarta Sans'; color: var(--text-muted);">
+                <p style="font-size: 0.82rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;">
+                    Format: Username, Password, Duration, Validity, Price, FreeUsername (Opt), FreePassword (Opt), FreeDuration (Opt)
+                </p>
+                <div style="display: flex; gap: 1rem; align-items: center; justify-content: center; margin-top: 1rem; flex-wrap: wrap;">
+                    <input type="file" id="csvFileInput" accept=".csv" style="font-family: 'Plus Jakarta Sans'; color: var(--text-muted); width: auto;">
+                </div>
             </div>
 
             <div class="bulk-actions-bar animate-up" id="bulkActionBar" style="display: none; animation-delay: 0.2s;">
@@ -624,9 +309,7 @@
                 </button>
             </div>
 
-            <div class="vouchers-grid" id="vouchersGrid">
-                <!-- Vouchers render here -->
-            </div>
+            <div class="vouchers-grid" id="vouchersGrid"></div>
         </div>
         
         <!-- ARCHIVE VIEW -->
@@ -685,7 +368,6 @@
             localStorage.setItem('zenfast_db', JSON.stringify(appData)); 
         }
 
-        // --- AUTO-ARCHIVE LOGIC ---
         function autoArchiveVouchers() {
             let changed = false;
             const now = Date.now();
@@ -693,10 +375,8 @@
 
             appData.forEach(category => {
                 const targetDays = parseInt(category.archiveDays) || 0;
-                
                 if (targetDays > 0) {
                     const archiveThresholdMs = targetDays * MS_PER_DAY;
-                    
                     category.vouchers.forEach(v => {
                         if (v.sold && !v.archived && v.soldTimestamp) {
                             if (now - v.soldTimestamp >= archiveThresholdMs) {
@@ -727,15 +407,12 @@
             }
         }
 
-        // --- UNIFIED MODAL EDIT FOR CATEGORY NAME & AUTO-VAULT DAYS ---
         function editCategory(categoryId) {
             const category = appData.find(c => c.id === categoryId);
             if (!category) return;
-
             editingCategoryId = categoryId;
             document.getElementById('editModalNameInput').value = category.name || '';
             document.getElementById('editModalDaysInput').value = category.archiveDays !== undefined ? category.archiveDays : 0;
-            
             document.getElementById('editCategoryModal').style.display = 'flex';
         }
 
@@ -752,31 +429,22 @@
             const newName = document.getElementById('editModalNameInput').value.trim();
             const newDays = parseInt(document.getElementById('editModalDaysInput').value, 10);
 
-            if (!newName) {
-                alert("Category name cannot be empty.");
-                return;
-            }
+            if (!newName) { alert("Category name cannot be empty."); return; }
 
             category.name = newName;
             category.archiveDays = isNaN(newDays) || newDays < 0 ? 0 : newDays;
 
             saveData();
             closeEditModal();
-
-            if (activeCategoryId === category.id) {
-                renderCategoryVouchers();
-            }
+            if (activeCategoryId === category.id) renderCategoryVouchers();
             renderDashboard();
             showToast("Category & Auto-Vault updated!");
         }
 
         function triggerCurrentCategoryEdit() {
-            if (activeCategoryId) {
-                editCategory(activeCategoryId);
-            }
+            if (activeCategoryId) editCategory(activeCategoryId);
         }
 
-        // --- DASHBOARD RENDER ---
         function renderDashboard() {
             autoArchiveVouchers();
             switchView('dashboardView');
@@ -833,29 +501,14 @@
             const days = parseInt(daysInput.value, 10) || 0;
 
             if (!name) return;
-
-            appData.push({ 
-                id: Date.now().toString(), 
-                name: name, 
-                archiveDays: days < 0 ? 0 : days,
-                headerImage: null,
-                vouchers: [] 
-            });
-
-            saveData();
-            nameInput.value = '';
-            daysInput.value = '';
-            renderDashboard();
-            showToast("Category deployed successfully.");
+            appData.push({ id: Date.now().toString(), name: name, archiveDays: days < 0 ? 0 : days, headerImage: null, vouchers: [] });
+            saveData(); nameInput.value = ''; daysInput.value = ''; renderDashboard(); showToast("Category deployed successfully.");
         }
 
         function goHome() { activeCategoryId = null; renderDashboard(); }
 
-        // --- CATEGORY VIEW ---
         function openCategory(id) {
-            activeCategoryId = id;
-            switchView('categoryView');
-            renderCategoryVouchers();
+            activeCategoryId = id; switchView('categoryView'); renderCategoryVouchers();
         }
 
         function renderCategoryVouchers() {
@@ -874,18 +527,14 @@
             const vaultDays = category.archiveDays || 0;
             document.getElementById('categoryVaultDaysDisplay').textContent = vaultDays > 0 ? `Auto-Vault: ${vaultDays} Days` : `Auto-Vault: Disabled`;
 
-            // Header PNG Banner UI
             const previewContainer = document.getElementById('headerPreviewContainer');
             const previewImg = document.getElementById('headerPreviewImg');
             const clearBtn = document.getElementById('clearHeaderBtn');
 
             if (category.headerImage) {
-                previewImg.src = category.headerImage;
-                previewContainer.style.display = 'block';
-                clearBtn.style.display = 'inline-block';
+                previewImg.src = category.headerImage; previewContainer.style.display = 'block'; clearBtn.style.display = 'inline-block';
             } else {
-                previewContainer.style.display = 'none';
-                clearBtn.style.display = 'none';
+                previewContainer.style.display = 'none'; clearBtn.style.display = 'none';
             }
 
             const grid = document.getElementById('vouchersGrid');
@@ -901,13 +550,23 @@
                 card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
                 card.style.animationDelay = `${(index * 0.05) + 0.3}s`;
                 
-                const safeUsername = (voucher.username || '').replace(/'/g, "\\'");
-                const safePassword = (voucher.password || '').replace(/'/g, "\\'");
-                const safeDuration = (voucher.duration || '').replace(/'/g, "\\'");
-                const safeValidity = (voucher.validity || '').replace(/'/g, "\\'");
-                
                 const displayPrice = (parseFloat(voucher.price) || 0).toFixed(2);
                 const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
+                
+                // Check if this specific voucher has free promo data
+                const hasFreeData = !!(voucher.freeUsername && voucher.freePassword);
+                const freeDurText = voucher.freeDuration ? ` (${escapeHtml(voucher.freeDuration)})` : '';
+                
+                // Render Promo Badge and toggle checkbox
+                const promoBadgeHtml = hasFreeData 
+                    ? `<div style="grid-column: 1 / -1; font-size: 0.85rem; color: #f87171; background: rgba(239, 68, 68, 0.1); border: 1px dashed rgba(239, 68, 68, 0.3); padding: 0.6rem 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                        <span style="font-family: 'JetBrains Mono', monospace;">🎁 BONUS: ${escapeHtml(voucher.freeUsername)} / ${escapeHtml(voucher.freePassword)}${freeDurText}</span>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif;">
+                            <input type="checkbox" id="promoToggle_${voucher.id}" checked style="width: 18px; height: 18px; accent-color: var(--neon-primary);">
+                            Include Promo in Output
+                        </label>
+                       </div>` 
+                    : '';
 
                 card.innerHTML = `
                     <div class="sold-badge">SOLD</div>
@@ -916,31 +575,17 @@
                     </div>
                     <div class="voucher-brand">ZENFAST</div>
                     <div class="voucher-details">
-                        <div>
-                            <div class="data-label">Username</div>
-                            <div class="data-value">${escapeHtml(voucher.username)}</div>
-                        </div>
-                        <div>
-                            <div class="data-label">Password</div>
-                            <div class="data-value">${escapeHtml(voucher.password)}</div>
-                        </div>
-                        <div>
-                            <div class="data-label">Duration</div>
-                            <div class="data-value">${escapeHtml(voucher.duration || 'N/A')}</div>
-                        </div>
-                        <div>
-                            <div class="data-label">Validity</div>
-                            <div class="data-value">${escapeHtml(voucher.validity || 'N/A')}</div>
-                        </div>
-                        <div>
-                            <div class="data-label">Price</div>
-                            <div class="data-value price-value">₱${displayPrice}</div>
-                        </div>
+                        <div><div class="data-label">Username</div><div class="data-value">${escapeHtml(voucher.username)}</div></div>
+                        <div><div class="data-label">Password</div><div class="data-value">${escapeHtml(voucher.password)}</div></div>
+                        <div><div class="data-label">Duration</div><div class="data-value">${escapeHtml(voucher.duration || 'N/A')}</div></div>
+                        <div><div class="data-label">Validity</div><div class="data-value">${escapeHtml(voucher.validity || 'N/A')}</div></div>
+                        <div><div class="data-label">Price</div><div class="data-value price-value">₱${displayPrice}</div></div>
+                        ${promoBadgeHtml}
                         ${soldDateHtml}
                     </div>
                     <div class="voucher-actions">
-                        <button class="btn-outline" onclick="copyCombo('${safeUsername}', '${safePassword}', '${safeDuration}', '${safeValidity}')">Copy Combo</button>
-                        <button class="btn-outline" style="border-color: var(--neon-primary); color: var(--neon-primary);" onclick="generateImage('${safeUsername}', '${safePassword}', '${safeDuration}', '${safeValidity}', '${voucher.price}')">Voucher Image</button>
+                        <button class="btn-outline" onclick="doCopyCombo('${voucher.id}')">Copy Combo</button>
+                        <button class="btn-outline" style="border-color: var(--neon-primary); color: var(--neon-primary);" onclick="doGenerateImage('${voucher.id}')">Voucher Image</button>
                         <button class="btn-primary" onclick="markSold('${voucher.id}')">Mark Sold</button>
                     </div>
                 `;
@@ -948,19 +593,15 @@
             });
         }
 
-        // --- HEADER PNG IMAGE UPLOADER ---
         document.getElementById('headerImageFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file || !activeCategoryId) return;
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 const category = appData.find(c => c.id === activeCategoryId);
                 if (category) {
                     category.headerImage = event.target.result;
-                    saveData();
-                    renderCategoryVouchers();
-                    showToast("Header PNG loaded!");
+                    saveData(); renderCategoryVouchers(); showToast("Header PNG loaded!");
                 }
             };
             reader.readAsDataURL(file);
@@ -968,192 +609,37 @@
 
         function clearHeaderImage() {
             const category = appData.find(c => c.id === activeCategoryId);
-            if (category) {
-                category.headerImage = null;
-                saveData();
-                document.getElementById('headerImageFileInput').value = '';
-                renderCategoryVouchers();
-                showToast("Header PNG removed.");
-            }
+            if (category) { category.headerImage = null; saveData(); document.getElementById('headerImageFileInput').value = ''; renderCategoryVouchers(); showToast("Header PNG removed."); }
         }
 
-        // --- CANVAS IMAGE GENERATOR (STRICT POPPINS BOLD/BLACK FONTS + COMPLEMENTARY MESSAGE) ---
-        function generateImage(username, password, duration, validity, price) {
-            const category = appData.find(c => c.id === activeCategoryId);
-            const headerImageSrc = category ? category.headerImage : null;
-
-            const canvas = document.createElement('canvas');
-            canvas.width = 800;
-            canvas.height = 540;
-            const ctx = canvas.getContext('2d');
-
-            function renderFullVoucher() {
-                ctx.fillStyle = '#080103';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                ctx.strokeStyle = 'rgba(239, 68, 68, 0.04)';
-                ctx.lineWidth = 1;
-                for (let x = 0; x < canvas.width; x += 30) {
-                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-                }
-                for (let y = 0; y < canvas.height; y += 30) {
-                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-                }
-
-                ctx.strokeStyle = '#ef4444';
-                ctx.lineWidth = 4;
-                ctx.strokeRect(15, 15, 770, 510);
-
-                ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(22, 22, 756, 496);
-
-                if (headerImageSrc) {
-                    const img = new Image();
-                    img.crossOrigin = "anonymous";
-                    img.onload = function() {
-                        ctx.drawImage(img, 28, 28, 744, 160);
-                        drawVoucherBody();
-                        exportCanvas();
-                    };
-                    img.onerror = function() {
-                        drawFallbackHeader();
-                        drawVoucherBody();
-                        exportCanvas();
-                    };
-                    img.src = headerImageSrc;
-                } else {
-                    drawFallbackHeader();
-                    drawVoucherBody();
-                    exportCanvas();
-                }
-            }
-
-            function drawFallbackHeader() {
-                const grad = ctx.createLinearGradient(28, 28, 772, 188);
-                grad.addColorStop(0, '#2e0508');
-                grad.addColorStop(0.5, '#120204');
-                grad.addColorStop(1, '#080103');
-                ctx.fillStyle = grad;
-                ctx.fillRect(28, 28, 744, 160);
-
-                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
-                ctx.beginPath(); ctx.moveTo(40, 186); ctx.lineTo(760, 186); ctx.stroke();
-
-                ctx.font = '900 36px "Poppins", sans-serif';
-                ctx.fillStyle = '#ef4444';
-                ctx.textAlign = 'center';
-                ctx.fillText('ZENFAST HOTSPOT', 400, 98);
-
-                ctx.font = '700 15px "Poppins", sans-serif';
-                ctx.fillStyle = '#f87171';
-                ctx.fillText('HIGH-SPEED PREPAID INTERNET VOUCHER', 400, 138);
-            }
-
-            function drawVoucherBody() {
-                drawDataCard(ctx, 40, 205, 340, 95, 'USERNAME', username, '#ef4444');
-                drawDataCard(ctx, 420, 205, 340, 95, 'PASSWORD', password, '#f87171');
-                drawDataCard(ctx, 40, 318, 340, 85, 'DURATION', duration || 'N/A', '#fca5a5');
-                drawDataCard(ctx, 420, 318, 340, 85, 'VALIDITY', validity || 'N/A', '#fca5a5');
-
-                // Price Section
-                const priceGrad = ctx.createLinearGradient(40, 420, 760, 420);
-                priceGrad.addColorStop(0, 'rgba(239, 68, 68, 0.15)');
-                priceGrad.addColorStop(1, 'rgba(127, 29, 29, 0.05)');
-                ctx.fillStyle = priceGrad;
-                ctx.fillRect(40, 420, 720, 56);
-                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)';
-                ctx.lineWidth = 1.5;
-                ctx.strokeRect(40, 420, 720, 56);
-
-                ctx.font = '800 14px "Poppins", sans-serif';
-                ctx.fillStyle = '#fca5a5';
-                ctx.textAlign = 'left';
-                ctx.fillText('VOUCHER PRICE', 60, 454);
-
-                ctx.font = '900 28px "Poppins", sans-serif';
-                ctx.fillStyle = '#ef4444';
-                ctx.textAlign = 'right';
-                ctx.fillText('₱' + (parseFloat(price) || 0).toFixed(2), 740, 458);
-
-                // Complementary Message Footer
-                ctx.font = '900 13px "Poppins", sans-serif';
-                ctx.fillStyle = '#f87171';
-                ctx.textAlign = 'center';
-                ctx.fillText('Thank you for purchasing voucher!', 400, 502);
-            }
-
-            function drawDataCard(context, x, y, w, h, label, value, accentColor) {
-                context.fillStyle = 'rgba(255, 255, 255, 0.02)';
-                context.fillRect(x, y, w, h);
-                context.strokeStyle = 'rgba(239, 68, 68, 0.2)';
-                context.lineWidth = 1;
-                context.strokeRect(x, y, w, h);
-
-                context.fillStyle = accentColor;
-                context.fillRect(x, y, 5, h);
-
-                context.font = '800 12px "Poppins", sans-serif';
-                context.fillStyle = '#fca5a5';
-                context.textAlign = 'left';
-                context.fillText(label, x + 20, y + 28);
-
-                context.font = '900 22px "Poppins", sans-serif';
-                context.fillStyle = '#ffffff';
-                context.fillText(value, x + 20, y + 62);
-            }
-
-            function exportCanvas() {
-                const link = document.createElement('a');
-                link.download = `Voucher_${username || 'Zenfast'}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                showToast("Voucher image generated!");
-            }
-
-            renderFullVoucher();
-        }
-
-        // --- ARCHIVE / VAULT VIEW ---
-        function openArchiveView() {
-            activeCategoryId = null;
-            switchView('archiveView');
-            renderArchive();
-        }
+        function openArchiveView() { activeCategoryId = null; switchView('archiveView'); renderArchive(); }
         
         function renderArchive() {
             autoArchiveVouchers();
             const container = document.getElementById('archiveContent');
             const bulkBar = document.getElementById('archiveBulkActionBar');
-            
             container.innerHTML = '';
             document.getElementById('selectAllArchiveCheckbox').checked = false;
             document.getElementById('deleteSelectedArchiveBtn').style.display = 'none';
             
-            let hasAnyArchived = false;
-            let delayIndex = 2;
+            let hasAnyArchived = false; let delayIndex = 2;
 
             appData.forEach(category => {
                 const archivedVouchers = category.vouchers.filter(v => v.archived);
-                
                 if (archivedVouchers.length > 0) {
                     hasAnyArchived = true;
-                    
                     const catTitle = document.createElement('h3');
                     catTitle.className = 'animate-up';
                     catTitle.style.cssText = `font-size: 1.2rem; font-weight: 800; margin: 2rem 0 1rem 0; color: var(--neon-secondary); border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem; animation-delay: ${delayIndex * 0.05}s`;
                     catTitle.textContent = `Database: ${category.name}`;
                     container.appendChild(catTitle);
                     
-                    const grid = document.createElement('div');
-                    grid.className = 'vouchers-grid';
+                    const grid = document.createElement('div'); grid.className = 'vouchers-grid';
                     
                     archivedVouchers.forEach(voucher => {
                         const card = document.createElement('div');
                         card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
-                        delayIndex++;
-                        card.style.animationDelay = `${delayIndex * 0.05}s`;
-                        
+                        delayIndex++; card.style.animationDelay = `${delayIndex * 0.05}s`;
                         const displayPrice = (parseFloat(voucher.price) || 0).toFixed(2);
                         const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
 
@@ -1179,15 +665,10 @@
                 }
             });
             
-            if (hasAnyArchived) {
-                bulkBar.style.display = 'flex';
-            } else {
-                bulkBar.style.display = 'none';
-                container.innerHTML = `<div class="glass-panel animate-up" style="text-align: center; padding: 3rem; color: var(--text-muted); font-style: italic; animation-delay: 0.2s;">The vault is currently empty.</div>`;
-            }
+            if (hasAnyArchived) bulkBar.style.display = 'flex';
+            else { bulkBar.style.display = 'none'; container.innerHTML = `<div class="glass-panel animate-up" style="text-align: center; padding: 3rem; color: var(--text-muted); font-style: italic; animation-delay: 0.2s;">The vault is currently empty.</div>`; }
         }
 
-        // --- BULK SELECTION ---
         function toggleSelectAll(checkboxClass, sourceElement) {
             document.querySelectorAll(`.${checkboxClass}`).forEach(cb => cb.checked = sourceElement.checked);
             if (checkboxClass === 'voucher-checkbox') updateBulkActions('voucher-checkbox', 'selectAllCheckbox', 'archiveSelectedBtn', 'Send to Vault');
@@ -1199,12 +680,8 @@
             const checkedBoxes = document.querySelectorAll(`.${checkboxClass}:checked`);
             document.getElementById(selectAllId).checked = (checkboxes.length > 0 && checkboxes.length === checkedBoxes.length);
             const btn = document.getElementById(btnId);
-            if (checkedBoxes.length > 0) {
-                btn.style.display = 'block';
-                btn.textContent = `${defaultText} (${checkedBoxes.length})`;
-            } else {
-                btn.style.display = 'none';
-            }
+            if (checkedBoxes.length > 0) { btn.style.display = 'block'; btn.textContent = `${defaultText} (${checkedBoxes.length})`; } 
+            else { btn.style.display = 'none'; }
         }
 
         function archiveSelectedVouchers() {
@@ -1228,12 +705,10 @@
                 if (!toDelete[catId]) toDelete[catId] = [];
                 toDelete[catId].push(cb.value);
             });
-
             Object.keys(toDelete).forEach(catId => {
                 const category = appData.find(c => c.id === catId);
                 if (category) category.vouchers = category.vouchers.filter(v => !toDelete[catId].includes(v.id));
             });
-
             saveData(); renderArchive(); showToast(`Records permanently erased.`);
         }
         
@@ -1241,39 +716,45 @@
             const category = appData.find(c => c.id === categoryId);
             if (!category) return;
             const voucher = category.vouchers.find(v => v.id === voucherId);
-            if (voucher) {
-                voucher.archived = false; saveData(); renderArchive(); showToast(`Record restored.`);
-            }
+            if (voucher) { voucher.archived = false; saveData(); renderArchive(); showToast(`Record restored.`); }
         }
 
-        // --- CSV IMPORT ---
+        // --- CSV IMPORT LOGIC WITH FREE DURATION ---
         document.getElementById('csvFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file || !activeCategoryId) return;
             const reader = new FileReader();
-            reader.onload = function(event) {
-                processCSV(event.target.result); e.target.value = '';
-            };
+            reader.onload = function(event) { processCSV(event.target.result); e.target.value = ''; };
             reader.readAsText(file);
         });
 
         function processCSV(csvText) {
             const category = appData.find(c => c.id === activeCategoryId);
             if (!category) return;
+            
             const lines = csvText.split(/\r?\n/);
+            
             lines.forEach((line) => {
                 const parts = line.split(',');
                 if (parts.length >= 2) {
                     const username = parts[0] ? parts[0].trim() : '';
                     const password = parts[1] ? parts[1].trim() : '';
+                    
                     if (username && password) {
                         category.vouchers.push({
                             id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
-                            username: username, password: password,
+                            username: username,
+                            password: password,
                             duration: parts[2] ? parts[2].trim() : '',
                             validity: parts[3] ? parts[3].trim() : '',
                             price: parts[4] ? parseFloat(parts[4].trim()) || 0 : 0,
-                            sold: false, soldTimestamp: null, soldDate: null, archived: false
+                            freeUsername: parts[5] ? parts[5].trim() : '',
+                            freePassword: parts[6] ? parts[6].trim() : '',
+                            freeDuration: parts[7] ? parts[7].trim() : '',
+                            sold: false, 
+                            soldTimestamp: null, 
+                            soldDate: null, 
+                            archived: false
                         });
                     }
                 }
@@ -1281,10 +762,155 @@
             saveData(); renderCategoryVouchers(); showToast("Batch import successful.");
         }
 
-        // --- UTILS ---
-        function copyCombo(username, password, duration, validity) {
-            const text = `USERNAME: ${username} & PASSWORD: ${password} DURATION: ${duration} VALIDITY: ${validity}`;
-            navigator.clipboard.writeText(text).then(() => showToast("Credentials copied to clipboard.")).catch(() => alert("Failed to copy."));
+        // --- HANDLER FUNCTIONS ---
+        function doCopyCombo(voucherId) {
+            const category = appData.find(c => c.id === activeCategoryId);
+            const voucher = category.vouchers.find(v => v.id === voucherId);
+            if (!voucher) return;
+            
+            const toggle = document.getElementById(`promoToggle_${voucherId}`);
+            const usePromo = toggle ? toggle.checked : false;
+
+            copyCombo(voucher.username, voucher.password, voucher.duration, voucher.validity, voucher.freeUsername, voucher.freePassword, voucher.freeDuration, usePromo);
+        }
+
+        function doGenerateImage(voucherId) {
+            const category = appData.find(c => c.id === activeCategoryId);
+            const voucher = category.vouchers.find(v => v.id === voucherId);
+            if (!voucher) return;
+
+            const toggle = document.getElementById(`promoToggle_${voucherId}`);
+            const usePromo = toggle ? toggle.checked : false;
+
+            generateImage(voucher.username, voucher.password, voucher.duration, voucher.validity, voucher.price, voucher.freeUsername, voucher.freePassword, voucher.freeDuration, usePromo);
+        }
+
+        function copyCombo(username, password, duration, validity, freeUser, freePass, freeDuration, isPromo) {
+            let text = `USERNAME: ${username} & PASSWORD: ${password} DURATION: ${duration} VALIDITY: ${validity}`;
+            if (isPromo && freeUser && freePass) {
+                text += ` | 🎁 FREE VOUCHER -> USERNAME: ${freeUser} PASSWORD: ${freePass} DURATION: ${freeDuration || 'N/A'}`;
+            }
+            navigator.clipboard.writeText(text)
+                .then(() => showToast("Credentials copied to clipboard."))
+                .catch(() => alert("Failed to copy."));
+        }
+
+        // --- ENHANCED VOUCHER CANVAS GENERATOR ---
+        function generateImage(username, password, duration, validity, price, freeUser, freePass, freeDuration, isPromo) {
+            const category = appData.find(c => c.id === activeCategoryId);
+            const headerImageSrc = category ? category.headerImage : null;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = 800; canvas.height = 540;
+            const ctx = canvas.getContext('2d');
+
+            function renderFullVoucher() {
+                // Background & Grid
+                ctx.fillStyle = '#080103'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.04)'; ctx.lineWidth = 1;
+                for (let x = 0; x < canvas.width; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+                for (let y = 0; y < canvas.height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
+
+                // Borders
+                ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 4; ctx.strokeRect(15, 15, 770, 510);
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)'; ctx.lineWidth = 2; ctx.strokeRect(22, 22, 756, 496);
+
+                if (headerImageSrc) {
+                    const img = new Image(); img.crossOrigin = "anonymous";
+                    img.onload = function() { ctx.drawImage(img, 28, 28, 744, 125); drawVoucherBody(); exportCanvas(); };
+                    img.onerror = function() { drawFallbackHeader(); drawVoucherBody(); exportCanvas(); };
+                    img.src = headerImageSrc;
+                } else {
+                    drawFallbackHeader(); drawVoucherBody(); exportCanvas();
+                }
+            }
+
+            function drawFallbackHeader() {
+                const grad = ctx.createLinearGradient(28, 28, 772, 153);
+                grad.addColorStop(0, '#2e0508'); grad.addColorStop(0.5, '#120204'); grad.addColorStop(1, '#080103');
+                ctx.fillStyle = grad; ctx.fillRect(28, 28, 744, 125);
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; ctx.beginPath(); ctx.moveTo(40, 151); ctx.lineTo(760, 151); ctx.stroke();
+
+                ctx.font = '900 32px "Poppins", sans-serif'; ctx.fillStyle = '#ef4444'; ctx.textAlign = 'center'; ctx.fillText('ZENFAST HOTSPOT', 400, 80);
+                ctx.font = '700 13px "Poppins", sans-serif'; ctx.fillStyle = '#f87171'; ctx.fillText('AFFORDABLE PREPAID INTERNET VOUCHER', 400, 115);
+            }
+
+            function drawVoucherBody() {
+                const hasPromoBox = isPromo && freeUser && freePass;
+
+                // Dynamic calculations to occupy space if promo is hidden
+                const cardH = hasPromoBox ? 72 : 114;
+                const row1Y = 162;
+                const row2Y = hasPromoBox ? 242 : 286;
+
+                // Main Voucher Credentials (4 Cards)
+                drawDataCard(ctx, 40, row1Y, 340, cardH, 'USERNAME', username, '#ef4444');
+                drawDataCard(ctx, 420, row1Y, 340, cardH, 'PASSWORD', password, '#f87171');
+                drawDataCard(ctx, 40, row2Y, 340, cardH, 'DURATION', duration || 'N/A', '#fca5a5');
+                drawDataCard(ctx, 420, row2Y, 340, cardH, 'VALIDITY', validity || 'N/A', '#fca5a5');
+
+                // Dedicated Free Promo Card Box
+                if (hasPromoBox) {
+                    const px = 40, py = 322, pw = 720, ph = 78;
+                    
+                    // Promo Card Box Background & Outline
+                    ctx.fillStyle = 'rgba(239, 68, 68, 0.08)'; ctx.fillRect(px, py, pw, ph);
+                    ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5; ctx.strokeRect(px, py, pw, ph);
+
+                    // Promo Top Banner Label
+                    ctx.fillStyle = '#ef4444'; ctx.fillRect(px, py, pw, 22);
+                    ctx.font = '800 11px "Poppins", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left';
+                    ctx.fillText('🎁 BONUS FREE VOUCHER INCLUDED', px + 12, py + 15);
+
+                    // Promo Credentials (3 Columns)
+                    const colW = pw / 3;
+
+                    // Free Username
+                    ctx.font = '800 10px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.fillText('FREE USERNAME', px + 12, py + 40);
+                    ctx.font = '800 16px "Poppins", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText(freeUser, px + 12, py + 62);
+
+                    // Free Password
+                    ctx.font = '800 10px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.fillText('FREE PASSWORD', px + colW + 12, py + 40);
+                    ctx.font = '800 16px "Poppins", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText(freePass, px + colW + 12, py + 62);
+
+                    // Free Duration
+                    ctx.font = '800 10px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.fillText('FREE DURATION', px + (colW * 2) + 12, py + 40);
+                    ctx.font = '800 16px "Poppins", sans-serif'; ctx.fillStyle = '#f87171'; ctx.fillText(freeDuration || 'N/A', px + (colW * 2) + 12, py + 62);
+                }
+
+                // Price Bar (Position remains constant so voucher height is stable for printing)
+                const priceGrad = ctx.createLinearGradient(40, 408, 760, 408);
+                priceGrad.addColorStop(0, 'rgba(239, 68, 68, 0.15)'); priceGrad.addColorStop(1, 'rgba(127, 29, 29, 0.05)');
+                ctx.fillStyle = priceGrad; ctx.fillRect(40, 408, 720, 52);
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; ctx.lineWidth = 1.5; ctx.strokeRect(40, 408, 720, 52);
+
+                ctx.font = '800 13px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.textAlign = 'left'; ctx.fillText('VOUCHER PRICE', 60, 440);
+                ctx.font = '900 26px "Poppins", sans-serif'; ctx.fillStyle = '#ef4444'; ctx.textAlign = 'right'; ctx.fillText('₱' + (parseFloat(price) || 0).toFixed(2), 740, 444);
+                
+                // Footer
+                ctx.font = '800 12px "Poppins", sans-serif'; ctx.fillStyle = '#f87171'; ctx.textAlign = 'center'; ctx.fillText('Thank you for purchasing voucher!', 400, 492);
+            }
+
+            // Updated to dynamically center text based on card height
+            function drawDataCard(context, x, y, w, h, label, value, accentColor) {
+                context.fillStyle = 'rgba(255, 255, 255, 0.02)'; context.fillRect(x, y, w, h);
+                context.strokeStyle = 'rgba(239, 68, 68, 0.2)'; context.lineWidth = 1; context.strokeRect(x, y, w, h);
+                context.fillStyle = accentColor; context.fillRect(x, y, 4, h);
+
+                const mid = y + (h / 2); // Calculate vertical center
+                context.font = '800 11px "Poppins", sans-serif'; context.fillStyle = '#fca5a5'; context.textAlign = 'left'; context.fillText(label, x + 16, mid - 12);
+                context.font = '900 20px "Poppins", sans-serif'; context.fillStyle = '#ffffff'; context.fillText(value, x + 16, mid + 18);
+            }
+
+            function exportCanvas() {
+                const link = document.createElement('a');
+                link.download = `Voucher_${username || 'Zenfast'}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("Voucher image generated!");
+            }
+
+            renderFullVoucher();
         }
 
         function markSold(voucherId) {
@@ -1292,20 +918,16 @@
             if (!category) return;
             const voucher = category.vouchers.find(v => v.id === voucherId);
             if (voucher) {
-                voucher.sold = true;
-                voucher.soldTimestamp = Date.now();
+                voucher.sold = true; voucher.soldTimestamp = Date.now();
                 const now = new Date();
                 voucher.soldDate = now.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
-                saveData(); 
-                renderCategoryVouchers(); 
-                showToast("Record marked as SOLD.");
+                saveData(); renderCategoryVouchers(); showToast("Record marked as SOLD.");
             }
         }
 
         function showToast(message) {
             const toast = document.getElementById("toast");
-            toast.textContent = message;
-            toast.classList.add("show");
+            toast.textContent = message; toast.classList.add("show");
             if (window.toastTimeout) clearTimeout(window.toastTimeout);
             window.toastTimeout = setTimeout(() => toast.classList.remove("show"), 3000);
         }
