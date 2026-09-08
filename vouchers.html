@@ -557,12 +557,12 @@
                 const hasFreeData = !!(voucher.freeUsername && voucher.freePassword);
                 const freeDurText = voucher.freeDuration ? ` (${escapeHtml(voucher.freeDuration)})` : '';
                 
-                // Render Promo Badge and toggle checkbox
+                // Render Promo Badge and toggle checkbox (unchecked by default)
                 const promoBadgeHtml = hasFreeData 
                     ? `<div style="grid-column: 1 / -1; font-size: 0.85rem; color: #f87171; background: rgba(239, 68, 68, 0.1); border: 1px dashed rgba(239, 68, 68, 0.3); padding: 0.6rem 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                         <span style="font-family: 'JetBrains Mono', monospace;">🎁 BONUS: ${escapeHtml(voucher.freeUsername)} / ${escapeHtml(voucher.freePassword)}${freeDurText}</span>
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: #fff; font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif;">
-                            <input type="checkbox" id="promoToggle_${voucher.id}" checked style="width: 18px; height: 18px; accent-color: var(--neon-primary);">
+                            <input type="checkbox" id="promoToggle_${voucher.id}" style="width: 18px; height: 18px; accent-color: var(--neon-primary);">
                             Include Promo in Output
                         </label>
                        </div>` 
@@ -786,10 +786,14 @@
         }
 
         function copyCombo(username, password, duration, validity, freeUser, freePass, freeDuration, isPromo) {
-            let text = `USERNAME: ${username} & PASSWORD: ${password} DURATION: ${duration} VALIDITY: ${validity}`;
+            let text = `Username: ${username}\nPassword: ${password}\nDuration: ${duration || 'N/A'}\nValidity: ${validity || 'N/A'}\n`;
+            
             if (isPromo && freeUser && freePass) {
-                text += ` | 🎁 FREE VOUCHER -> USERNAME: ${freeUser} PASSWORD: ${freePass} DURATION: ${freeDuration || 'N/A'}`;
+                text += `\nFree Voucher:\nUsername: ${freeUser}\nPassword: ${freePass}\nDuration: ${freeDuration || 'N/A'}\n`;
             }
+            
+            text += `\nThank you for purchasing!`;
+
             navigator.clipboard.writeText(text)
                 .then(() => showToast("Credentials copied to clipboard."))
                 .catch(() => alert("Failed to copy."));
