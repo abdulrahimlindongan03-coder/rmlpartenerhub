@@ -18,6 +18,7 @@
             --text-muted: #fca5a5;
             --sold-color: #dc2626;
             --money-color: #ef4444;
+            --sale-color: #fbbf24;
         }
 
         * {
@@ -119,13 +120,13 @@
         @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
 
         .input-group { display: flex; gap: 1rem; }
-        input[type="text"], input[type="number"], select {
+        input[type="text"], input[type="number"], input[type="datetime-local"], select {
             background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 12px;
             padding: 1rem 1.25rem; color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1rem; outline: none; transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); width: 100%;
         }
 
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+        input[type="text"]:focus, input[type="number"]:focus, input[type="datetime-local"]:focus, select:focus {
             border-color: var(--neon-primary); box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
@@ -141,6 +142,8 @@
         .btn-outline:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--neon-primary); }
         .btn-danger { background: linear-gradient(135deg, #dc2626, #7f1d1d); color: white; }
         .btn-warning { background: linear-gradient(135deg, #b91c1c, #450a0a); color: white; }
+        .btn-sale { background: linear-gradient(135deg, #f59e0b, #b45309); color: white; }
+        .btn-sale:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
 
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85);
@@ -154,17 +157,29 @@
         .modal-card .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem; }
 
         .categories-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; }
-        .category-card { cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 200px; text-align: center; position: relative; }
+        .category-card { cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 220px; text-align: center; position: relative; padding-top: 2.8rem; }
         .category-card:hover { transform: translateY(-5px) scale(1.02); border-color: var(--neon-primary); box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.4); background: var(--surface-hover); }
-        .category-card h3 { font-size: 1.25rem; margin-bottom: 0.25rem; letter-spacing: 0.5px; padding-right: 20px; padding-left: 20px; }
+        .category-card h3 { font-size: 1.25rem; margin-bottom: 0.25rem; letter-spacing: 0.5px; padding-right: 15px; padding-left: 15px; }
         
+        .cat-card-actions {
+            position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; z-index: 10;
+        }
+
         .edit-cat-btn {
-            position: absolute; top: 12px; right: 12px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border);
-            border-radius: 8px; padding: 0.35rem 0.7rem; font-size: 0.75rem; color: var(--text-muted); transition: all 0.2s ease;
+            background: rgba(0, 0, 0, 0.6); border: 1px solid var(--glass-border);
+            border-radius: 8px; padding: 0.3rem 0.6rem; font-size: 0.75rem; color: var(--text-muted); transition: all 0.2s ease;
         }
         .edit-cat-btn:hover { background: rgba(239, 68, 68, 0.2); border-color: var(--neon-primary); color: #fff; }
         
-        .category-card .vault-info { font-size: 0.75rem; color: var(--neon-secondary); font-weight: 700; margin-bottom: 0.5rem; background: rgba(239, 68, 68, 0.1); padding: 0.2rem 0.6rem; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .sale-btn-dash {
+            background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 8px; padding: 0.3rem 0.6rem; font-size: 0.75rem; color: #fbbf24; transition: all 0.2s ease; font-weight: 700;
+        }
+        .sale-btn-dash:hover { background: rgba(245, 158, 11, 0.4); border-color: #fbbf24; color: #fff; }
+
+        .category-card .vault-info { font-size: 0.75rem; color: var(--neon-secondary); font-weight: 700; margin-bottom: 0.4rem; background: rgba(239, 68, 68, 0.1); padding: 0.2rem 0.6rem; border-radius: 12px; border: 1px solid rgba(239, 68, 68, 0.25); }
+        .category-card .sale-info-badge { font-size: 0.75rem; color: #fbbf24; font-weight: 800; margin-bottom: 0.5rem; background: rgba(245, 158, 11, 0.15); padding: 0.2rem 0.6rem; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.3); }
+        
         .category-card span.stock { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); background: rgba(0,0,0,0.6); padding: 0.35rem 0.85rem; border-radius: 20px; margin-bottom: 0.75rem; border: 1px solid var(--glass-border); }
         .category-card .sales-badge { font-size: 0.95rem; font-weight: 800; color: var(--money-color); background: rgba(239, 68, 68, 0.12); padding: 0.4rem 0.75rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); width: 90%; font-family: 'JetBrains Mono', monospace; }
 
@@ -204,6 +219,30 @@
 
         .voucher-card.sold .sold-badge { display: block; }
         .sold-date-info { grid-column: 1 / -1; font-size: 0.8rem; color: #fca5a5; background: rgba(220, 38, 38, 0.1); border: 1px dashed rgba(220, 38, 38, 0.3); padding: 0.5rem 1rem; border-radius: 8px; font-family: 'JetBrains Mono', monospace; }
+
+        /* Vault Interactive Tabs Styling */
+        .vault-tab-btn {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 0.6rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .vault-tab-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--neon-primary);
+            color: #fff;
+        }
+        .vault-tab-btn.active {
+            background: linear-gradient(135deg, #ef4444, #991b1b);
+            border-color: var(--neon-primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+        }
 
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #ef4444, #991b1b);
@@ -265,11 +304,13 @@
                 <div>
                     <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                         <h2 id="currentCategoryTitle" style="font-size: 1.8rem; font-weight: 900; color: #fff;">Category Name</h2>
-                        <button class="btn-outline" onclick="triggerCurrentCategoryEdit()" style="padding: 0.4rem 0.88rem; font-size: 0.8rem;">✏️ Edit Category Details</button>
+                        <button class="btn-outline" onclick="triggerCurrentCategoryEdit()" style="padding: 0.4rem 0.88rem; font-size: 0.8rem;">✏️ Edit Details</button>
+                        <button class="btn-sale" onclick="triggerCurrentCategorySale()" style="padding: 0.4rem 0.88rem; font-size: 0.8rem;">🏷️ Manage Sale</button>
                     </div>
-                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; align-items: center;">
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem; align-items: center; flex-wrap: wrap;">
                         <div id="categorySalesTracker" style="color: var(--money-color); font-weight: 800; font-size: 1rem; font-family: 'JetBrains Mono', monospace;">Revenue: ₱0.00</div>
                         <div id="categoryVaultDaysDisplay" style="color: var(--neon-secondary); font-weight: 700; font-size: 0.85rem; background: rgba(239, 68, 68, 0.1); padding: 0.2rem 0.6rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.25);">Auto-Vault: 0 Days</div>
+                        <div id="categorySaleStatusDisplay" style="display: none; color: #fbbf24; font-weight: 800; font-size: 0.85rem; background: rgba(245, 158, 11, 0.15); padding: 0.2rem 0.6rem; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.3);">🔥 Sale Active</div>
                     </div>
                 </div>
                 <span id="voucherCount" style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 20px;">0 Records</span>
@@ -316,13 +357,13 @@
         <div id="archiveView" class="view">
             <div class="animate-up" style="margin-bottom: 2rem;">
                 <h2 style="font-size: 1.8rem; font-weight: 900; color: var(--neon-primary);">The Vault</h2>
-                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;">Records permanently deleted here will be deducted from your total revenue.</div>
+                <div style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.4rem;">Click a category to toggle its vaulted vouchers. Switch between Sold and Unsold vouchers inside.</div>
             </div>
 
             <div class="bulk-actions-bar animate-up" id="archiveBulkActionBar" style="display: none; animation-delay: 0.1s;">
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="selectAllArchiveCheckbox" onchange="toggleSelectAll('archive-checkbox', this)">
-                    <span style="font-size: 0.95rem; font-weight: 600;">Select All Vaulted</span>
+                    <span style="font-size: 0.95rem; font-weight: 600;">Select All Vaulted Records</span>
                 </label>
                 <button class="btn-danger" id="deleteSelectedArchiveBtn" style="display: none; padding: 0.6rem 1.25rem;" onclick="permanentlyDeleteSelected()">
                     Erase Permanently
@@ -352,12 +393,36 @@
         </div>
     </div>
 
+    <!-- SALE MODAL -->
+    <div id="saleModal" class="modal-overlay" style="display: none;">
+        <div class="modal-card">
+            <h3 style="color: #fbbf24;">🏷️ Configure Category Sale</h3>
+            <div class="form-group">
+                <label>Discount Percentage (%)</label>
+                <input type="number" id="saleModalPercentInput" min="1" max="100" placeholder="e.g. 8 for 8%">
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">Prices will be rounded off automatically (e.g. 42.56 → 43).</p>
+            </div>
+            <div class="form-group">
+                <label>Sale Deadline / End Date & Time</label>
+                <input type="datetime-local" id="saleModalEndDateInput">
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.3rem;">After this end date, prices automatically revert to original.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-outline" onclick="closeSaleModal()">Cancel</button>
+                <button class="btn-danger" id="removeSaleBtn" onclick="removeCategorySale()" style="display: none;">Disable Sale</button>
+                <button class="btn-primary" style="background: linear-gradient(135deg, #f59e0b, #b45309);" onclick="saveCategorySale()">Apply Sale</button>
+            </div>
+        </div>
+    </div>
+
     <div id="toast">Data successfully processed!</div>
 
     <script>
         let appData = JSON.parse(localStorage.getItem('zenfast_db')) || [];
         let activeCategoryId = null;
         let editingCategoryId = null;
+        let saleCategoryId = null;
+        let vaultCategoryState = {}; // Keeps track of expanded categories and selected tabs { catId: { expanded: bool, tab: 'sold' | 'unsold' } }
 
         function init() { 
             autoArchiveVouchers();
@@ -366,6 +431,26 @@
 
         function saveData() { 
             localStorage.setItem('zenfast_db', JSON.stringify(appData)); 
+        }
+
+        // Calculation helper: Checks if sale is active and calculates rounded discount price
+        function getEffectivePrice(category, basePrice) {
+            const original = parseFloat(basePrice) || 0;
+            if (!category || !category.salePercent || !category.saleEndDate) return original;
+
+            const now = Date.now();
+            const end = new Date(category.saleEndDate).getTime();
+
+            if (now < end && category.salePercent > 0) {
+                const discounted = original * (1 - (category.salePercent / 100));
+                return Math.round(discounted);
+            }
+            return original;
+        }
+
+        function isSaleActive(category) {
+            if (!category || !category.salePercent || !category.saleEndDate) return false;
+            return Date.now() < new Date(category.saleEndDate).getTime() && category.salePercent > 0;
         }
 
         function autoArchiveVouchers() {
@@ -438,11 +523,91 @@
             closeEditModal();
             if (activeCategoryId === category.id) renderCategoryVouchers();
             renderDashboard();
-            showToast("Category & Auto-Vault updated!");
+            showToast("Category settings updated!");
         }
 
         function triggerCurrentCategoryEdit() {
             if (activeCategoryId) editCategory(activeCategoryId);
+        }
+
+        // SALE MODAL FUNCTIONS
+        function openSaleModal(categoryId) {
+            const category = appData.find(c => c.id === categoryId);
+            if (!category) return;
+            saleCategoryId = categoryId;
+
+            document.getElementById('saleModalPercentInput').value = category.salePercent || '';
+
+            const removeBtn = document.getElementById('removeSaleBtn');
+            if (category.saleEndDate) {
+                const d = new Date(category.saleEndDate);
+                const tzOffset = d.getTimezoneOffset() * 60000;
+                const localISOTime = (new Date(d.getTime() - tzOffset)).toISOString().slice(0, 16);
+                document.getElementById('saleModalEndDateInput').value = localISOTime;
+                removeBtn.style.display = 'inline-block';
+            } else {
+                document.getElementById('saleModalEndDateInput').value = '';
+                removeBtn.style.display = 'none';
+            }
+
+            document.getElementById('saleModal').style.display = 'flex';
+        }
+
+        function closeSaleModal() {
+            saleCategoryId = null;
+            document.getElementById('saleModal').style.display = 'none';
+        }
+
+        function saveCategorySale() {
+            if (!saleCategoryId) return;
+            const category = appData.find(c => c.id === saleCategoryId);
+            if (!category) return;
+
+            const percent = parseFloat(document.getElementById('saleModalPercentInput').value);
+            const endDateVal = document.getElementById('saleModalEndDateInput').value;
+
+            if (isNaN(percent) || percent <= 0 || percent > 100) {
+                alert("Please enter a valid percentage discount between 1 and 100.");
+                return;
+            }
+            if (!endDateVal) {
+                alert("Please select a sale deadline / end date & time.");
+                return;
+            }
+
+            const endDate = new Date(endDateVal).getTime();
+            if (endDate <= Date.now()) {
+                alert("End date must be in the future.");
+                return;
+            }
+
+            category.salePercent = percent;
+            category.saleEndDate = endDate;
+
+            saveData();
+            closeSaleModal();
+            if (activeCategoryId === category.id) renderCategoryVouchers();
+            renderDashboard();
+            showToast(`Sale applied: ${percent}% OFF applied!`);
+        }
+
+        function removeCategorySale() {
+            if (!saleCategoryId) return;
+            const category = appData.find(c => c.id === saleCategoryId);
+            if (!category) return;
+
+            category.salePercent = 0;
+            category.saleEndDate = null;
+
+            saveData();
+            closeSaleModal();
+            if (activeCategoryId === category.id) renderCategoryVouchers();
+            renderDashboard();
+            showToast("Sale ended. Prices reverted to normal.");
+        }
+
+        function triggerCurrentCategorySale() {
+            if (activeCategoryId) openSaleModal(activeCategoryId);
         }
 
         function renderDashboard() {
@@ -464,7 +629,7 @@
                 let categorySales = 0;
                 cat.vouchers.forEach(v => {
                     if (v.sold) {
-                        const price = parseFloat(v.price) || 0;
+                        const price = v.soldPrice !== undefined ? v.soldPrice : (parseFloat(v.price) || 0);
                         categorySales += price;
                         globalTotalSales += price;
                     }
@@ -476,14 +641,25 @@
                 const vaultDays = cat.archiveDays || 0;
                 const archiveDaysText = vaultDays > 0 ? `Auto-Vault: ${vaultDays} Days` : `Auto-Vault: Disabled`;
 
+                const saleActive = isSaleActive(cat);
+                let saleBadgeHtml = '';
+                if (saleActive) {
+                    const endDateStr = new Date(cat.saleEndDate).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+                    saleBadgeHtml = `<div class="sale-info-badge">🔥 SALE ${cat.salePercent}% OFF (Ends: ${endDateStr})</div>`;
+                }
+
                 const card = document.createElement('div');
                 card.className = 'glass-panel category-card animate-up';
                 card.style.animationDelay = `${delayIndex * 0.05}s`;
                 card.onclick = () => openCategory(cat.id);
                 card.innerHTML = `
-                    <button class="edit-cat-btn" title="Edit Category Details" onclick="event.stopPropagation(); editCategory('${cat.id}')">✏️ Edit</button>
+                    <div class="cat-card-actions">
+                        <button class="sale-btn-dash" title="Configure Sale" onclick="event.stopPropagation(); openSaleModal('${cat.id}')">🏷️ Sale</button>
+                        <button class="edit-cat-btn" title="Edit Category Details" onclick="event.stopPropagation(); editCategory('${cat.id}')">✏️ Edit</button>
+                    </div>
                     <h3>${escapeHtml(cat.name)}</h3>
                     <div class="vault-info">⚡ ${archiveDaysText}</div>
+                    ${saleBadgeHtml}
                     <span class="stock">${available} / ${total} Available</span>
                     <div class="sales-badge">₱${categorySales.toFixed(2)}</div>
                 `;
@@ -501,7 +677,15 @@
             const days = parseInt(daysInput.value, 10) || 0;
 
             if (!name) return;
-            appData.push({ id: Date.now().toString(), name: name, archiveDays: days < 0 ? 0 : days, headerImage: null, vouchers: [] });
+            appData.push({ 
+                id: Date.now().toString(), 
+                name: name, 
+                archiveDays: days < 0 ? 0 : days, 
+                headerImage: null, 
+                salePercent: 0,
+                saleEndDate: null,
+                vouchers: [] 
+            });
             saveData(); nameInput.value = ''; daysInput.value = ''; renderDashboard(); showToast("Category deployed successfully.");
         }
 
@@ -517,7 +701,11 @@
             if (!category) return;
             
             let categoryTotal = 0;
-            category.vouchers.forEach(v => { if (v.sold) categoryTotal += (parseFloat(v.price) || 0); });
+            category.vouchers.forEach(v => { 
+                if (v.sold) {
+                    categoryTotal += (v.soldPrice !== undefined ? v.soldPrice : (parseFloat(v.price) || 0)); 
+                }
+            });
             const unarchivedVouchers = category.vouchers.filter(v => !v.archived);
 
             document.getElementById('currentCategoryTitle').textContent = category.name;
@@ -526,6 +714,15 @@
             
             const vaultDays = category.archiveDays || 0;
             document.getElementById('categoryVaultDaysDisplay').textContent = vaultDays > 0 ? `Auto-Vault: ${vaultDays} Days` : `Auto-Vault: Disabled`;
+
+            const saleDisplay = document.getElementById('categorySaleStatusDisplay');
+            if (isSaleActive(category)) {
+                const endDateStr = new Date(category.saleEndDate).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+                saleDisplay.textContent = `🔥 SALE ${category.salePercent}% OFF (Ends: ${endDateStr})`;
+                saleDisplay.style.display = 'inline-block';
+            } else {
+                saleDisplay.style.display = 'none';
+            }
 
             const previewContainer = document.getElementById('headerPreviewContainer');
             const previewImg = document.getElementById('headerPreviewImg');
@@ -550,14 +747,20 @@
                 card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
                 card.style.animationDelay = `${(index * 0.05) + 0.3}s`;
                 
-                const displayPrice = (parseFloat(voucher.price) || 0).toFixed(2);
+                const basePrice = parseFloat(voucher.price) || 0;
+                const effectivePrice = getEffectivePrice(category, basePrice);
+                const onSale = isSaleActive(category) && effectivePrice !== basePrice;
+
+                let priceDisplayHtml = `₱${effectivePrice.toFixed(2)}`;
+                if (onSale) {
+                    priceDisplayHtml = `<span style="text-decoration: line-through; opacity: 0.5; font-size: 0.8em; margin-right: 4px; color: #fff;">₱${basePrice.toFixed(2)}</span>₱${effectivePrice.toFixed(2)} <span style="font-size:0.75em; color:#fbbf24; font-weight:bold;">(${category.salePercent}% OFF)</span>`;
+                }
+
                 const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
                 
-                // Check if this specific voucher has free promo data
                 const hasFreeData = !!(voucher.freeUsername && voucher.freePassword);
                 const freeDurText = voucher.freeDuration ? ` (${escapeHtml(voucher.freeDuration)})` : '';
                 
-                // Render Promo Badge and toggle checkbox (unchecked by default)
                 const promoBadgeHtml = hasFreeData 
                     ? `<div style="grid-column: 1 / -1; font-size: 0.85rem; color: #f87171; background: rgba(239, 68, 68, 0.1); border: 1px dashed rgba(239, 68, 68, 0.3); padding: 0.6rem 1rem; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
                         <span style="font-family: 'JetBrains Mono', monospace;">🎁 BONUS: ${escapeHtml(voucher.freeUsername)} / ${escapeHtml(voucher.freePassword)}${freeDurText}</span>
@@ -579,7 +782,7 @@
                         <div><div class="data-label">Password</div><div class="data-value">${escapeHtml(voucher.password)}</div></div>
                         <div><div class="data-label">Duration</div><div class="data-value">${escapeHtml(voucher.duration || 'N/A')}</div></div>
                         <div><div class="data-label">Validity</div><div class="data-value">${escapeHtml(voucher.validity || 'N/A')}</div></div>
-                        <div><div class="data-label">Price</div><div class="data-value price-value">₱${displayPrice}</div></div>
+                        <div><div class="data-label">Price</div><div class="data-value price-value">${priceDisplayHtml}</div></div>
                         ${promoBadgeHtml}
                         ${soldDateHtml}
                     </div>
@@ -614,6 +817,28 @@
 
         function openArchiveView() { activeCategoryId = null; switchView('archiveView'); renderArchive(); }
         
+        // VAULT TOGGLES & TAB CONTROLS
+        function toggleVaultCategory(catId) {
+            if (!vaultCategoryState[catId]) {
+                vaultCategoryState[catId] = { expanded: true, tab: 'sold' };
+            } else {
+                vaultCategoryState[catId].expanded = !vaultCategoryState[catId].expanded;
+            }
+            renderArchive();
+        }
+
+        function switchVaultTab(catId, tabName, event) {
+            if (event) event.stopPropagation();
+            if (!vaultCategoryState[catId]) {
+                vaultCategoryState[catId] = { expanded: true, tab: tabName };
+            } else {
+                vaultCategoryState[catId].expanded = true;
+                vaultCategoryState[catId].tab = tabName;
+            }
+            renderArchive();
+        }
+
+        // ARCHIVE VIEW ORGANIZED BY CATEGORY -> SOLD / UNSOLD TABS
         function renderArchive() {
             autoArchiveVouchers();
             const container = document.getElementById('archiveContent');
@@ -622,51 +847,121 @@
             document.getElementById('selectAllArchiveCheckbox').checked = false;
             document.getElementById('deleteSelectedArchiveBtn').style.display = 'none';
             
-            let hasAnyArchived = false; let delayIndex = 2;
+            let hasAnyArchived = false; 
+            let delayIndex = 2;
 
             appData.forEach(category => {
                 const archivedVouchers = category.vouchers.filter(v => v.archived);
                 if (archivedVouchers.length > 0) {
                     hasAnyArchived = true;
-                    const catTitle = document.createElement('h3');
-                    catTitle.className = 'animate-up';
-                    catTitle.style.cssText = `font-size: 1.2rem; font-weight: 800; margin: 2rem 0 1rem 0; color: var(--neon-secondary); border-bottom: 1px dashed var(--glass-border); padding-bottom: 0.5rem; animation-delay: ${delayIndex * 0.05}s`;
-                    catTitle.textContent = `Database: ${category.name}`;
-                    container.appendChild(catTitle);
-                    
-                    const grid = document.createElement('div'); grid.className = 'vouchers-grid';
-                    
-                    archivedVouchers.forEach(voucher => {
-                        const card = document.createElement('div');
-                        card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
-                        delayIndex++; card.style.animationDelay = `${delayIndex * 0.05}s`;
-                        const displayPrice = (parseFloat(voucher.price) || 0).toFixed(2);
-                        const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
 
-                        card.innerHTML = `
-                            <div class="sold-badge">SOLD</div>
-                            <div class="voucher-selector">
-                                <input type="checkbox" class="archive-checkbox" data-catid="${category.id}" value="${voucher.id}" onchange="updateBulkActions('archive-checkbox', 'selectAllArchiveCheckbox', 'deleteSelectedArchiveBtn', 'Erase Permanently')">
+                    // Initialize Category State in Vault
+                    if (!vaultCategoryState[category.id]) {
+                        vaultCategoryState[category.id] = { expanded: false, tab: 'sold' };
+                    }
+                    const catState = vaultCategoryState[category.id];
+
+                    // Sold Vouchers sorted by Transaction Log (oldest to newest timestamp)
+                    const soldArchived = archivedVouchers
+                        .filter(v => v.sold)
+                        .sort((a, b) => (a.soldTimestamp || 0) - (b.soldTimestamp || 0));
+
+                    // Unsold Vouchers
+                    const unsoldArchived = archivedVouchers.filter(v => !v.sold);
+
+                    // Category Container Box
+                    const catBox = document.createElement('div');
+                    catBox.className = 'glass-panel animate-up';
+                    catBox.style.cssText = `margin-bottom: 1.5rem; border: 1px solid rgba(239, 68, 68, 0.35); animation-delay: ${delayIndex * 0.05}s`;
+
+                    // Clickable Header for Category Expansion
+                    const catHeader = document.createElement('div');
+                    catHeader.style.cssText = `display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-bottom: ${catState.expanded ? '1rem' : '0'}; border-bottom: ${catState.expanded ? '1px dashed var(--glass-border)' : 'none'}; flex-wrap: wrap; gap: 10px;`;
+                    catHeader.onclick = () => toggleVaultCategory(category.id);
+                    
+                    catHeader.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 1rem; color: var(--neon-primary); transform: rotate(${catState.expanded ? '90deg' : '0deg'}); transition: transform 0.2s ease; display: inline-block;">▶</span>
+                            <div>
+                                <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--neon-secondary); margin: 0;">📁 ${escapeHtml(category.name)}</h3>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);">Click to ${catState.expanded ? 'collapse' : 'expand'} category records</span>
                             </div>
-                            <div class="voucher-brand" style="color: var(--text-muted);">VAULTED</div>
-                            <div class="voucher-details">
-                                <div><div class="data-label">Username</div><div class="data-value">${escapeHtml(voucher.username)}</div></div>
-                                <div><div class="data-label">Password</div><div class="data-value">${escapeHtml(voucher.password)}</div></div>
-                                <div><div class="data-label">Price</div><div class="data-value price-value">₱${displayPrice}</div></div>
-                                ${soldDateHtml}
-                            </div>
-                            <div class="voucher-actions archive-actions">
-                                <button class="btn-outline" style="border-color: var(--neon-primary); color: var(--neon-primary);" onclick="restoreVoucher('${category.id}', '${voucher.id}')">Restore</button>
-                            </div>
+                        </div>
+                        <span style="font-size: 0.85rem; font-weight: 700; background: rgba(239, 68, 68, 0.15); color: var(--neon-primary); padding: 0.3rem 0.8rem; border-radius: 20px; border: 1px solid rgba(239, 68, 68, 0.3);">
+                            ${archivedVouchers.length} Total Vaulted
+                        </span>
+                    `;
+                    catBox.appendChild(catHeader);
+
+                    // If Category is expanded, render Sub-tabs (Sold / Unsold) and corresponding grid
+                    if (catState.expanded) {
+                        const subContainer = document.createElement('div');
+                        subContainer.style.cssText = `margin-top: 1.25rem;`;
+
+                        // Tab Selection Buttons
+                        const tabsRow = document.createElement('div');
+                        tabsRow.style.cssText = `display: flex; gap: 0.75rem; margin-bottom: 1.25rem;`;
+                        tabsRow.innerHTML = `
+                            <button class="vault-tab-btn ${catState.tab === 'sold' ? 'active' : ''}" onclick="switchVaultTab('${category.id}', 'sold', event)">
+                                🏷️ Sold (${soldArchived.length})
+                            </button>
+                            <button class="vault-tab-btn ${catState.tab === 'unsold' ? 'active' : ''}" onclick="switchVaultTab('${category.id}', 'unsold', event)">
+                                📦 Unsold (${unsoldArchived.length})
+                            </button>
                         `;
-                        grid.appendChild(card);
-                    });
-                    container.appendChild(grid);
+                        subContainer.appendChild(tabsRow);
+
+                        const grid = document.createElement('div'); 
+                        grid.className = 'vouchers-grid';
+
+                        const currentList = catState.tab === 'sold' ? soldArchived : unsoldArchived;
+
+                        if (currentList.length === 0) {
+                            grid.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-style: italic; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px dashed var(--glass-border);">No ${catState.tab} vouchers stored in this category vault.</div>`;
+                        } else {
+                            currentList.forEach(voucher => {
+                                const card = document.createElement('div');
+                                card.className = `glass-panel voucher-card animate-up ${voucher.sold ? 'sold' : ''}`;
+                                delayIndex++; 
+                                card.style.animationDelay = `${delayIndex * 0.03}s`;
+                                
+                                const price = voucher.soldPrice !== undefined ? voucher.soldPrice : getEffectivePrice(category, voucher.price);
+                                const displayPrice = price.toFixed(2);
+                                const soldDateHtml = voucher.sold && voucher.soldDate ? `<div class="sold-date-info">TRANSACTION LOG: ${voucher.soldDate}</div>` : '';
+
+                                card.innerHTML = `
+                                    <div class="sold-badge">SOLD</div>
+                                    <div class="voucher-selector">
+                                        <input type="checkbox" class="archive-checkbox" data-catid="${category.id}" value="${voucher.id}" onchange="updateBulkActions('archive-checkbox', 'selectAllArchiveCheckbox', 'deleteSelectedArchiveBtn', 'Erase Permanently')">
+                                    </div>
+                                    <div class="voucher-brand" style="color: var(--text-muted);">${voucher.sold ? 'SOLD' : 'UNSOLD'}</div>
+                                    <div class="voucher-details">
+                                        <div><div class="data-label">Username</div><div class="data-value">${escapeHtml(voucher.username)}</div></div>
+                                        <div><div class="data-label">Password</div><div class="data-value">${escapeHtml(voucher.password)}</div></div>
+                                        <div><div class="data-label">Price</div><div class="data-value price-value">₱${displayPrice}</div></div>
+                                        ${soldDateHtml}
+                                    </div>
+                                    <div class="voucher-actions archive-actions">
+                                        <button class="btn-outline" style="border-color: var(--neon-primary); color: var(--neon-primary);" onclick="restoreVoucher('${category.id}', '${voucher.id}')">Restore</button>
+                                    </div>
+                                `;
+                                grid.appendChild(card);
+                            });
+                        }
+
+                        subContainer.appendChild(grid);
+                        catBox.appendChild(subContainer);
+                    }
+
+                    container.appendChild(catBox);
                 }
             });
             
             if (hasAnyArchived) bulkBar.style.display = 'flex';
-            else { bulkBar.style.display = 'none'; container.innerHTML = `<div class="glass-panel animate-up" style="text-align: center; padding: 3rem; color: var(--text-muted); font-style: italic; animation-delay: 0.2s;">The vault is currently empty.</div>`; }
+            else { 
+                bulkBar.style.display = 'none'; 
+                container.innerHTML = `<div class="glass-panel animate-up" style="text-align: center; padding: 3rem; color: var(--text-muted); font-style: italic; animation-delay: 0.2s;">The vault is currently empty.</div>`; 
+            }
         }
 
         function toggleSelectAll(checkboxClass, sourceElement) {
@@ -719,7 +1014,7 @@
             if (voucher) { voucher.archived = false; saveData(); renderArchive(); showToast(`Record restored.`); }
         }
 
-        // --- CSV IMPORT LOGIC WITH FREE DURATION ---
+        // CSV IMPORT LOGIC
         document.getElementById('csvFileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file || !activeCategoryId) return;
@@ -762,7 +1057,6 @@
             saveData(); renderCategoryVouchers(); showToast("Batch import successful.");
         }
 
-        // --- HANDLER FUNCTIONS ---
         function doCopyCombo(voucherId) {
             const category = appData.find(c => c.id === activeCategoryId);
             const voucher = category.vouchers.find(v => v.id === voucherId);
@@ -776,13 +1070,31 @@
 
         function doGenerateImage(voucherId) {
             const category = appData.find(c => c.id === activeCategoryId);
+            if (!category) return;
             const voucher = category.vouchers.find(v => v.id === voucherId);
             if (!voucher) return;
 
             const toggle = document.getElementById(`promoToggle_${voucherId}`);
             const usePromo = toggle ? toggle.checked : false;
+            
+            const basePrice = parseFloat(voucher.price) || 0;
+            const activePrice = getEffectivePrice(category, basePrice);
+            const onSale = isSaleActive(category) && activePrice !== basePrice;
 
-            generateImage(voucher.username, voucher.password, voucher.duration, voucher.validity, voucher.price, voucher.freeUsername, voucher.freePassword, voucher.freeDuration, usePromo);
+            generateImage(
+                voucher.username, 
+                voucher.password, 
+                voucher.duration, 
+                voucher.validity, 
+                activePrice, 
+                voucher.freeUsername, 
+                voucher.freePassword, 
+                voucher.freeDuration, 
+                usePromo, 
+                basePrice, 
+                onSale, 
+                category.salePercent || 0
+            );
         }
 
         function copyCombo(username, password, duration, validity, freeUser, freePass, freeDuration, isPromo) {
@@ -799,8 +1111,7 @@
                 .catch(() => alert("Failed to copy."));
         }
 
-        // --- ENHANCED VOUCHER CANVAS GENERATOR ---
-        function generateImage(username, password, duration, validity, price, freeUser, freePass, freeDuration, isPromo) {
+        function generateImage(username, password, duration, validity, price, freeUser, freePass, freeDuration, isPromo, basePrice, onSale, salePercent) {
             const category = appData.find(c => c.id === activeCategoryId);
             const headerImageSrc = category ? category.headerImage : null;
 
@@ -809,13 +1120,11 @@
             const ctx = canvas.getContext('2d');
 
             function renderFullVoucher() {
-                // Background & Grid
                 ctx.fillStyle = '#080103'; ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.strokeStyle = 'rgba(239, 68, 68, 0.04)'; ctx.lineWidth = 1;
                 for (let x = 0; x < canvas.width; x += 30) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
                 for (let y = 0; y < canvas.height; y += 30) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
 
-                // Borders
                 ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 4; ctx.strokeRect(15, 15, 770, 510);
                 ctx.strokeStyle = 'rgba(239, 68, 68, 0.35)'; ctx.lineWidth = 2; ctx.strokeRect(22, 22, 756, 496);
 
@@ -842,66 +1151,117 @@
             function drawVoucherBody() {
                 const hasPromoBox = isPromo && freeUser && freePass;
 
-                // Dynamic calculations to occupy space if promo is hidden
                 const cardH = hasPromoBox ? 72 : 114;
                 const row1Y = 162;
                 const row2Y = hasPromoBox ? 242 : 286;
 
-                // Main Voucher Credentials (4 Cards)
                 drawDataCard(ctx, 40, row1Y, 340, cardH, 'USERNAME', username, '#ef4444');
                 drawDataCard(ctx, 420, row1Y, 340, cardH, 'PASSWORD', password, '#f87171');
                 drawDataCard(ctx, 40, row2Y, 340, cardH, 'DURATION', duration || 'N/A', '#fca5a5');
                 drawDataCard(ctx, 420, row2Y, 340, cardH, 'VALIDITY', validity || 'N/A', '#fca5a5');
 
-                // Dedicated Free Promo Card Box
                 if (hasPromoBox) {
                     const px = 40, py = 322, pw = 720, ph = 78;
                     
-                    // Promo Card Box Background & Outline
                     ctx.fillStyle = 'rgba(239, 68, 68, 0.08)'; ctx.fillRect(px, py, pw, ph);
                     ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 1.5; ctx.strokeRect(px, py, pw, ph);
 
-                    // Promo Top Banner Label
                     ctx.fillStyle = '#ef4444'; ctx.fillRect(px, py, pw, 22);
                     ctx.font = '800 11px "Poppins", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left';
                     ctx.fillText('🎁 BONUS FREE VOUCHER INCLUDED', px + 12, py + 15);
 
-                    // Promo Credentials (3 Columns)
                     const colW = pw / 3;
 
-                    // Free Username
                     ctx.font = '800 10px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.fillText('FREE USERNAME', px + 12, py + 40);
                     ctx.font = '800 16px "Poppins", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText(freeUser, px + 12, py + 62);
 
-                    // Free Password
                     ctx.font = '800 10px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.fillText('FREE PASSWORD', px + colW + 12, py + 40);
                     ctx.font = '800 16px "Poppins", sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText(freePass, px + colW + 12, py + 62);
 
-                    // Free Duration
                     ctx.font = '800 10px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.fillText('FREE DURATION', px + (colW * 2) + 12, py + 40);
                     ctx.font = '800 16px "Poppins", sans-serif'; ctx.fillStyle = '#f87171'; ctx.fillText(freeDuration || 'N/A', px + (colW * 2) + 12, py + 62);
                 }
 
-                // Price Bar (Position remains constant so voucher height is stable for printing)
+                // --- PRICE BAR SECTION ---
                 const priceGrad = ctx.createLinearGradient(40, 408, 760, 408);
                 priceGrad.addColorStop(0, 'rgba(239, 68, 68, 0.15)'); priceGrad.addColorStop(1, 'rgba(127, 29, 29, 0.05)');
                 ctx.fillStyle = priceGrad; ctx.fillRect(40, 408, 720, 52);
                 ctx.strokeStyle = 'rgba(239, 68, 68, 0.4)'; ctx.lineWidth = 1.5; ctx.strokeRect(40, 408, 720, 52);
 
                 ctx.font = '800 13px "Poppins", sans-serif'; ctx.fillStyle = '#fca5a5'; ctx.textAlign = 'left'; ctx.fillText('VOUCHER PRICE', 60, 440);
-                ctx.font = '900 26px "Poppins", sans-serif'; ctx.fillStyle = '#ef4444'; ctx.textAlign = 'right'; ctx.fillText('₱' + (parseFloat(price) || 0).toFixed(2), 740, 444);
-                
-                // Footer
+
+                if (onSale) {
+                    // Draw Discount Pill Badge
+                    const badgeText = `${salePercent}% OFF`;
+                    ctx.font = '800 11px "Poppins", sans-serif';
+                    const badgeTextWidth = ctx.measureText(badgeText).width;
+                    const badgeWidth = badgeTextWidth + 16;
+                    const badgeX = 180;
+                    const badgeY = 423;
+
+                    ctx.fillStyle = '#dc2626';
+                    if (ctx.roundRect) {
+                        ctx.beginPath();
+                        ctx.roundRect(badgeX, badgeY, badgeWidth, 22, 6);
+                        ctx.fill();
+                    } else {
+                        ctx.fillRect(badgeX, badgeY, badgeWidth, 22);
+                    }
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(badgeText, badgeX + (badgeWidth / 2), badgeY + 15);
+
+                    // Calculations for dual price rendering
+                    const salePriceStr = '₱' + (parseFloat(price) || 0).toFixed(2);
+                    const basePriceStr = '₱' + (parseFloat(basePrice) || 0).toFixed(2);
+
+                    ctx.font = '900 26px "Poppins", sans-serif';
+                    const saleWidth = ctx.measureText(salePriceStr).width;
+
+                    ctx.font = '700 18px "Poppins", sans-serif';
+                    const origWidth = ctx.measureText(basePriceStr).width;
+
+                    const saleX = 740;
+                    const origX = 740 - saleWidth - 18;
+
+                    // Draw Sale Price
+                    ctx.font = '900 26px "Poppins", sans-serif';
+                    ctx.fillStyle = '#ef4444';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(salePriceStr, saleX, 444);
+
+                    // Draw Darkened Original Price
+                    ctx.font = '700 18px "Poppins", sans-serif';
+                    ctx.fillStyle = '#64748b';
+                    ctx.textAlign = 'right';
+                    ctx.fillText(basePriceStr, origX, 442);
+
+                    // Strikethrough Line across Original Price
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(origX - origWidth, 436);
+                    ctx.lineTo(origX, 436);
+                    ctx.stroke();
+
+                } else {
+                    // Standard price layout when not on sale
+                    ctx.font = '900 26px "Poppins", sans-serif'; 
+                    ctx.fillStyle = '#ef4444'; 
+                    ctx.textAlign = 'right'; 
+                    ctx.fillText('₱' + (parseFloat(price) || 0).toFixed(2), 740, 444);
+                }
+
                 ctx.font = '800 12px "Poppins", sans-serif'; ctx.fillStyle = '#f87171'; ctx.textAlign = 'center'; ctx.fillText('Thank you for purchasing voucher!', 400, 492);
             }
 
-            // Updated to dynamically center text based on card height
             function drawDataCard(context, x, y, w, h, label, value, accentColor) {
                 context.fillStyle = 'rgba(255, 255, 255, 0.02)'; context.fillRect(x, y, w, h);
                 context.strokeStyle = 'rgba(239, 68, 68, 0.2)'; context.lineWidth = 1; context.strokeRect(x, y, w, h);
                 context.fillStyle = accentColor; context.fillRect(x, y, 4, h);
 
-                const mid = y + (h / 2); // Calculate vertical center
+                const mid = y + (h / 2);
                 context.font = '800 11px "Poppins", sans-serif'; context.fillStyle = '#fca5a5'; context.textAlign = 'left'; context.fillText(label, x + 16, mid - 12);
                 context.font = '900 20px "Poppins", sans-serif'; context.fillStyle = '#ffffff'; context.fillText(value, x + 16, mid + 18);
             }
@@ -922,7 +1282,11 @@
             if (!category) return;
             const voucher = category.vouchers.find(v => v.id === voucherId);
             if (voucher) {
-                voucher.sold = true; voucher.soldTimestamp = Date.now();
+                voucher.sold = true; 
+                voucher.soldTimestamp = Date.now();
+                // Store effective price at time of purchase
+                voucher.soldPrice = getEffectivePrice(category, voucher.price);
+                
                 const now = new Date();
                 voucher.soldDate = now.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
                 saveData(); renderCategoryVouchers(); showToast("Record marked as SOLD.");
