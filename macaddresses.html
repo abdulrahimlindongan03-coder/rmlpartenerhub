@@ -2,1054 +2,1639 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RML_MAC ADDRESSES</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WiFi Device & MAC Manager</title>
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Dark Mode Eye-Friendly Palette: Midnight Slate (#0f172a), Dark Slate (#1e293b), Soft Teal (#14b8a6) */
+        :root {
+            --bg-deep: #0b0d14;
+            --bg-card: rgba(20, 25, 38, 0.85);
+            --bg-card-hover: rgba(28, 35, 52, 0.95);
+            --bg-modal: #131824;
+            --bg-input: #0a0d14;
+            --accent-gold: #c5a059;
+            --accent-gold-light: #e5c178;
+            --accent-gold-glow: rgba(197, 160, 89, 0.25);
+            --border-subtle: rgba(197, 160, 89, 0.2);
+            --border-highlight: rgba(197, 160, 89, 0.4);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --status-paid-bg: rgba(16, 185, 129, 0.15);
+            --status-paid-text: #34d399;
+            --status-paid-border: rgba(16, 185, 129, 0.3);
+            --status-due-bg: rgba(239, 68, 68, 0.15);
+            --status-due-text: #f87171;
+            --status-due-border: rgba(239, 68, 68, 0.3);
+            --status-warning-bg: rgba(245, 158, 11, 0.15);
+            --status-warning-text: #fbbf24;
+            --status-warning-border: rgba(245, 158, 11, 0.3);
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #0f172a; 
-            color: #e2e8f0; 
-            padding: 20px;
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 90%, rgba(30, 58, 138, 0.12) 0%, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding-bottom: 30px;
+            overflow-x: hidden;
         }
 
-        .header-actions {
+        /* Mobile Container */
+        .app-container {
             width: 100%;
-            max-width: 1050px;
+            max-width: 480px;
+            min-height: 100vh;
             display: flex;
-            justify-content: flex-start;
-            margin-bottom: 10px;
+            flex-direction: column;
+            background: rgba(11, 13, 20, 0.6);
+            border-left: 1px solid rgba(255, 255, 255, 0.03);
+            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+            position: relative;
         }
 
-        .btn-back {
-            background-color: #334155;
-            color: #f8fafc;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+        /* Header */
+        header {
+            background: rgba(11, 13, 20, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 1.25rem;
         }
 
-        .btn-back:hover {
-            background-color: #475569;
-            transform: translateY(-2px);
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 2.2rem;
-            color: #f8fafc;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent-gold), #8a6d3b);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 1.1rem;
+            box-shadow: 0 0 12px var(--accent-gold-glow);
+        }
+
+        .brand h1 {
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .brand h1 span {
+            color: var(--accent-gold);
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
             letter-spacing: 2px;
         }
 
-        .main-container {
-            width: 100%;
-            max-width: 1050px;
-        }
-
-        .action-buttons {
+        .menu-toggle-btn {
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid var(--border-subtle);
+            color: var(--accent-gold-light);
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-md);
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            width: 100%;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .action-buttons button {
+        .menu-toggle-btn:active {
+            transform: scale(0.92);
+            background: rgba(197, 160, 89, 0.25);
+        }
+
+        /* Drawer Navigation */
+        .drawer-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 7, 12, 0.75);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .drawer-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-modal);
+            border-left: 1px solid var(--border-highlight);
+            z-index: 1001;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+            transform: translateX(100%);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-backdrop.active .nav-drawer {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .drawer-header h3 {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .drawer-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .drawer-menu {
+            list-style: none;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             flex: 1;
-            min-width: 0;
-            padding: 12px 8px;
+            overflow-y: auto;
+        }
+
+        .drawer-menu-item {
+            padding: 0.9rem 1rem;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .drawer-menu-item i {
+            color: var(--accent-gold);
+            width: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .drawer-menu-item:hover, .drawer-menu-item:active {
+            background: rgba(197, 160, 89, 0.15);
+            border-color: var(--accent-gold);
+            transform: translateX(-4px);
+        }
+
+        .drawer-footer {
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.2);
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-gold), #967433);
+            color: #0b0d14;
+            border: none;
+            box-shadow: 0 4px 15px var(--accent-gold-glow);
+        }
+
+        .btn-primary:active {
+            background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 1.25rem;
+            flex: 1;
+        }
+
+        .dashboard-toolbar {
+            margin-bottom: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 0.85rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold-glow);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.9rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard List */
+        .owners-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .owner-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .owner-card:active {
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+            transform: scale(0.99);
+        }
+
+        .owner-main-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.25), rgba(255, 255, 255, 0.05));
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold-light);
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+
+        .owner-details-text h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-main);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .due-indicator {
+            font-size: 0.75rem;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .due-indicator.due-warning {
+            color: var(--status-warning-text);
+        }
+
+        .due-indicator.due-alert {
+            color: var(--status-due-text);
+        }
+
+        .due-indicator.due-ok {
+            color: var(--text-muted);
+        }
+
+        /* Badges */
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.725rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-paid {
+            background: var(--status-paid-bg);
+            color: var(--status-paid-text);
+            border: 1px solid var(--status-paid-border);
+        }
+
+        .badge-unpaid {
+            background: var(--status-due-bg);
+            color: var(--status-due-text);
+            border: 1px solid var(--status-due-border);
+        }
+
+        .badge-warning {
+            background: var(--status-warning-bg);
+            color: var(--status-warning-text);
+            border: 1px solid var(--status-warning-border);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 7, 12, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        @media (min-width: 480px) {
+            .modal-overlay {
+                align-items: center;
+                padding: 1rem;
+            }
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-modal);
+            border: 1px solid var(--border-highlight);
+            border-top-left-radius: var(--radius-lg);
+            border-top-right-radius: var(--radius-lg);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9);
+            transform: translateY(100%);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        @media (min-width: 480px) {
+            .modal {
+                border-radius: var(--radius-lg);
+                transform: translateY(20px);
+            }
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.1rem 1.25rem;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .modal-header h3 {
+            font-size: 1rem;
+            color: var(--accent-gold-light);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            font-size: 0.875rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold-glow);
+        }
+
+        .ssid-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 140px;
+            overflow-y: auto;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+        }
+
+        .ssid-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .ssid-checkbox-item input[type="checkbox"] {
+            accent-color: var(--accent-gold);
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Details Modal Specific */
+        .detail-card-row {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-md);
+            padding: 0.9rem 1rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .detail-label-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-gold-light);
+        }
+
+        .device-trigger-btn {
+            width: 100%;
+            background: rgba(197, 160, 89, 0.08);
+            border: 1px dashed var(--accent-gold);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            color: var(--accent-gold-light);
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+
+        .device-trigger-btn:active {
+            background: rgba(197, 160, 89, 0.18);
+        }
+
+        .device-details-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .device-details-container.open {
+            display: flex;
+        }
+
+        .device-item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem;
+        }
+
+        .mac-tag {
+            font-family: monospace;
+            letter-spacing: 1px;
+            background: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mac-tag:hover, .mac-tag:active {
+            border-color: var(--accent-gold);
+            background: rgba(197, 160, 89, 0.2);
+            transform: scale(1.02);
+        }
+
+        .ssid-pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .ssid-pill {
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: var(--text-main);
+        }
+
+        /* Billing List */
+        .billing-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .billing-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.85rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .billing-item-info strong {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .billing-item-info span {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--bg-modal);
+            border: 1px solid var(--accent-gold);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2000;
+            opacity: 0;
+            transition: var(--transition);
             font-size: 0.85rem;
             white-space: nowrap;
-            color: #ffffff;
         }
 
-        .btn-save-data { background-color: #0d9488; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2); }
-        .btn-save-data:hover { background-color: #14b8a6; transform: translateY(-2px); }
-
-        .btn-export-csv, .btn-import-csv, .btn-save-png, .btn-toggle-archive { 
-            background-color: #334155; 
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); 
-        }
-        .btn-export-csv:hover, .btn-import-csv:hover, .btn-save-png:hover, .btn-toggle-archive:hover { 
-            background-color: #475569; 
-            transform: translateY(-2px); 
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
         }
 
-        .btn-toggle-billing { background-color: #334155; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3); }
-        .btn-toggle-billing:hover { background-color: #475569; transform: translateY(-2px); }
-
-        .registration-form, .delete-owner-card, #capture-area, #billingArea, #archiveArea {
-            background: #1e293b; 
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid #334155;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
         }
 
-        .registration-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .empty-state i {
+            font-size: 2.5rem;
+            color: var(--border-subtle);
+            margin-bottom: 0.75rem;
         }
 
-        .full-width { grid-column: span 2; }
-        .input-group { display: flex; flex-direction: column; justify-content: center; }
+        /* SSID Manage List */
+        .ssid-manage-list {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-        label {
-            margin-bottom: 6px;
+        .ssid-manage-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.6rem 0.8rem;
+            border-radius: var(--radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 0.85rem;
-            color: #94a3b8;
-            text-transform: uppercase;
         }
 
-        input[type="text"], input[type="number"], select {
-            padding: 12px;
-            border: 2px solid #334155;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            color: #e2e8f0;
-            background-color: #0f172a; 
-            transition: all 0.3s ease;
-        }
-
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: #14b8a6;
-            background-color: #1e293b;
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15);
-        }
-
-        .checkbox-container { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
-        .checkbox-label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem; color: #2dd4bf; }
-        .checkbox-label input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #14b8a6; }
-
-        button {
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-register { background-color: #0d9488; color: #ffffff; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2); }
-        .btn-register:hover { background-color: #14b8a6; transform: translateY(-2px); }
-
-        .delete-owner-flex { display: flex; gap: 15px; }
-        .delete-owner-flex select { flex: 1; }
-        .btn-delete-owner { background-color: #475569; color: #ffffff; padding: 12px 24px; }
-        .btn-delete-owner:hover { background-color: #64748b; transform: translateY(-2px); }
-
-        .category-summary-container {
-            display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;
-        }
-
-        .summary-badge {
-            background: #0f172a; padding: 10px 16px; border-radius: 10px; font-size: 0.85rem;
-            color: #cbd5e1; border: 2px solid #334155; text-transform: uppercase;
-            letter-spacing: 1px; transition: all 0.2s ease;
-        }
-        .summary-badge span { color: #2dd4bf; margin-left: 4px; }
-
-        #capture-area h2, #billingArea h2, #archiveArea h2 {
-            text-align: center; margin-bottom: 20px; color: #f8fafc; text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; font-size: 0.88rem; }
-        th { background-color: #0f172a; color: #94a3b8; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 1px; }
-
-        .mac-cell { cursor: pointer; color: #2dd4bf; transition: all 0.2s ease; user-select: all; }
-        .mac-cell:hover { text-decoration: underline; color: #5eead4; }
-
-        .category-header { font-size: 1rem; text-align: center; letter-spacing: 2px; padding: 15px; }
-
-        .badge { padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; display: inline-block; text-align: center; text-transform: uppercase; }
-        .badge-paid { background-color: #115e59; color: #5eead4; }
-        .badge-disconnect { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #991b1b; }
-        .badge-warning { background-color: #78350f; color: #fde68a; }
-        .badge-nodate { background-color: #334155; color: #94a3b8; }
-
-        .btn-mark-paid {
-            padding: 6px 12px; font-size: 0.75rem; border-radius: 6px; background-color: #0d9488;
-            color: #ffffff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); border: none; cursor: pointer;
-        }
-        .btn-mark-paid:hover { background-color: #14b8a6; }
-
-        .btn-activate {
-            padding: 6px 12px; font-size: 0.75rem; border-radius: 6px; background-color: #059669;
-            color: #ffffff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); border: none; cursor: pointer;
-        }
-        .btn-activate:hover { background-color: #10b981; }
-
-        .date-edit-input {
-            padding: 6px; border: 1px solid #334155; border-radius: 6px; font-family: 'Poppins', sans-serif;
-            font-size: 0.8rem; font-weight: 700; color: #e2e8f0; background-color: #0f172a;
-        }
-
-        .hidden { display: none !important; }
-
-        @media (max-width: 768px) {
-            .action-buttons { flex-direction: row; gap: 5px; }
-            .action-buttons button { font-size: 0.65rem; padding: 10px 2px; letter-spacing: 0px; }
-            .registration-form { grid-template-columns: 1fr; padding: 15px; }
-            .full-width { grid-column: span 1; }
-            .delete-owner-flex { flex-direction: column; }
-            #capture-area, #billingArea, #archiveArea { padding: 10px; overflow-x: auto; }
-            th, td { padding: 8px; font-size: 0.8rem; }
-            h1 { font-size: 1.8rem; }
-            .header-actions { justify-content: center; }
-            .summary-badge { flex: 1 1 30%; max-width: 32%; font-size: 0.72rem; padding: 8px 4px; text-align: center; }
+        .ssid-device-count-badge {
+            background: rgba(197, 160, 89, 0.15);
+            color: var(--accent-gold-light);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-    <div class="header-actions">
-        <a href="index.html" class="btn-back">← Back to Dashboard</a>
+    <div class="app-container">
+        <!-- Header -->
+        <header>
+            <div class="header-container">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-wifi"></i>
+                    </div>
+                    <h1>WIFI MANAGER <span>1080x1920 MOBILE</span></h1>
+                </div>
+                <button class="menu-toggle-btn" onclick="toggleNavDrawer()" aria-label="Open Navigation Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="dashboard-toolbar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" oninput="renderDashboard()" placeholder="Search owner name...">
+                </div>
+            </div>
+
+            <div class="owners-list" id="ownersList">
+                <!-- Injected via JS -->
+            </div>
+        </div>
     </div>
 
-    <div class="main-container">
-        <h1>MAC ADDRESSES</h1>
+    <!-- Hidden CSV File Input -->
+    <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleImportCSV(event)">
 
-        <div class="action-buttons">
-            <button class="btn-save-data" id="btnSaveData">SAVED!</button>
-            <button class="btn-export-csv" id="btnExportCsv">Export CSV</button>
-            <button class="btn-import-csv" id="btnImportCsv">Import CSV</button>
-            <button class="btn-save-png" id="btnSave">Save as PNG</button>
-            <button class="btn-toggle-billing" id="btnToggleBilling">BILLING</button>
-            <button class="btn-toggle-archive" id="btnToggleArchive">ARCHIVE</button>
-        </div>
-
-        <div id="dashboardArea">
-            <div class="registration-form">
-                <div class="input-group full-width">
-                    <label>Categories (Select Multiple)</label>
-                    <div class="checkbox-container">
-                        <label class="checkbox-label"><input type="checkbox" name="categoryCheckbox" value="RML"> RML</label>
-                        <label class="checkbox-label"><input type="checkbox" name="categoryCheckbox" value="INDOOR"> INDOOR</label>
-                        <label class="checkbox-label"><input type="checkbox" name="categoryCheckbox" value="OUTDOOR"> OUTDOOR</label>
-                        <label class="checkbox-label"><input type="checkbox" name="categoryCheckbox" value="EXTENDER"> EXTENDER</label>
-                        <label class="checkbox-label"><input type="checkbox" name="categoryCheckbox" value="AC1200"> AC1200</label>
-                        <label class="checkbox-label"><input type="checkbox" name="categoryCheckbox" value="ROUTER"> ROUTER</label>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label for="macAddress">MAC Address</label>
-                    <input type="text" id="macAddress" placeholder="e.g. B8:3A:08:E5:21:C0" maxlength="17">
-                </div>
-                <div class="input-group">
-                    <label for="ownerName">Owner's Name</label>
-                    <input type="text" id="ownerName" placeholder="Enter owner name" list="ownerList">
-                    <datalist id="ownerList"></datalist>
-                </div>
-                <div class="input-group">
-                    <label for="device">Device</label>
-                    <input type="text" id="device" placeholder="e.g. Router, Smartphone">
-                </div>
-                <div class="input-group">
-                    <label for="payment">Payment</label>
-                    <input type="text" id="payment" placeholder="Enter payment amount/status">
-                </div>
-                <div class="input-group">
-                    <label for="dueDay">Due Day of Month (1-31)</label>
-                    <input type="number" id="dueDay" min="1" max="31" placeholder="e.g. 15">
-                </div>
-                <div class="input-group full-width">
-                    <div class="checkbox-container">
-                        <label class="checkbox-label"><input type="checkbox" id="noDueDate"> No Due Date</label>
-                        <label class="checkbox-label"><input type="checkbox" id="isInitialPaid"> Mark Initial Bill as Paid</label>
-                    </div>
-                </div>
-                <button class="btn-register full-width" id="btnRegister">Register Device</button>
+    <!-- Navigation Drawer -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeNavDrawer()">
+        <div class="nav-drawer" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h3><i class="fa-solid fa-sliders"></i> Menu Navigation</h3>
+                <button class="drawer-close-btn" onclick="closeNavDrawer()">&times;</button>
             </div>
-
-            <div class="delete-owner-card">
-                <div class="input-group">
-                    <label for="searchInput">Search Records</label>
-                    <input type="text" id="searchInput" placeholder="Search by Owner Name or MAC Address...">
-                </div>
-                <div class="input-group">
-                    <label for="deleteMacSelect">Remove Device By MAC Address</label>
-                    <div class="delete-owner-flex">
-                        <select id="deleteMacSelect"><option value="">-- Select MAC Address to Delete --</option></select>
-                        <button class="btn-delete-owner" id="btnDeleteMac">Delete MAC</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="capture-area">
-                <h2>Registered Devices</h2>
-                <div class="category-summary-container" id="categorySummary"></div>
-                <table id="deviceTable">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>MAC Address (Click to Copy)</th>
-                            <th>Device</th>
-                            <th>Payment</th>
-                            <th>Next Due Date</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
+            <ul class="drawer-menu">
+                <li class="drawer-menu-item" onclick="handleMenuAction('register')">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>Register</span>
+                </li>
+                <li class="drawer-menu-item" onclick="handleMenuAction('ssid')">
+                    <i class="fa-solid fa-wifi"></i>
+                    <span>SSID</span>
+                </li>
+                <li class="drawer-menu-item" onclick="handleMenuAction('billing')">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Billing Section</span>
+                </li>
+                <li class="drawer-menu-item" onclick="handleMenuAction('export_csv')">
+                    <i class="fa-solid fa-file-export"></i>
+                    <span>Export as CSV</span>
+                </li>
+                <li class="drawer-menu-item" onclick="handleMenuAction('import_csv')">
+                    <i class="fa-solid fa-file-import"></i>
+                    <span>Import as CSV</span>
+                </li>
+            </ul>
+            <div class="drawer-footer">
+                &copy; Circle C RML Programming
             </div>
         </div>
-
-        <div id="billingArea" class="hidden">
-            <h2>BILLING MANAGEMENT</h2>
-            <div class="input-group" style="margin-bottom: 20px;">
-                <label for="billingSearchInput">Quick Find by Owner or MAC Address</label>
-                <input type="text" id="billingSearchInput" placeholder="Type Owner or MAC Address here to filter...">
-            </div>
-            <table id="billingTable">
-                <thead>
-                    <tr>
-                        <th>Owner</th>
-                        <th>MAC Address</th>
-                        <th>Device</th>
-                        <th>Payment</th>
-                        <th>Billing Date (Edit)</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="billingTableBody"></tbody>
-            </table>
-        </div>
-
-        <div id="archiveArea" class="hidden">
-            <h2>ARCHIVED / OVERDUE DEVICES</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Owner</th>
-                        <th>MAC Address</th>
-                        <th>Category</th>
-                        <th>Device</th>
-                        <th>Overdue Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="archiveTableBody"></tbody>
-            </table>
-        </div>
-
-        <script id="embeddedData" type="application/json">
-            []
-        </script>
-
-        <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
-
     </div>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" style="color: var(--accent-gold);"></i>
+        <span id="toastMessage">Action completed</span>
+    </div>
+
+    <!-- 1. REGISTER SSID MODAL -->
+    <div class="modal-overlay" id="ssidRegisterModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-wifi"></i> Manage WiFi SSIDs</h3>
+                <button class="close-btn" onclick="closeModal('ssidRegisterModal')">&times;</button>
+            </div>
+            <form onsubmit="handleSSIDRegister(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ssidName">Add New WiFi SSID</label>
+                        <input type="text" id="ssidName" class="form-control" placeholder="e.g. VIP_Lounge_5G" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-plus"></i> Add SSID</button>
+                    
+                    <div style="margin-top: 1.25rem;">
+                        <label style="font-size:0.8rem; color:var(--text-muted); font-weight:500;">Existing SSIDs</label>
+                        <div class="ssid-manage-list" id="ssidManageList">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" onclick="closeModal('ssidRegisterModal')">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. REGISTER OWNER NAME & BILLING DATE MODAL -->
+    <div class="modal-overlay" id="ownerRegisterModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-plus"></i> Register Owner</h3>
+                <button class="close-btn" onclick="closeModal('ownerRegisterModal')">&times;</button>
+            </div>
+            <form onsubmit="handleOwnerRegister(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ownerNameInput">Owner Name</label>
+                        <input type="text" id="ownerNameInput" class="form-control" placeholder="e.g. RYAN" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="billingDateInput">Billing Date</label>
+                        <input type="date" id="billingDateInput" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" onclick="closeModal('ownerRegisterModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. BILLING SECTION MODAL -->
+    <div class="modal-overlay" id="billingSectionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-invoice-dollar"></i> Billing Section</h3>
+                <button class="close-btn" onclick="closeModal('billingSectionModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="billing-list" id="billingListContainer">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closeModal('billingSectionModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. OWNER DETAILS MODAL -->
+    <div class="modal-overlay" id="ownerDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-id-card"></i> Owner Details</h3>
+                <button class="close-btn" onclick="closeModal('ownerDetailsModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="ownerDetailsBody">
+                <!-- Injected via JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="deleteOwnerBtn" style="color: var(--status-due-text); border-color: rgba(239, 68, 68, 0.3);">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button type="button" class="btn btn-primary" onclick="closeModal('ownerDetailsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. ADD DEVICE MODAL -->
+    <div class="modal-overlay" id="addDeviceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-mobile-screen-button"></i> Add Device</h3>
+                <button class="close-btn" onclick="closeModal('addDeviceModal')">&times;</button>
+            </div>
+            <form onsubmit="handleAddDeviceSubmit(event)">
+                <input type="hidden" id="targetOwnerId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="deviceNameInput">Device Name</label>
+                        <input type="text" id="deviceNameInput" class="form-control" placeholder="e.g. Phone / Laptop" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="macAddressInput">MAC Address (Auto-Formatted)</label>
+                        <input type="text" id="macAddressInput" class="form-control" placeholder="F4:D4:88:31:00:BC" required oninput="formatMACInput(this)" maxlength="17">
+                    </div>
+                    <div class="form-group">
+                        <label>Assigned WiFi SSIDs (Multiple Allowed)</label>
+                        <div class="ssid-checkbox-group" id="ssidCheckboxContainer">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" onclick="closeModal('addDeviceModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Device</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JS Logic -->
     <script>
-        let recordsData = [];
-        let activeCategoryFilter = null;
+        const STORAGE_SSIDS = 'wifi_app_ssids_v3';
+        const STORAGE_OWNERS = 'wifi_app_owners_v3';
 
-        const macInput = document.getElementById('macAddress');
-        const btnRegister = document.getElementById('btnRegister');
-        const tableBody = document.getElementById('tableBody');
-        const billingTableBody = document.getElementById('billingTableBody');
-        const archiveTableBody = document.getElementById('archiveTableBody');
-        const categorySummary = document.getElementById('categorySummary');
-        
-        const btnSaveData = document.getElementById('btnSaveData');
-        const btnExportCsv = document.getElementById('btnExportCsv');
-        const btnImportCsv = document.getElementById('btnImportCsv');
-        const csvFileInput = document.getElementById('csvFileInput');
-        const btnSave = document.getElementById('btnSave');
-        
-        const deleteMacSelect = document.getElementById('deleteMacSelect');
-        const btnDeleteMac = document.getElementById('btnDeleteMac');
-        const ownerList = document.getElementById('ownerList');
-        const noDueDateCheckbox = document.getElementById('noDueDate');
-        const dueDayInput = document.getElementById('dueDay');
-        const isInitialPaidCheckbox = document.getElementById('isInitialPaid');
-        
-        const searchInput = document.getElementById('searchInput');
-        const billingSearchInput = document.getElementById('billingSearchInput');
-        
-        const btnToggleBilling = document.getElementById('btnToggleBilling');
-        const btnToggleArchive = document.getElementById('btnToggleArchive');
-        const dashboardArea = document.getElementById('dashboardArea');
-        const billingArea = document.getElementById('billingArea');
-        const archiveArea = document.getElementById('archiveArea');
+        let ssids = [];
+        let owners = [];
+        let activeOwnerId = null;
 
-        searchInput.addEventListener('input', renderTable);
-        billingSearchInput.addEventListener('input', renderBillingTable);
+        // --- INIT & LOCAL STORAGE --- //
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStorage();
+            document.getElementById('billingDateInput').value = new Date().toISOString().split('T')[0];
+            renderDashboard();
+        });
 
-        // --- View Switching Logic ---
-        function switchView(view) {
-            dashboardArea.classList.add('hidden');
-            billingArea.classList.add('hidden');
-            archiveArea.classList.add('hidden');
+        function loadStorage() {
+            const storedSsids = localStorage.getItem(STORAGE_SSIDS);
+            const storedOwners = localStorage.getItem(STORAGE_OWNERS);
+            ssids = storedSsids ? JSON.parse(storedSsids) : [];
+            owners = storedOwners ? JSON.parse(storedOwners) : [];
+        }
+
+        function saveStorage() {
+            localStorage.setItem(STORAGE_SSIDS, JSON.stringify(ssids));
+            localStorage.setItem(STORAGE_OWNERS, JSON.stringify(owners));
+        }
+
+        // --- NAVIGATION HANDLERS --- //
+        function toggleNavDrawer() {
+            document.getElementById('drawerBackdrop').classList.toggle('active');
+        }
+
+        function closeNavDrawer() {
+            document.getElementById('drawerBackdrop').classList.remove('active');
+        }
+
+        function handleMenuAction(action) {
+            closeNavDrawer();
+            setTimeout(() => {
+                if (action === 'register') {
+                    openModal('ownerRegisterModal');
+                } else if (action === 'ssid') {
+                    renderSSIDManageList();
+                    openModal('ssidRegisterModal');
+                } else if (action === 'billing') {
+                    renderBillingSection();
+                    openModal('billingSectionModal');
+                } else if (action === 'export_csv') {
+                    exportToCSV();
+                } else if (action === 'import_csv') {
+                    document.getElementById('csvFileInput').click();
+                }
+            }, 200);
+        }
+
+        // --- ALPHABETICAL SORTING --- //
+        function getSortedOwners() {
+            return [...owners].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+        }
+
+        // --- MAC AUTO-FORMATTER --- //
+        function formatMACInput(input) {
+            let raw = input.value.replace(/[^0-9A-Fa-f]/g, '').toUpperCase();
+            if (raw.length > 12) raw = raw.substring(0, 12);
             
-            btnToggleBilling.textContent = 'BILLING';
-            btnToggleBilling.style.backgroundColor = '#334155';
-            btnToggleArchive.textContent = 'ARCHIVE';
-            btnToggleArchive.style.backgroundColor = '#334155';
-
-            if (view === 'dashboard') {
-                dashboardArea.classList.remove('hidden');
-                renderTable();
-            } else if (view === 'billing') {
-                billingArea.classList.remove('hidden');
-                btnToggleBilling.textContent = 'BACK TO DASHBOARD';
-                btnToggleBilling.style.backgroundColor = '#0d9488';
-                renderBillingTable();
-            } else if (view === 'archive') {
-                archiveArea.classList.remove('hidden');
-                btnToggleArchive.textContent = 'BACK TO DASHBOARD';
-                btnToggleArchive.style.backgroundColor = '#0d9488';
-                renderArchiveTable();
-            }
-        }
-
-        btnToggleBilling.addEventListener('click', () => {
-            if (billingArea.classList.contains('hidden')) switchView('billing');
-            else switchView('dashboard');
-        });
-
-        btnToggleArchive.addEventListener('click', () => {
-            if (archiveArea.classList.contains('hidden')) switchView('archive');
-            else switchView('dashboard');
-        });
-
-        noDueDateCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                dueDayInput.value = '';
-                dueDayInput.disabled = true;
-                dueDayInput.style.backgroundColor = '#334155'; 
-                isInitialPaidCheckbox.checked = false;
-                isInitialPaidCheckbox.disabled = true;
-            } else {
-                dueDayInput.disabled = false;
-                dueDayInput.style.backgroundColor = '#0f172a';
-                isInitialPaidCheckbox.disabled = false;
-            }
-        });
-
-        function parseLocalDate(dateString) {
-            const [y, m, d] = dateString.split('-').map(Number);
-            return new Date(y, m - 1, d);
-        }
-
-        function formatLocalDate(date) {
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, '0');
-            const d = String(date.getDate()).padStart(2, '0');
-            return `${y}-${m}-${d}`;
-        }
-
-        function getCurrentDateString() {
-            return new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        }
-        
-        function getDateTimeString() {
-            const d = new Date();
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            const month = monthNames[d.getMonth()];
-            const day = String(d.getDate()).padStart(2, '0');
-            const year = d.getFullYear();
-            let hours = d.getHours();
-            const minutes = String(d.getMinutes()).padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            return `${month}. ${day}, ${year}_${hours}:${minutes}${ampm}`;
-        }
-
-        function addOneMonth(dateString, originalDueDay) {
-            let [y, m, d] = dateString.split('-').map(Number);
-            let nextMonthIndex = m; 
-            let nextYear = y;
-            if (nextMonthIndex > 11) { nextMonthIndex = 0; nextYear++; }
-            let maxDays = new Date(nextYear, nextMonthIndex + 1, 0).getDate();
-            let safeDay = Math.min(originalDueDay, maxDays);
-            let result = new Date(nextYear, nextMonthIndex, safeDay);
-            return formatLocalDate(result);
-        }
-
-        function getOwnerStyles() {
-            return { bg: `#0f172a`, border: `#14b8a6`, text: `#2dd4bf` };
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            let loaded = false;
-            const embeddedScript = document.getElementById('embeddedData');
-            if (embeddedScript) {
-                try {
-                    const embeddedRecords = JSON.parse(embeddedScript.textContent);
-                    if (Array.isArray(embeddedRecords) && embeddedRecords.length > 0) {
-                        recordsData = embeddedRecords;
-                        loaded = true;
-                    }
-                } catch (e) {
-                    console.error("Error parsing embedded data:", e);
-                }
-            }
-
-            if (!loaded) {
-                const savedRecords = localStorage.getItem('mac_address_records');
-                if (savedRecords) {
-                    recordsData = JSON.parse(savedRecords);
-                }
-            }
-
-            recordsData = recordsData.map(item => {
-                if (item.noDueDate === undefined) item.noDueDate = false;
-                if (item.isArchived === undefined) item.isArchived = false;
-
-                if (!item.nextDueDate && !item.noDueDate) {
-                    let today = new Date();
-                    today.setHours(0,0,0,0);
-                    let originalDueDay = parseInt(item.dueDay, 10) || 1;
-                    let y = today.getFullYear();
-                    let m = today.getMonth();
-                    let maxD = new Date(y, m + 1, 0).getDate();
-                    let safeD = Math.min(originalDueDay, maxD);
-                    let nextD = new Date(y, m, safeD);
-                    if (today > nextD) { 
-                        m++;
-                        if (m > 11) { m = 0; y++; }
-                        maxD = new Date(y, m + 1, 0).getDate();
-                        safeD = Math.min(originalDueDay, maxD);
-                        nextD = new Date(y, m, safeD);
-                    }
-                    item.originalDueDay = originalDueDay;
-                    item.nextDueDate = formatLocalDate(nextD);
-                }
-                if (item.category) item.category = item.category.toUpperCase();
-                if (item.owner) item.owner = item.owner.toUpperCase();
-                if (item.device) item.device = item.device.toUpperCase();
-                return item;
-            });
-            renderTable();
-        });
-
-        macInput.addEventListener('input', function (e) {
-            let val = e.target.value.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
             let formatted = '';
-            for (let i = 0; i < val.length; i++) {
-                if (i > 0 && i % 2 === 0) formatted += ':';
-                formatted += val[i];
+            for (let i = 0; i < raw.length; i++) {
+                if (i > 0 && i % 2 === 0) {
+                    formatted += ':';
+                }
+                formatted += raw[i];
             }
-            e.target.value = formatted.substring(0, 17);
-        });
-
-        window.copyMac = function(text, element) {
-            navigator.clipboard.writeText(text).then(() => {
-                element.innerText = 'COPIED!';
-                element.style.color = '#14b8a6';
-                setTimeout(() => {
-                    element.innerText = text;
-                    element.style.color = '';
-                }, 1200);
-            }).catch(() => {
-                alert('Copied: ' + text);
-            });
-        };
-
-        function updateChoices() {
-            const currentSelectedMac = deleteMacSelect.value;
-            deleteMacSelect.innerHTML = '<option value="">-- Select MAC Address to Delete --</option>';
-            ownerList.innerHTML = '';
-
-            const owners = [...new Set(recordsData.map(r => r.owner).filter(Boolean))];
-            owners.forEach(owner => {
-                const dataOpt = document.createElement('option');
-                dataOpt.value = owner;
-                ownerList.appendChild(dataOpt);
-            });
-
-            const macMap = new Map();
-            recordsData.forEach(r => {
-                if (r.mac && !macMap.has(r.mac)) {
-                    macMap.set(r.mac, `${r.mac} (${r.owner || 'UNKNOWN'} - ${r.device || 'DEVICE'})`);
-                }
-            });
-
-            macMap.forEach((text, mac) => {
-                const opt = document.createElement('option');
-                opt.value = mac;
-                opt.textContent = text;
-                deleteMacSelect.appendChild(opt);
-            });
-
-            if (macMap.has(currentSelectedMac)) deleteMacSelect.value = currentSelectedMac;
+            input.value = formatted;
         }
 
-        // --- DASHBOARD TABLE ---
-        function renderTable() {
-            let today = new Date();
-            today.setHours(0,0,0,0);
-
-            // 1. Auto-Archive Logic: Overdue by 4 days
-            recordsData.forEach(item => {
-                if (!item.noDueDate && item.nextDueDate && !item.isArchived) {
-                    let dueDateObj = parseLocalDate(item.nextDueDate);
-                    let diffTime = dueDateObj.getTime() - today.getTime();
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if (diffDays <= -4) {
-                        item.isArchived = true;
-                    }
-                }
-            });
-
-            tableBody.innerHTML = '';
-            categorySummary.innerHTML = '';
-            
-            const searchTerm = searchInput.value.trim().toLowerCase();
-            const categoryCounts = {};
-            
-            recordsData.forEach(r => {
-                if (r.category && !r.isArchived) {
-                    categoryCounts[r.category] = (categoryCounts[r.category] || 0) + 1;
-                }
-            });
-
-            const defaultCategories = ['RML', 'INDOOR', 'OUTDOOR', 'EXTENDER', 'AC1200', 'ROUTER'];
-            const allCategories = [...new Set([...defaultCategories, ...Object.keys(categoryCounts)])];
-
-            allCategories.forEach(cat => {
-                const count = categoryCounts[cat] || 0;
-                const badge = document.createElement('div');
-                badge.className = 'summary-badge';
-                badge.style.cursor = 'pointer';
-                if (activeCategoryFilter === cat) {
-                    badge.style.border = '2px solid #14b8a6';
-                    badge.style.backgroundColor = '#134e4a';
-                }
-                badge.innerHTML = `${cat}: <span>${count} Connected</span>`;
-                badge.onclick = () => {
-                    activeCategoryFilter = (activeCategoryFilter === cat) ? null : cat;
-                    renderTable();
-                };
-                categorySummary.appendChild(badge);
-            });
-
-            const recordsToDisplay = recordsData.filter(r => {
-                if (r.isArchived) return false;
-                const matchesCategory = activeCategoryFilter ? r.category === activeCategoryFilter : true;
-                const matchesSearch = searchTerm ? (
-                    (r.owner && r.owner.toLowerCase().includes(searchTerm)) ||
-                    (r.mac && r.mac.toLowerCase().includes(searchTerm))
-                ) : true;
-                return matchesCategory && matchesSearch;
-            });
-
-            const owners = [...new Set(recordsToDisplay.map(r => r.owner).filter(Boolean))].sort();
-
-            owners.forEach(owner => {
-                const ownerRecords = recordsToDisplay.filter(r => r.owner === owner);
-                if (ownerRecords.length > 0) {
-                    const styles = getOwnerStyles();
-                    const headerTr = document.createElement('tr');
-                    headerTr.innerHTML = `<td colspan="6" class="category-header" style="background-color: ${styles.bg}; color: ${styles.text}; border-bottom: 2px solid ${styles.border};">OWNER: ${owner}</td>`;
-                    tableBody.appendChild(headerTr);
-
-                    ownerRecords.forEach(item => {
-                        let badgeClass = 'badge-paid';
-                        let statusLabel = 'PAID';
-                        let dueDateDisplay = item.nextDueDate;
-
-                        if (item.noDueDate) {
-                            badgeClass = 'badge-nodate';
-                            statusLabel = 'NO DUE DATE';
-                            dueDateDisplay = 'N/A';
-                        } else {
-                            let dueDateObj = parseLocalDate(item.nextDueDate);
-                            let diffTime = dueDateObj.getTime() - today.getTime();
-                            let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                            if (diffDays < 0) {
-                                badgeClass = 'badge-disconnect';
-                                statusLabel = 'OVERDUE';
-                            } else if (diffDays === 0) {
-                                badgeClass = 'badge-warning';
-                                statusLabel = 'DUE TODAY';
-                            }
-                        }
-
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td><span class="badge badge-nodate">${item.category}</span></td>
-                            <td class="mac-cell" title="Click to copy" onclick="copyMac('${item.mac}', this)">${item.mac}</td>
-                            <td>${item.device}</td>
-                            <td>${item.payment}</td>
-                            <td>${dueDateDisplay}</td>
-                            <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
-                        `;
-                        tableBody.appendChild(tr);
-                    });
-                }
-            });
-            updateChoices();
-        }
-
-        // --- BILLING TABLE ---
-        function renderBillingTable() {
-            billingTableBody.innerHTML = '';
-            let today = new Date();
+        // --- DASHBOARD DUE CALCULATION & RENDERING --- //
+        function calculateDueStatus(billingDateStr, isPaid) {
+            const today = new Date();
             today.setHours(0,0,0,0);
             
-            const searchTerm = billingSearchInput.value.trim().toLowerCase();
-            const macGroupMap = new Map();
-            
-            recordsData.forEach(item => {
-                if (!item.mac || item.isArchived || item.noDueDate) return; 
-                
-                const macKey = item.mac.toUpperCase();
-                if (!macGroupMap.has(macKey)) {
-                    macGroupMap.set(macKey, []);
+            const due = new Date(billingDateStr);
+            due.setHours(0,0,0,0);
+
+            const timeDiff = due.getTime() - today.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            let countdownText = '';
+            let statusClass = 'due-ok';
+
+            if (!isPaid) {
+                if (daysDiff < 0) {
+                    countdownText = `Overdue by ${Math.abs(daysDiff)} day(s)`;
+                    statusClass = 'due-alert';
+                } else if (daysDiff === 0) {
+                    countdownText = 'Due Today!';
+                    statusClass = 'due-alert';
+                } else if (daysDiff <= 7) {
+                    countdownText = `${daysDiff} day(s) left and counting`;
+                    statusClass = 'due-warning';
+                } else {
+                    countdownText = `Due in ${daysDiff} days`;
                 }
-                macGroupMap.get(macKey).push(item);
-            });
+            } else {
+                countdownText = `Paid - Next billing: ${billingDateStr}`;
+            }
 
-            macGroupMap.forEach((items, mac) => {
-                const owners = [...new Set(items.map(i => i.owner).filter(Boolean))].join(', ');
-
-                if (searchTerm && !mac.toLowerCase().includes(searchTerm) && !owners.toLowerCase().includes(searchTerm)) return;
-
-                const devices = [...new Set(items.map(i => i.device).filter(Boolean))].join(', ');
-                const payments = [...new Set(items.map(i => i.payment).filter(Boolean))].join(' | ');
-
-                let repItem = items[0];
-                const validItems = items.filter(i => !i.noDueDate && i.nextDueDate);
-                if (validItems.length > 0) {
-                    validItems.sort((a, b) => a.nextDueDate.localeCompare(b.nextDueDate));
-                    repItem = validItems[0];
-                }
-
-                let badgeClass = 'badge-paid';
-                let statusLabel = 'PAID';
-                
-                let dueDateObj = parseLocalDate(repItem.nextDueDate);
-                let diffTime = dueDateObj.getTime() - today.getTime();
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                if (diffDays < 0) {
-                    badgeClass = 'badge-disconnect';
-                    statusLabel = 'OVERDUE';
-                } else if (diffDays === 0) {
-                    badgeClass = 'badge-warning';
-                    statusLabel = 'DUE TODAY';
-                }
-
-                const actionHtml = `<button class="btn-mark-paid" onclick="markPaidByMac('${mac}')">MARK PAID</button>`;
-                const dueDateDisplay = `<input type="date" class="date-edit-input" value="${repItem.nextDueDate}" onchange="updateBillingDateByMac('${mac}', this.value)">`;
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight:700; color:#cbd5e1;">${owners}</td>
-                    <td class="mac-cell" title="Click to copy" onclick="copyMac('${mac}', this)">${mac}</td>
-                    <td>${devices}</td>
-                    <td>${payments}</td>
-                    <td>${dueDateDisplay}</td>
-                    <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
-                    <td>${actionHtml}</td>
-                `;
-                billingTableBody.appendChild(tr);
-            });
+            return { daysDiff, countdownText, statusClass };
         }
 
-        // --- ARCHIVE TABLE ---
-        function renderArchiveTable() {
-            archiveTableBody.innerHTML = '';
-            
-            const archivedRecords = recordsData.filter(r => r.isArchived);
-            const archivedMacs = [...new Set(archivedRecords.map(r => r.mac))];
+        function renderDashboard() {
+            const container = document.getElementById('ownersList');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
 
-            archivedMacs.forEach(mac => {
-                const macItems = archivedRecords.filter(r => r.mac === mac);
-                const representative = macItems[0];
-                
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight:700; color:#cbd5e1;">${representative.owner}</td>
-                    <td class="mac-cell" title="Click to copy" onclick="copyMac('${mac}', this)">${mac}</td>
-                    <td><span class="badge badge-nodate">${representative.category}</span></td>
-                    <td>${representative.device}</td>
-                    <td><span style="color:#fca5a5;">${representative.nextDueDate}</span></td>
-                    <td><button class="btn-activate" onclick="activateMac('${mac}')">ACTIVATE</button></td>
+            const sorted = getSortedOwners();
+            const filteredOwners = sorted.filter(o => o.name.toLowerCase().includes(searchQuery));
+
+            if (filteredOwners.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-users-slash"></i>
+                        <p>No registered owners found</p>
+                    </div>
                 `;
-                archiveTableBody.appendChild(tr);
-            });
-        }
-
-        window.activateMac = function(mac) {
-            let todayStr = formatLocalDate(new Date());
-            recordsData.forEach(item => {
-                if (item.mac === mac && item.isArchived) {
-                    item.isArchived = false;
-                    if (!item.noDueDate) {
-                        item.nextDueDate = todayStr;
-                    }
-                }
-            });
-            renderArchiveTable();
-        };
-
-        window.updateBillingDateByMac = function(mac, newVal) {
-            if (newVal) {
-                let newDateObj = parseLocalDate(newVal);
-                recordsData.forEach(item => {
-                    if (item.mac && item.mac.toUpperCase() === mac.toUpperCase()) {
-                        item.nextDueDate = newVal;
-                        item.originalDueDay = newDateObj.getDate();
-                    }
-                });
-                renderBillingTable();
-                renderTable();
-            }
-        };
-
-        window.markPaidByMac = function(mac) {
-            recordsData.forEach(item => {
-                if (item.mac && item.mac.toUpperCase() === mac.toUpperCase() && !item.noDueDate) {
-                    item.nextDueDate = addOneMonth(item.nextDueDate, item.originalDueDay);
-                }
-            });
-            renderTable();
-            if (!billingArea.classList.contains('hidden')) renderBillingTable();
-        };
-
-        btnDeleteMac.addEventListener('click', () => {
-            const selectedMac = deleteMacSelect.value;
-            if (!selectedMac) return alert("Please select a MAC address to delete.");
-            if (confirm(`Are you sure you want to delete all entries for MAC address: "${selectedMac}"?`)) {
-                recordsData = recordsData.filter(item => item.mac !== selectedMac);
-                renderTable();
-                if (!archiveArea.classList.contains('hidden')) renderArchiveTable();
-                if (!billingArea.classList.contains('hidden')) renderBillingTable();
-            }
-        });
-
-        btnRegister.addEventListener('click', () => {
-            const selectedCategories = Array.from(document.querySelectorAll('input[name="categoryCheckbox"]:checked')).map(cb => cb.value);
-            const mac = document.getElementById('macAddress').value;
-            const owner = document.getElementById('ownerName').value.trim().toUpperCase();
-            const device = document.getElementById('device').value.trim().toUpperCase();
-            const payment = document.getElementById('payment').value;
-            const noDueDate = noDueDateCheckbox.checked;
-            const dueDayVal = dueDayInput.value;
-            const isInitialPaid = isInitialPaidCheckbox.checked;
-
-            if (selectedCategories.length === 0 || !mac || !owner || !device || (!noDueDate && !dueDayVal)) {
-                alert("Please select at least one Category, and fill in the MAC Address, Owner, Device, and Due Day fields.");
                 return;
             }
 
-            let originalDueDay = null;
-            let nextDueDateStr = 'N/A';
+            container.innerHTML = filteredOwners.map(owner => {
+                const initials = owner.name.substring(0, 2).toUpperCase();
+                const dueInfo = calculateDueStatus(owner.billingDate, owner.isPaid);
 
-            if (!noDueDate) {
-                originalDueDay = parseInt(dueDayVal, 10);
-                if (originalDueDay < 1 || originalDueDay > 31) return alert("Enter a valid day between 1 and 31.");
+                return `
+                    <div class="owner-card" onclick="openOwnerDetailsModal('${owner.id}')">
+                        <div class="owner-main-info">
+                            <div class="avatar">${initials}</div>
+                            <div class="owner-details-text">
+                                <h3>${escapeHtml(owner.name)}</h3>
+                                <div class="due-indicator ${dueInfo.statusClass}">
+                                    <i class="fa-solid fa-clock"></i> ${dueInfo.countdownText}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="badge ${owner.isPaid ? 'badge-paid' : 'badge-unpaid'}">
+                                ${owner.isPaid ? 'Paid' : 'Unpaid'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
 
-                let today = new Date();
-                today.setHours(0,0,0,0);
-                let y = today.getFullYear();
-                let m = today.getMonth();
-                
-                let maxD = new Date(y, m + 1, 0).getDate();
-                let safeD = Math.min(originalDueDay, maxD);
-                let baseDate = new Date(y, m, safeD);
+        // --- REGISTER OWNER --- //
+        function handleOwnerRegister(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('ownerNameInput');
+            const dateInput = document.getElementById('billingDateInput');
 
-                if (today > baseDate) {
-                    m++;
-                    if (m > 11) { m = 0; y++; }
-                    maxD = new Date(y, m + 1, 0).getDate();
-                    safeD = Math.min(originalDueDay, maxD);
-                    baseDate = new Date(y, m, safeD);
-                }
+            const newOwner = {
+                id: 'owner_' + Date.now(),
+                name: nameInput.value.trim().toUpperCase(),
+                billingDate: dateInput.value,
+                isPaid: false,
+                devices: []
+            };
 
-                nextDueDateStr = formatLocalDate(baseDate);
-                if (isInitialPaid) nextDueDateStr = addOneMonth(nextDueDateStr, originalDueDay);
+            owners.push(newOwner);
+            saveStorage();
+            renderDashboard();
+
+            showToast(`Owner "${newOwner.name}" registered`);
+            nameInput.value = '';
+            closeModal('ownerRegisterModal');
+        }
+
+        // --- BILLING SECTION --- //
+        function renderBillingSection() {
+            const container = document.getElementById('billingListContainer');
+            const sorted = getSortedOwners();
+
+            if (sorted.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:1rem;">No billing records available.</p>`;
+                return;
             }
 
-            selectedCategories.forEach(category => {
-                recordsData.push({
-                    category, mac, owner, device, payment, noDueDate, originalDueDay, 
-                    nextDueDate: nextDueDateStr, isArchived: false
+            container.innerHTML = sorted.map(owner => `
+                <div class="billing-item">
+                    <div class="billing-item-info">
+                        <strong>${escapeHtml(owner.name)}</strong>
+                        <span>Billing Date: ${owner.billingDate}</span>
+                    </div>
+                    <div>
+                        ${owner.isPaid ? 
+                            `<span class="badge badge-paid"><i class="fa-solid fa-check-circle"></i> Paid</span>` : 
+                            `<button class="btn btn-primary btn-sm" onclick="markPaidAndUpdateBilling('${owner.id}')"><i class="fa-solid fa-credit-card"></i> Pay Now</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function markPaidAndUpdateBilling(ownerId) {
+            const owner = owners.find(o => o.id === ownerId);
+            if (owner) {
+                owner.isPaid = true;
+                
+                let currentBilling = owner.billingDate ? new Date(owner.billingDate) : new Date();
+                currentBilling.setMonth(currentBilling.getMonth() + 1);
+                owner.billingDate = currentBilling.toISOString().split('T')[0];
+
+                saveStorage();
+                renderDashboard();
+                renderBillingSection();
+                showToast(`Payment registered for ${owner.name}. New Date: ${owner.billingDate}`);
+            }
+        }
+
+        // --- STATUS HELPER FOR DETAILS MODAL --- //
+        function getOwnerDetailsStatusBadge(owner) {
+            if (owner.isPaid) {
+                return `<span class="badge badge-paid"><i class="fa-solid fa-check-circle"></i> Paid</span>`;
+            }
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const due = new Date(owner.billingDate);
+            due.setHours(0,0,0,0);
+
+            const daysDiff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 3600 * 24));
+
+            if (daysDiff >= 0 && daysDiff <= 7) {
+                return `<span class="badge badge-warning"><i class="fa-solid fa-clock"></i> ${daysDiff} day(s) left and counting</span>`;
+            } else if (daysDiff < 0) {
+                return `<span class="badge badge-unpaid"><i class="fa-solid fa-triangle-exclamation"></i> Overdue by ${Math.abs(daysDiff)} day(s)</span>`;
+            } else {
+                return `<span class="badge badge-unpaid"><i class="fa-solid fa-circle-xmark"></i> Unpaid (${daysDiff} days left)</span>`;
+            }
+        }
+
+        // --- OWNER DETAILS MODAL --- //
+        function openOwnerDetailsModal(ownerId) {
+            activeOwnerId = ownerId;
+            const owner = owners.find(o => o.id === ownerId);
+            if (!owner) return;
+
+            const container = document.getElementById('ownerDetailsBody');
+
+            let devicesHtml = '';
+            if (owner.devices && owner.devices.length > 0) {
+                devicesHtml = owner.devices.map(dev => `
+                    <div class="device-item-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-size:0.875rem; color:var(--text-main);">${escapeHtml(dev.name)}</strong>
+                            <span class="mac-tag" onclick="copyMacAddress('${dev.mac}', event)">
+                                <i class="fa-regular fa-copy" style="font-size:0.75rem;"></i> ${dev.mac}
+                            </span>
+                        </div>
+                        <div class="ssid-pill-list">
+                            ${dev.ssids.map(s => `<span class="ssid-pill"><i class="fa-solid fa-wifi" style="font-size:0.6rem; margin-right:2px;"></i> ${escapeHtml(s)}</span>`).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                devicesHtml = `<p style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:8px;">No devices registered yet.</p>`;
+            }
+
+            container.innerHTML = `
+                <div class="detail-card-row">
+                    <div class="detail-label-text">Owner Name</div>
+                    <div class="detail-value-text">${escapeHtml(owner.name)}</div>
+                </div>
+
+                <div class="detail-card-row">
+                    <div class="detail-label-text">Billing Date & Status</div>
+                    <div style="font-size:0.9rem; font-weight:600; display:flex; align-items:center; gap:8px; margin-top:4px;">
+                        <span>${owner.billingDate}</span>
+                        ${getOwnerDetailsStatusBadge(owner)}
+                    </div>
+                </div>
+
+                <button type="button" class="device-trigger-btn" onclick="toggleDeviceListContainer()">
+                    <span><i class="fa-solid fa-mobile-screen"></i> Device (${owner.devices ? owner.devices.length : 0})</span>
+                    <i class="fa-solid fa-chevron-down" id="deviceChevron"></i>
+                </button>
+
+                <div class="device-details-container" id="deviceDetailsView">
+                    ${devicesHtml}
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" onclick="openAddDeviceModal('${owner.id}')">
+                    <i class="fa-solid fa-plus-circle"></i> Add Device
+                </button>
+            `;
+
+            document.getElementById('deleteOwnerBtn').onclick = () => deleteOwner(owner.id);
+            openModal('ownerDetailsModal');
+        }
+
+        function copyMacAddress(mac, event) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(mac).then(() => {
+                showToast(`MAC Address copied: ${mac}`);
+            }).catch(() => {
+                const textArea = document.createElement("textarea");
+                textArea.value = mac;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                showToast(`MAC Address copied: ${mac}`);
+            });
+        }
+
+        function toggleDeviceListContainer() {
+            const devView = document.getElementById('deviceDetailsView');
+            const chevron = document.getElementById('deviceChevron');
+            if (devView) {
+                devView.classList.toggle('open');
+                if (devView.classList.contains('open')) {
+                    chevron.style.transform = 'rotate(180deg)';
+                } else {
+                    chevron.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+
+        function deleteOwner(ownerId) {
+            if (confirm('Are you sure you want to delete this owner record?')) {
+                owners = owners.filter(o => o.id !== ownerId);
+                saveStorage();
+                renderDashboard();
+                closeModal('ownerDetailsModal');
+                showToast('Owner deleted');
+            }
+        }
+
+        // --- ADD DEVICE MODAL --- //
+        function openAddDeviceModal(ownerId) {
+            if (ssids.length === 0) {
+                showToast('Please add at least one WiFi SSID first!', true);
+                renderSSIDManageList();
+                openModal('ssidRegisterModal');
+                return;
+            }
+
+            document.getElementById('targetOwnerId').value = ownerId;
+            document.getElementById('deviceNameInput').value = '';
+            document.getElementById('macAddressInput').value = '';
+
+            const checkboxContainer = document.getElementById('ssidCheckboxContainer');
+            checkboxContainer.innerHTML = ssids.map((ssid, index) => `
+                <label class="ssid-checkbox-item">
+                    <input type="checkbox" name="assignedSSIDs" value="${escapeHtml(ssid)}" ${index === 0 ? 'checked' : ''}>
+                    <span>${escapeHtml(ssid)}</span>
+                </label>
+            `).join('');
+
+            openModal('addDeviceModal');
+        }
+
+        function handleAddDeviceSubmit(e) {
+            e.preventDefault();
+            const ownerId = document.getElementById('targetOwnerId').value;
+            const deviceName = document.getElementById('deviceNameInput').value.trim();
+            const macAddress = document.getElementById('macAddressInput').value.trim();
+
+            const selectedSSIDs = Array.from(document.querySelectorAll('input[name="assignedSSIDs"]:checked'))
+                                       .map(cb => cb.value);
+
+            if (selectedSSIDs.length === 0) {
+                showToast('Select at least one SSID!', true);
+                return;
+            }
+
+            if (macAddress.length < 17) {
+                showToast('Please enter a valid 12-digit MAC address', true);
+                return;
+            }
+
+            const owner = owners.find(o => o.id === ownerId);
+            if (owner) {
+                if (!owner.devices) owner.devices = [];
+                owner.devices.push({
+                    id: 'dev_' + Date.now(),
+                    name: deviceName,
+                    mac: macAddress,
+                    ssids: selectedSSIDs
                 });
+
+                saveStorage();
+                renderDashboard();
+                closeModal('addDeviceModal');
+                openOwnerDetailsModal(ownerId);
+                showToast(`Device "${deviceName}" added successfully`);
+            }
+        }
+
+        // --- SSID MANAGEMENT & DEVICE BADGE --- //
+        function countRegisteredDevicesForSSID(ssidName) {
+            let count = 0;
+            owners.forEach(owner => {
+                if (owner.devices) {
+                    owner.devices.forEach(dev => {
+                        if (dev.ssids && dev.ssids.includes(ssidName)) {
+                            count++;
+                        }
+                    });
+                }
+            });
+            return count;
+        }
+
+        function handleSSIDRegister(e) {
+            e.preventDefault();
+            const input = document.getElementById('ssidName');
+            const newSSID = input.value.trim();
+
+            if (newSSID && !ssids.includes(newSSID)) {
+                ssids.push(newSSID);
+                saveStorage();
+                renderSSIDManageList();
+                showToast(`SSID "${newSSID}" registered`);
+                input.value = '';
+            } else if (ssids.includes(newSSID)) {
+                showToast('SSID already exists!', true);
+            }
+        }
+
+        function renderSSIDManageList() {
+            const container = document.getElementById('ssidManageList');
+            if (ssids.length === 0) {
+                container.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">No SSIDs added yet.</span>`;
+                return;
+            }
+
+            container.innerHTML = ssids.map(ssid => {
+                const deviceCount = countRegisteredDevicesForSSID(ssid);
+                return `
+                    <div class="ssid-manage-item">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-wifi" style="color:var(--accent-gold);"></i>
+                            <span>${escapeHtml(ssid)}</span>
+                            <span class="ssid-device-count-badge">
+                                ${deviceCount} ${deviceCount === 1 ? 'device' : 'devices'}
+                            </span>
+                        </div>
+                        <button type="button" class="btn btn-sm" style="color:var(--status-due-text); padding:2px 6px;" onclick="deleteSSID('${escapeHtml(ssid)}')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteSSID(ssidName) {
+            ssids = ssids.filter(s => s !== ssidName);
+            saveStorage();
+            renderSSIDManageList();
+            showToast(`SSID "${ssidName}" removed`);
+        }
+
+        // --- IMPORT & EXPORT CSV BACKUP --- //
+        function exportToCSV() {
+            if (ssids.length === 0 && owners.length === 0) {
+                showToast('No stored details to export!', true);
+                return;
+            }
+
+            let csvRows = [];
+            csvRows.push(["Type", "Owner Name", "Billing Date", "Status", "Device Name", "MAC Address", "Assigned SSIDs"]);
+
+            ssids.forEach(ssid => {
+                csvRows.push(["SSID", "", "", "", "", "", ssid]);
             });
 
-            renderTable();
-            document.querySelectorAll('input[name="categoryCheckbox"]').forEach(cb => cb.checked = false);
-            document.getElementById('macAddress').value = '';
-            document.getElementById('ownerName').value = '';
-            document.getElementById('device').value = '';
-            document.getElementById('payment').value = '';
-            dueDayInput.value = '';
-            noDueDateCheckbox.checked = false;
-            dueDayInput.disabled = false;
-            dueDayInput.style.backgroundColor = '#0f172a';
-            isInitialPaidCheckbox.checked = false;
-            isInitialPaidCheckbox.disabled = false;
-        });
-
-        btnSaveData.addEventListener('click', () => {
-            localStorage.setItem('mac_address_records', JSON.stringify(recordsData));
-            btnSaveData.textContent = 'SAVED!';
-            btnSaveData.style.backgroundColor = '#14b8a6';
-            setTimeout(() => {
-                btnSaveData.textContent = 'SAVE CHANGES';
-                btnSaveData.style.backgroundColor = '#0d9488';
-            }, 2000);
-        });
-
-        btnExportCsv.addEventListener('click', () => {
-            if (recordsData.length === 0) return alert("No records available to export!");
-
-            let csvContent = "Category,MAC Address,Owner,Device,Payment,No Due Date,Original Due Day,Next Due Date,Archived\r\n";
-            
-            recordsData.forEach(item => {
-                let row = [
-                    `"${(item.category || '').replace(/"/g, '""')}"`,
-                    `"${(item.mac || '').replace(/"/g, '""')}"`,
-                    `"${(item.owner || '').replace(/"/g, '""')}"`,
-                    `"${(item.device || '').replace(/"/g, '""')}"`,
-                    `"${(item.payment || '').replace(/"/g, '""')}"`,
-                    `"${item.noDueDate ? 'True' : 'False'}"`,
-                    `"${item.originalDueDay !== null && item.originalDueDay !== undefined ? item.originalDueDay : ''}"`,
-                    `"${(item.nextDueDate || '').replace(/"/g, '""')}"`,
-                    `"${item.isArchived ? 'True' : 'False'}"`
-                ];
-                csvContent += row.join(",") + "\r\n";
+            owners.forEach(owner => {
+                const statusStr = owner.isPaid ? "Paid" : "Unpaid";
+                if (!owner.devices || owner.devices.length === 0) {
+                    csvRows.push(["OWNER", owner.name, owner.billingDate, statusStr, "", "", ""]);
+                } else {
+                    owner.devices.forEach(dev => {
+                        const ssidsStr = (dev.ssids || []).join(';');
+                        csvRows.push(["DEVICE", owner.name, owner.billingDate, statusStr, dev.name, dev.mac, ssidsStr]);
+                    });
+                }
             });
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `RML_MAC_${getDateTimeString()}.csv`;
+            const csvContent = "data:text/csv;charset=utf-8," + csvRows.map(row => 
+                row.map(cell => `"${(cell || '').replace(/"/g, '""')}"`).join(",")
+            ).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `wifi_manager_backup_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
             link.click();
-            URL.revokeObjectURL(link.href);
+            document.body.removeChild(link);
+            showToast('Backup exported as CSV');
+        }
 
-            btnExportCsv.textContent = 'EXPORTED!';
-            btnExportCsv.style.backgroundColor = '#475569';
-            setTimeout(() => {
-                btnExportCsv.textContent = 'Export CSV';
-                btnExportCsv.style.backgroundColor = '#334155';
-            }, 2000);
-        });
-
-        btnImportCsv.addEventListener('click', () => csvFileInput.click());
-
-        csvFileInput.addEventListener('change', function(e) {
+        function handleImportCSV(e) {
             const file = e.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(event) {
-                try { parseCSV(event.target.result); } 
-                catch (err) { alert("Error parsing CSV file: " + err.message); }
+                try {
+                    const text = event.target.result;
+                    parseAndImportCSV(text);
+                    saveStorage();
+                    renderDashboard();
+                    showToast('CSV imported successfully!');
+                } catch (err) {
+                    showToast('Failed to parse CSV file.', true);
+                }
+                e.target.value = '';
             };
             reader.readAsText(file);
-            this.value = '';
-        });
+        }
 
-        function parseCSV(text) {
+        function parseAndImportCSV(text) {
             const lines = text.split(/\r\n|\n/);
-            if (lines.length < 2) return alert("CSV file is empty or invalid.");
+            if (lines.length < 2) return;
 
-            function parseCSVLine(line) {
-                const result = [];
-                let startValue = 0; let inQuotes = false;
-                for (let i = 0; i < line.length; i++) {
-                    const c = line[i];
-                    if (c === '"') {
-                        if (inQuotes && line[i + 1] === '"') i++;
-                        else inQuotes = !inQuotes;
-                    } else if (c === ',' && !inQuotes) {
-                        let val = line.substring(startValue, i).trim();
-                        if (val.startsWith('"') && val.endsWith('"')) val = val.substring(1, val.length - 1).replace(/""/g, '"');
-                        result.push(val);
-                        startValue = i + 1;
-                    }
-                }
-                let val = line.substring(startValue).trim();
-                if (val.startsWith('"') && val.endsWith('"')) val = val.substring(1, val.length - 1).replace(/""/g, '"');
-                result.push(val);
-                return result;
-            }
+            const newSSIDs = new Set(ssids);
+            const ownerMap = new Map();
 
-            const newRecords = [];
+            owners.forEach(o => ownerMap.set(o.name.toUpperCase(), o));
+
             for (let i = 1; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
-                const cols = parseCSVLine(line);
-                if (cols.length >= 5) {
-                    const category = (cols[0] || 'RML').toUpperCase();
-                    const mac = cols[1] || '';
-                    const owner = (cols[2] || '').toUpperCase();
-                    const device = (cols[3] || '').toUpperCase();
-                    const payment = cols[4] || '';
-                    const noDueDate = cols[5] ? cols[5].toLowerCase() === 'true' : false;
-                    const originalDueDay = cols[6] && cols[6] !== '' && cols[6] !== 'null' ? parseInt(cols[6], 10) : null;
-                    const nextDueDate = cols[7] || 'N/A';
-                    const isArchived = cols[8] ? cols[8].toLowerCase() === 'true' : false;
 
-                    if (mac && owner) {
-                        newRecords.push({
-                            category, mac, owner, device, payment, noDueDate, originalDueDay, nextDueDate, isArchived
-                        });
+                const cols = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || line.split(',');
+                const cleanCols = cols.map(c => c.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
+
+                if (cleanCols.length < 7) continue;
+
+                const recordType = cleanCols[0];
+                const ssidFromCol = cleanCols[6];
+
+                if (recordType === "SSID" && ssidFromCol) {
+                    newSSIDs.add(ssidFromCol);
+                } else if (recordType === "OWNER" || recordType === "DEVICE") {
+                    const ownerName = cleanCols[1].toUpperCase();
+                    const billingDate = cleanCols[2];
+                    const statusStr = cleanCols[3];
+                    const isPaid = statusStr.toLowerCase() === 'paid';
+                    const devName = cleanCols[4];
+                    const devMac = cleanCols[5];
+                    const devSSIDs = ssidFromCol ? ssidFromCol.split(';') : [];
+
+                    devSSIDs.forEach(s => { if (s) newSSIDs.add(s); });
+
+                    let ownerObj = ownerMap.get(ownerName);
+                    if (!ownerObj) {
+                        ownerObj = {
+                            id: 'owner_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                            name: ownerName,
+                            billingDate: billingDate || new Date().toISOString().split('T')[0],
+                            isPaid: isPaid,
+                            devices: []
+                        };
+                        ownerMap.set(ownerName, ownerObj);
+                    } else {
+                        ownerObj.billingDate = billingDate || ownerObj.billingDate;
+                        ownerObj.isPaid = isPaid;
+                    }
+
+                    if (recordType === "DEVICE" && devName && devMac) {
+                        const existingDev = ownerObj.devices.find(d => d.mac === devMac);
+                        if (!existingDev) {
+                            ownerObj.devices.push({
+                                id: 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                                name: devName,
+                                mac: devMac,
+                                ssids: devSSIDs
+                            });
+                        }
                     }
                 }
             }
 
-            if (newRecords.length > 0) {
-                if (confirm(`Successfully parsed ${newRecords.length} records. Click OK to Replace existing records, or Cancel to Append them.`)) {
-                    recordsData = newRecords;
-                } else {
-                    recordsData = recordsData.concat(newRecords);
-                }
-                renderTable();
-                alert("CSV imported successfully!");
-            } else {
-                alert("No valid records found in the CSV file.");
-            }
+            ssids = Array.from(newSSIDs);
+            owners = Array.from(ownerMap.values());
         }
 
-        btnSave.addEventListener('click', () => {
-            const targetArea = !dashboardArea.classList.contains('hidden') ? document.getElementById('capture-area') 
-                             : !billingArea.classList.contains('hidden') ? document.getElementById('billingArea')
-                             : document.getElementById('archiveArea');
-            html2canvas(targetArea, {
-                scale: 2,
-                backgroundColor: "#0f172a" 
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `MAC_ADDRESS_${getCurrentDateString()}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+        // --- UTILS --- //
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
             });
-        });
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            
+            toastMsg.innerText = message;
+            toast.style.borderColor = isError ? 'var(--status-due-text)' : 'var(--accent-gold)';
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
     </script>
 </body>
 </html>
