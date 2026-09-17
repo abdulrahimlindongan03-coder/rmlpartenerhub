@@ -7,7 +7,6 @@
     <link rel="icon" href="income.png" type="image/png">
     
     <style>
-        /* Updated to Medium (500), Bold (700), and Black (900) */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;900&display=swap');
 
         * {
@@ -15,7 +14,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Poppins', sans-serif !important;
-            font-weight: 500; /* Medium base font */
+            font-weight: 500;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -83,7 +82,7 @@
             color: #fff;
             text-align: center;
             outline: none;
-            font-weight: 700 !important; /* Bold */
+            font-weight: 700 !important;
             transition: all 0.2s ease;
             box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
         }
@@ -97,7 +96,7 @@
             width: 100%;
             min-height: 54px;
             font-size: 14px;
-            font-weight: 700 !important; /* Bold */
+            font-weight: 700 !important;
             border: none;
             border-radius: 14px;
             cursor: pointer;
@@ -115,12 +114,23 @@
         .btn-create { background: linear-gradient(135deg, #00c6ff, #0072ff); }
         .btn-balance-nav { background: rgba(34, 34, 34, 0.9); border: 1px solid #444; color: #00f2fe !important; margin-top: 15px; }
         .btn-add-balance { background: linear-gradient(135deg, #ff0844, #ffb199); }
+        .btn-proceed { background: linear-gradient(135deg, #f6d365, #fda085); }
         
-        .button-group { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
-        .button-group button { margin-top: 0; flex: 1; font-size: 12px; }
+        .button-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; width: 100%; }
+        .button-grid button { margin-top: 0; font-size: 12px; }
         .btn-deposit { background: linear-gradient(135deg, #00c6ff, #0072ff); }
         .btn-pay { background: linear-gradient(135deg, #42e695, #3bb2b8); } 
         .btn-borrow { background: linear-gradient(135deg, #ff0844, #ffb199); }
+        .btn-consume { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+        .btn-clear-history { background: rgba(255, 8, 68, 0.15); color: #ff0844; border: 1px solid #ff0844; margin-top: 10px; font-size: 12px; min-height: 44px; }
+
+        .action-panel { display: none; }
+        .action-panel.active { display: block; animation: slideUpFade 0.3s ease forwards; }
+        
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .account-list {
             display: flex;
@@ -153,9 +163,9 @@
         }
         .balance-card::before { background: #ff0844; } 
         
-        .acc-name { font-size: 15px; font-weight: 700 !important; color: #eee; } /* Bold */
-        .acc-balance { font-size: 18px; font-weight: 900 !important; color: #00f2fe; } /* Black */
-        .bal-amount { color: #ff0844; font-size: 16px; font-weight: 900 !important; } /* Black */
+        .acc-name { font-size: 15px; font-weight: 700 !important; color: #eee; } 
+        .acc-balance { font-size: 18px; font-weight: 900 !important; color: #00f2fe; } 
+        .bal-amount { color: #ff0844; font-size: 16px; font-weight: 900 !important; } 
 
         .top-bar {
             display: flex;
@@ -177,7 +187,7 @@
 
         .current-acc-title { 
             font-size: 15px; 
-            font-weight: 700 !important; /* Bold */
+            font-weight: 700 !important; 
             color: #fff; 
             text-transform: uppercase; 
             text-align: center;
@@ -195,9 +205,9 @@
             text-align: center;
             border: 1px solid #222;
         }
-        .card-title { font-size: 10px; text-transform: uppercase; color: #888; margin-bottom: 8px; font-weight: 700 !important;} /* Bold */
-        .savings-amount { font-size: 20px; font-weight: 900 !important; color: #00f2fe; } /* Black */
-        .borrowed-amount { font-size: 20px; font-weight: 900 !important; color: #ff0844; } /* Black */
+        .card-title { font-size: 10px; text-transform: uppercase; color: #888; margin-bottom: 8px; font-weight: 700 !important;} 
+        .savings-amount { font-size: 20px; font-weight: 900 !important; color: #00f2fe; } 
+        .borrowed-amount { font-size: 20px; font-weight: 900 !important; color: #ff0844; } 
 
         .history {
             background: rgba(10, 10, 10, 0.85);
@@ -219,7 +229,10 @@
         
         .history-list li {
             padding: 12px 0; border-bottom: 1px solid #1a1a1a;
-            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700 !important; /* Bold */
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 700 !important;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .history-list li:last-child { border-bottom: none; }
         .text-green { color: #00f2fe; } 
@@ -301,10 +314,17 @@
 
         <div>
             <input type="number" id="amountInput" placeholder="ENTER AMOUNT (₱)" min="0.01" step="0.01">
-            <div class="button-group">
-                <button class="btn-deposit" onclick="handleTransaction('deposit')">Deposit</button>
-                <button class="btn-pay" onclick="handleTransaction('pay')">Pay</button>
-                <button class="btn-borrow" onclick="handleTransaction('borrow')">Borrow</button>
+            
+            <button id="btnProceed" class="btn-proceed" onclick="showActionPanel()">Proceed</button>
+
+            <div id="actionPanel" class="action-panel">
+                <div class="button-grid">
+                    <button class="btn-deposit" onclick="handleTransaction('deposit')">Deposit</button>
+                    <button class="btn-pay" onclick="handleTransaction('pay')">Pay</button>
+                    <button class="btn-borrow" onclick="handleTransaction('borrow')">Borrow</button>
+                    <button class="btn-consume" onclick="handleTransaction('consume')">Consume</button>
+                </div>
+                <button class="btn-clear-history" onclick="clearTransactions()">Clear Recent Transactions</button>
             </div>
         </div>
 
@@ -440,7 +460,18 @@
         currentAccountId = id;
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById('accountView').classList.add('active');
+        
+        // Reset the input area UI
+        document.getElementById('btnProceed').style.display = 'flex';
+        document.getElementById('actionPanel').classList.remove('active');
+        document.getElementById('amountInput').value = '';
+
         updateAccountUI();
+    }
+
+    function showActionPanel() {
+        document.getElementById('btnProceed').style.display = 'none';
+        document.getElementById('actionPanel').classList.add('active');
     }
 
     function getCurrentAccount() { return accounts.find(acc => acc.id === currentAccountId); }
@@ -468,7 +499,15 @@
 
             if (item.type === 'deposit') { typeText = 'Deposited'; colorClass = 'text-green'; sign = '+'; } 
             else if (item.type === 'pay') { typeText = 'Paid'; colorClass = 'text-green'; sign = '+'; } 
-            else if (item.type === 'borrow') { typeText = 'Borrowed'; colorClass = 'text-orange'; sign = '-'; }
+            else if (item.type === 'borrow') { 
+                typeText = 'Borrowed'; 
+                colorClass = 'text-orange'; 
+                sign = '-'; 
+                if(item.unpaidBalance > 0 && item.unpaidBalance < item.amount) {
+                    typeText += ` (Remaining: ₱${item.unpaidBalance})`;
+                }
+            }
+            else if (item.type === 'consume') { typeText = 'Consumed'; colorClass = 'text-orange'; sign = '-'; }
 
             li.innerHTML = `
                 <div>
@@ -477,6 +516,32 @@
                 </div>
                 <span class="${colorClass}">${sign}${phpFormatter.format(item.amount)}</span>
             `;
+
+            // Setup Long Press for Borrowed Items to view description details
+            if (item.type === 'borrow' && item.description) {
+                li.style.cursor = "pointer";
+                let pressTimer;
+                const showDesc = () => {
+                    alert(`Borrow Details:\n\nDescription: ${item.description}\nOriginal Amount: ₱${item.amount}\nRemaining Unpaid: ₱${item.unpaidBalance}`);
+                };
+
+                const startPress = (e) => {
+                    pressTimer = window.setTimeout(showDesc, 600);
+                };
+                const cancelPress = () => {
+                    clearTimeout(pressTimer);
+                };
+
+                li.addEventListener('mousedown', startPress);
+                li.addEventListener('touchstart', startPress, {passive: true});
+                
+                li.addEventListener('mouseup', cancelPress);
+                li.addEventListener('mouseleave', cancelPress);
+                li.addEventListener('touchend', cancelPress);
+                li.addEventListener('touchcancel', cancelPress);
+                li.addEventListener('touchmove', cancelPress); 
+            }
+
             historyList.appendChild(li);
         }
     }
@@ -488,22 +553,97 @@
 
         if (isNaN(amount) || amount <= 0) { alert("Enter a valid amount."); return; }
 
-        if (type === 'deposit') { acc.savings += amount; } 
+        let description = "";
+
+        if (type === 'deposit') { 
+            acc.savings += amount; 
+        } 
         else if (type === 'pay') {
             if (acc.borrowed <= 0) { alert("No borrowed amount to pay."); return; }
-            if (amount > acc.borrowed) { alert("Cannot pay more than borrowed."); return; }
-            acc.borrowed -= amount; acc.savings += amount;
+            if (amount > acc.borrowed) { alert("Cannot pay more than total borrowed (₱" + acc.borrowed + ")."); return; }
+            
+            // FIFO - Deduct payment from unpaid balances of previous borrows
+            let remainingPayment = amount;
+            for (let i = 0; i < acc.history.length; i++) {
+                let item = acc.history[i];
+                if (item.type === 'borrow' && item.unpaidBalance > 0) {
+                    let deduct = Math.min(item.unpaidBalance, remainingPayment);
+                    item.unpaidBalance -= deduct;
+                    remainingPayment -= deduct;
+                    if (remainingPayment <= 0) break;
+                }
+            }
+
+            acc.borrowed -= amount; 
+            acc.savings += amount;
         }
         else if (type === 'borrow') {
             if (amount > acc.savings) { alert("Not enough savings."); return; }
-            acc.savings -= amount; acc.borrowed += amount;
+            
+            // Ask for description before proceeding
+            description = prompt("Enter Description (Where will you use this?):");
+            if (description === null || description.trim() === "") {
+                alert("Transaction Cancelled: A description is required to borrow.");
+                return;
+            }
+
+            acc.savings -= amount; 
+            acc.borrowed += amount;
+        }
+        else if (type === 'consume') {
+            if (amount > acc.savings) { alert("Not enough savings to consume."); return; }
+            acc.savings -= amount;
         }
 
-        const dateStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        acc.history.push({ type: type, amount: amount, date: dateStr });
-        if (acc.history.length > 50) acc.history.shift();
+        const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' };
+        const dateStr = new Date().toLocaleString([], dateOptions);
+        
+        let newHistoryItem = { 
+            id: Date.now().toString(),
+            type: type, 
+            amount: amount, 
+            date: dateStr 
+        };
 
-        saveData(); updateAccountUI(); amountInput.value = ''; 
+        if (type === 'borrow') {
+            newHistoryItem.description = description.trim();
+            newHistoryItem.unpaidBalance = amount;
+        }
+
+        acc.history.push(newHistoryItem);
+        
+        // Remove older items if limit > 50, but never remove un-paid borrows
+        if (acc.history.length > 50) {
+            let removableIndex = acc.history.findIndex(item => !(item.type === 'borrow' && item.unpaidBalance > 0));
+            if (removableIndex !== -1) {
+                acc.history.splice(removableIndex, 1);
+            }
+        }
+
+        // Reset UI actions
+        document.getElementById('btnProceed').style.display = 'flex';
+        document.getElementById('actionPanel').classList.remove('active');
+        amountInput.value = '';
+
+        saveData(); 
+        updateAccountUI(); 
+    }
+
+    function clearTransactions() {
+        const acc = getCurrentAccount();
+        if (!acc) return;
+        if (confirm("Clear recent transactions?\n\nNote: Any borrow transactions that are not fully paid yet will remain in the history until they are settled.")) {
+            
+            // Only keep history items that are borrows AND have an unpaid balance > 0
+            acc.history = acc.history.filter(item => item.type === 'borrow' && item.unpaidBalance > 0);
+            
+            // Reset UI actions
+            document.getElementById('btnProceed').style.display = 'flex';
+            document.getElementById('actionPanel').classList.remove('active');
+            
+            saveData();
+            updateAccountUI();
+        }
     }
 
     function deleteAccount() {
