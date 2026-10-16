@@ -584,6 +584,11 @@
             transition: var(--transition);
         }
 
+        select.form-control option {
+            background-color: var(--bg-modal);
+            color: var(--text-main);
+        }
+
         .form-control:focus {
             border-color: var(--accent-gold);
             box-shadow: 0 0 10px var(--accent-gold-glow);
@@ -593,7 +598,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            max-height: 140px;
+            max-height: 160px;
             overflow-y: auto;
             background: var(--bg-input);
             border: 1px solid var(--border-subtle);
@@ -608,12 +613,14 @@
             font-size: 0.85rem;
             color: var(--text-main);
             cursor: pointer;
+            transition: var(--transition);
         }
 
         .ssid-checkbox-item input[type="checkbox"] {
             accent-color: var(--accent-gold);
             width: 16px;
             height: 16px;
+            cursor: pointer;
         }
 
         /* Details Modal Specific */
@@ -874,6 +881,14 @@
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                     <span>Billing Section</span>
                 </li>
+                <li class="drawer-menu-item" onclick="handleMenuAction('archive')">
+                    <i class="fa-solid fa-box-archive"></i>
+                    <span>(Archive)</span>
+                </li>
+                <li class="drawer-menu-item" onclick="handleMenuAction('no_payment')">
+                    <i class="fa-solid fa-ban"></i>
+                    <span>NO PAYMENT</span>
+                </li>
                 <li class="drawer-menu-item" onclick="handleMenuAction('export_csv')">
                     <i class="fa-solid fa-file-export"></i>
                     <span>Export as CSV</span>
@@ -968,7 +983,28 @@
         </div>
     </div>
 
-    <!-- 4. OWNER DETAILS MODAL -->
+    <!-- 4. ARCHIVE MODAL -->
+    <div class="modal-overlay" id="archiveModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-box-archive"></i> Archived Registrations</h3>
+                <button class="close-btn" onclick="closeModal('archiveModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">
+                    Accounts unpaid for 8+ days after billing date. Pay to restore and update billing date.
+                </div>
+                <div class="billing-list" id="archiveListContainer">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closeModal('archiveModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. OWNER DETAILS MODAL -->
     <div class="modal-overlay" id="ownerDetailsModal">
         <div class="modal">
             <div class="modal-header">
@@ -987,7 +1023,7 @@
         </div>
     </div>
 
-    <!-- 5. ADD DEVICE MODAL -->
+    <!-- 6. ADD DEVICE MODAL -->
     <div class="modal-overlay" id="addDeviceModal">
         <div class="modal">
             <div class="modal-header">
@@ -1020,32 +1056,125 @@
         </div>
     </div>
 
+    <!-- 7. NO PAYMENT DASHBOARD MODAL -->
+    <div class="modal-overlay" id="noPaymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-ban"></i> No Payment Dashboard</h3>
+                <button class="close-btn" onclick="closeModal('noPaymentModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.825rem; color: var(--text-muted); font-weight: 500;">Free / Special Access Devices</span>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="openNoPaymentRegisterModal()">
+                        <i class="fa-solid fa-plus"></i> Register Device
+                    </button>
+                </div>
+                <div class="billing-list" id="noPaymentListContainer">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closeModal('noPaymentModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. REGISTER NO PAYMENT DEVICE MODAL -->
+    <div class="modal-overlay" id="noPaymentRegisterModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-laptop-code"></i> Register No Payment Device</h3>
+                <button class="close-btn" onclick="closeModal('noPaymentRegisterModal')">&times;</button>
+            </div>
+            <form onsubmit="handleNoPaymentRegisterSubmit(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="noPayDeviceName">Device Name</label>
+                        <input type="text" id="noPayDeviceName" class="form-control" placeholder="e.g. Office Router / Staff Phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noPayMacAddress">MAC Address (Auto-Formatted)</label>
+                        <input type="text" id="noPayMacAddress" class="form-control" placeholder="F4:D4:88:31:00:BC" required oninput="formatMACInput(this)" maxlength="17">
+                    </div>
+                    <div class="form-group">
+                        <label>Assigned WiFi SSIDs (Select Multiple or No SSID)</label>
+                        <div class="ssid-checkbox-group">
+                            <label class="ssid-checkbox-item" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px; margin-bottom: 4px;">
+                                <input type="checkbox" id="noPayNoSsid" onchange="toggleNoPaySsidOptions(this)">
+                                <span style="color: var(--accent-gold-light); font-weight: 600;">
+                                    <i class="fa-solid fa-ban" style="margin-right:4px;"></i> No SSID (Bypass Network)
+                                </span>
+                            </label>
+                            <div id="noPaySsidCheckboxContainer" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="noPayOptionalNote">Optional Notes / Details</label>
+                        <input type="text" id="noPayOptionalNote" class="form-control" placeholder="e.g. Admin staff device, VIP guest, Maintenance">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" onclick="closeModal('noPaymentRegisterModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Register Device</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JS Logic -->
     <script>
         const STORAGE_SSIDS = 'wifi_app_ssids_v3';
         const STORAGE_OWNERS = 'wifi_app_owners_v3';
+        const STORAGE_NO_PAYMENT = 'wifi_app_nopayment_v3';
 
         let ssids = [];
         let owners = [];
+        let noPaymentDevices = [];
         let activeOwnerId = null;
 
         // --- INIT & LOCAL STORAGE --- //
         document.addEventListener('DOMContentLoaded', () => {
             loadStorage();
             document.getElementById('billingDateInput').value = new Date().toISOString().split('T')[0];
+            checkAndUpdateBillingStatuses();
             renderDashboard();
         });
 
         function loadStorage() {
             const storedSsids = localStorage.getItem(STORAGE_SSIDS);
             const storedOwners = localStorage.getItem(STORAGE_OWNERS);
+            const storedNoPayment = localStorage.getItem(STORAGE_NO_PAYMENT);
+
             ssids = storedSsids ? JSON.parse(storedSsids) : [];
             owners = storedOwners ? JSON.parse(storedOwners) : [];
+            noPaymentDevices = storedNoPayment ? JSON.parse(storedNoPayment) : [];
         }
 
         function saveStorage() {
             localStorage.setItem(STORAGE_SSIDS, JSON.stringify(ssids));
             localStorage.setItem(STORAGE_OWNERS, JSON.stringify(owners));
+            localStorage.setItem(STORAGE_NO_PAYMENT, JSON.stringify(noPaymentDevices));
+        }
+
+        // --- AUTOMATIC BILLING & ARCHIVE CHECKER --- //
+        function checkAndUpdateBillingStatuses() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            owners.forEach(owner => {
+                const due = new Date(owner.billingDate);
+                due.setHours(0,0,0,0);
+                const daysDiff = Math.ceil((due.getTime() - today.getTime()) / (1000 * 3600 * 24));
+
+                // If billing date reached or passed, automatically set to unpaid
+                if (daysDiff <= 0 && owner.isPaid) {
+                    owner.isPaid = false;
+                }
+            });
+            saveStorage();
         }
 
         // --- NAVIGATION HANDLERS --- //
@@ -1068,6 +1197,12 @@
                 } else if (action === 'billing') {
                     renderBillingSection();
                     openModal('billingSectionModal');
+                } else if (action === 'archive') {
+                    renderArchiveSection();
+                    openModal('archiveModal');
+                } else if (action === 'no_payment') {
+                    renderNoPaymentDashboard();
+                    openModal('noPaymentModal');
                 } else if (action === 'export_csv') {
                     exportToCSV();
                 } else if (action === 'import_csv') {
@@ -1131,11 +1266,19 @@
         }
 
         function renderDashboard() {
+            checkAndUpdateBillingStatuses();
             const container = document.getElementById('ownersList');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
 
             const sorted = getSortedOwners();
-            const filteredOwners = sorted.filter(o => o.name.toLowerCase().includes(searchQuery));
+            // Filter out owners who are unpaid for 8+ days (they go to Archive)
+            const activeOwners = sorted.filter(owner => {
+                const dueInfo = calculateDueStatus(owner.billingDate, owner.isPaid);
+                const isArchived = !owner.isPaid && dueInfo.daysDiff <= -8;
+                return !isArchived;
+            });
+
+            const filteredOwners = activeOwners.filter(o => o.name.toLowerCase().includes(searchQuery));
 
             if (filteredOwners.length === 0) {
                 container.innerHTML = `
@@ -1197,6 +1340,7 @@
 
         // --- BILLING SECTION --- //
         function renderBillingSection() {
+            checkAndUpdateBillingStatuses();
             const container = document.getElementById('billingListContainer');
             const sorted = getSortedOwners();
 
@@ -1233,7 +1377,175 @@
                 saveStorage();
                 renderDashboard();
                 renderBillingSection();
+                renderArchiveSection();
                 showToast(`Payment registered for ${owner.name}. New Date: ${owner.billingDate}`);
+            }
+        }
+
+        // --- ARCHIVE SECTION --- //
+        function renderArchiveSection() {
+            const container = document.getElementById('archiveListContainer');
+            const sorted = getSortedOwners();
+
+            const archivedOwners = sorted.filter(owner => {
+                const dueInfo = calculateDueStatus(owner.billingDate, owner.isPaid);
+                return !owner.isPaid && dueInfo.daysDiff <= -8;
+            });
+
+            if (archivedOwners.length === 0) {
+                container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:1rem;">No archived records found.</p>`;
+                return;
+            }
+
+            container.innerHTML = archivedOwners.map(owner => `
+                <div class="billing-item">
+                    <div class="billing-item-info">
+                        <strong>${escapeHtml(owner.name)}</strong>
+                        <span>Billing Date was: ${owner.billingDate}</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm" onclick="markPaidAndUpdateBilling('${owner.id}')">
+                            <i class="fa-solid fa-credit-card"></i> Pay & Restore
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- NO PAYMENT DASHBOARD & REGISTRATION --- //
+        function renderNoPaymentDashboard() {
+            const container = document.getElementById('noPaymentListContainer');
+
+            if (noPaymentDevices.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding:2rem 1rem;">
+                        <i class="fa-solid fa-ban"></i>
+                        <p>No free / no-payment devices registered</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = noPaymentDevices.map(dev => {
+                const deviceSsids = dev.ssids || (dev.ssid ? [dev.ssid] : ["NONE"]);
+                const ssidPills = deviceSsids.map(s => {
+                    if (s === "NONE" || !s) {
+                        return `<span class="ssid-pill" style="opacity: 0.7;"><i class="fa-solid fa-ban" style="font-size:0.6rem; margin-right:2px;"></i> No SSID</span>`;
+                    }
+                    return `<span class="ssid-pill"><i class="fa-solid fa-wifi" style="font-size:0.6rem; margin-right:2px;"></i> ${escapeHtml(s)}</span>`;
+                }).join('');
+
+                return `
+                    <div class="device-item-card" style="margin-bottom:10px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <strong style="font-size:0.9rem; color:var(--text-main);">${escapeHtml(dev.name)}</strong>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <span class="mac-tag" onclick="copyMacAddress('${dev.mac}', event)">
+                                    <i class="fa-regular fa-copy" style="font-size:0.75rem;"></i> ${dev.mac}
+                                </span>
+                                <button type="button" class="btn btn-sm" style="color:var(--status-due-text); padding:2px 6px;" onclick="deleteNoPaymentDevice('${dev.id}')">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="ssid-pill-list">
+                            ${ssidPills}
+                            ${dev.note ? `<span class="ssid-pill" style="border-color:var(--border-subtle); color:var(--accent-gold-light);"><i class="fa-solid fa-note-sticky" style="font-size:0.6rem; margin-right:2px;"></i> ${escapeHtml(dev.note)}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openNoPaymentRegisterModal() {
+            document.getElementById('noPayDeviceName').value = '';
+            document.getElementById('noPayMacAddress').value = '';
+            document.getElementById('noPayOptionalNote').value = '';
+
+            const noSsidCheckbox = document.getElementById('noPayNoSsid');
+            noSsidCheckbox.checked = false;
+
+            const container = document.getElementById('noPaySsidCheckboxContainer');
+            if (ssids.length === 0) {
+                container.innerHTML = `<span style="font-size:0.75rem; color:var(--text-muted);">No SSIDs added yet. Check "No SSID" or add SSIDs in menu.</span>`;
+            } else {
+                container.innerHTML = ssids.map(ssid => `
+                    <label class="ssid-checkbox-item">
+                        <input type="checkbox" name="noPayAssignedSSIDs" value="${escapeHtml(ssid)}" onchange="handleNoPaySsidSelectionChange()">
+                        <span>${escapeHtml(ssid)}</span>
+                    </label>
+                `).join('');
+            }
+
+            toggleNoPaySsidOptions(noSsidCheckbox);
+            openModal('noPaymentRegisterModal');
+        }
+
+        function toggleNoPaySsidOptions(noSsidCb) {
+            const checkboxes = document.querySelectorAll('input[name="noPayAssignedSSIDs"]');
+            checkboxes.forEach(cb => {
+                if (noSsidCb.checked) {
+                    cb.checked = false;
+                    cb.disabled = true;
+                    cb.closest('.ssid-checkbox-item').style.opacity = '0.4';
+                } else {
+                    cb.disabled = false;
+                    cb.closest('.ssid-checkbox-item').style.opacity = '1';
+                }
+            });
+        }
+
+        function handleNoPaySsidSelectionChange() {
+            const noSsidCb = document.getElementById('noPayNoSsid');
+            const checkedBoxes = document.querySelectorAll('input[name="noPayAssignedSSIDs"]:checked');
+            if (checkedBoxes.length > 0 && noSsidCb.checked) {
+                noSsidCb.checked = false;
+                toggleNoPaySsidOptions(noSsidCb);
+            }
+        }
+
+        function handleNoPaymentRegisterSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('noPayDeviceName').value.trim();
+            const mac = document.getElementById('noPayMacAddress').value.trim();
+            const note = document.getElementById('noPayOptionalNote').value.trim();
+
+            const noSsidChecked = document.getElementById('noPayNoSsid').checked;
+            const selectedSSIDs = Array.from(document.querySelectorAll('input[name="noPayAssignedSSIDs"]:checked'))
+                                       .map(cb => cb.value);
+
+            if (!noSsidChecked && selectedSSIDs.length === 0) {
+                showToast('Select at least one SSID or check "No SSID"!', true);
+                return;
+            }
+
+            if (mac.length < 17) {
+                showToast('Please enter a valid 12-digit MAC address', true);
+                return;
+            }
+
+            const newDevice = {
+                id: 'nopay_' + Date.now(),
+                name: name,
+                mac: mac,
+                ssids: noSsidChecked ? ["NONE"] : selectedSSIDs,
+                note: note,
+                createdAt: new Date().toISOString()
+            };
+
+            noPaymentDevices.push(newDevice);
+            saveStorage();
+            renderNoPaymentDashboard();
+            closeModal('noPaymentRegisterModal');
+            showToast(`No Payment Device "${name}" registered`);
+        }
+
+        function deleteNoPaymentDevice(id) {
+            if (confirm('Are you sure you want to remove this device?')) {
+                noPaymentDevices = noPaymentDevices.filter(d => d.id !== id);
+                saveStorage();
+                renderNoPaymentDashboard();
+                showToast('Device removed');
             }
         }
 
@@ -1429,6 +1741,13 @@
                     });
                 }
             });
+            noPaymentDevices.forEach(dev => {
+                if (dev.ssids && dev.ssids.includes(ssidName)) {
+                    count++;
+                } else if (dev.ssid === ssidName) {
+                    count++;
+                }
+            });
             return count;
         }
 
@@ -1483,28 +1802,33 @@
 
         // --- IMPORT & EXPORT CSV BACKUP --- //
         function exportToCSV() {
-            if (ssids.length === 0 && owners.length === 0) {
+            if (ssids.length === 0 && owners.length === 0 && noPaymentDevices.length === 0) {
                 showToast('No stored details to export!', true);
                 return;
             }
 
             let csvRows = [];
-            csvRows.push(["Type", "Owner Name", "Billing Date", "Status", "Device Name", "MAC Address", "Assigned SSIDs"]);
+            csvRows.push(["Type", "Owner Name", "Billing Date", "Status", "Device Name", "MAC Address", "Assigned SSIDs", "Notes"]);
 
             ssids.forEach(ssid => {
-                csvRows.push(["SSID", "", "", "", "", "", ssid]);
+                csvRows.push(["SSID", "", "", "", "", "", ssid, ""]);
             });
 
             owners.forEach(owner => {
                 const statusStr = owner.isPaid ? "Paid" : "Unpaid";
                 if (!owner.devices || owner.devices.length === 0) {
-                    csvRows.push(["OWNER", owner.name, owner.billingDate, statusStr, "", "", ""]);
+                    csvRows.push(["OWNER", owner.name, owner.billingDate, statusStr, "", "", "", ""]);
                 } else {
                     owner.devices.forEach(dev => {
                         const ssidsStr = (dev.ssids || []).join(';');
-                        csvRows.push(["DEVICE", owner.name, owner.billingDate, statusStr, dev.name, dev.mac, ssidsStr]);
+                        csvRows.push(["DEVICE", owner.name, owner.billingDate, statusStr, dev.name, dev.mac, ssidsStr, ""]);
                     });
                 }
+            });
+
+            noPaymentDevices.forEach(dev => {
+                const ssidsStr = Array.isArray(dev.ssids) ? dev.ssids.join(';') : (dev.ssid || "NONE");
+                csvRows.push(["NO_PAYMENT", "NO PAYMENT", "", "Free", dev.name, dev.mac, ssidsStr, dev.note || ""]);
             });
 
             const csvContent = "data:text/csv;charset=utf-8," + csvRows.map(row => 
@@ -1547,6 +1871,7 @@
 
             const newSSIDs = new Set(ssids);
             const ownerMap = new Map();
+            const newNoPaymentDevices = [...noPaymentDevices];
 
             owners.forEach(o => ownerMap.set(o.name.toUpperCase(), o));
 
@@ -1561,9 +1886,30 @@
 
                 const recordType = cleanCols[0];
                 const ssidFromCol = cleanCols[6];
+                const noteFromCol = cleanCols[7] || '';
 
                 if (recordType === "SSID" && ssidFromCol) {
                     newSSIDs.add(ssidFromCol);
+                } else if (recordType === "NO_PAYMENT") {
+                    const devName = cleanCols[4];
+                    const devMac = cleanCols[5];
+                    const ssidCol = ssidFromCol ? ssidFromCol.split(';') : ["NONE"];
+
+                    ssidCol.forEach(s => { if (s && s !== "NONE") newSSIDs.add(s); });
+
+                    if (devName && devMac) {
+                        const exists = newNoPaymentDevices.some(d => d.mac === devMac);
+                        if (!exists) {
+                            newNoPaymentDevices.push({
+                                id: 'nopay_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                                name: devName,
+                                mac: devMac,
+                                ssids: ssidCol,
+                                note: noteFromCol,
+                                createdAt: new Date().toISOString()
+                            });
+                        }
+                    }
                 } else if (recordType === "OWNER" || recordType === "DEVICE") {
                     const ownerName = cleanCols[1].toUpperCase();
                     const billingDate = cleanCols[2];
@@ -1606,11 +1952,12 @@
 
             ssids = Array.from(newSSIDs);
             owners = Array.from(ownerMap.values());
+            noPaymentDevices = newNoPaymentDevices;
         }
 
         // --- UTILS --- //
         function escapeHtml(str) {
-            return str.replace(/[&<>"']/g, function(m) {
+            return (str || '').replace(/[&<>"']/g, function(m) {
                 return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
             });
         }
