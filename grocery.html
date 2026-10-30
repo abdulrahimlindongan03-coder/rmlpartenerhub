@@ -234,6 +234,12 @@
             background: rgba(26, 28, 20, 0.9); z-index: 9999; display: flex; align-items: center; justify-content: center;
         }
         .login-box { padding: 25px; text-align: center; width: 90%; max-width: 400px; }
+
+        .low-qty-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px; background: rgba(255,255,255,0.03); border-radius: 8px;
+            border-left: 3px solid var(--danger); margin-bottom: 8px;
+        }
     </style>
 </head>
 <body>
@@ -268,6 +274,7 @@
                 <button class="btn btn-primary" onclick="openModal()">+ Add Product</button>
                 <button class="btn btn-info" onclick="openAddBatchModal()">+ Add Stock</button>
                 <button class="btn btn-danger" onclick="openConsumeModal()">➖ Consume</button>
+                <button class="btn btn-warning" onclick="openLowStockModal()">⚠️ Low Stock (≤5)</button>
                 <button class="btn btn-warning" onclick="generateReceipt()">🧾 Receipt</button>
                 <button class="btn btn-warning" onclick="exportToCSV()">📤 CSV Backup</button>
                 <button class="btn btn-info" onclick="document.getElementById('import-csv-file').click()">📥 Restore</button>
@@ -277,11 +284,27 @@
 
         <!-- EXPIRING SOON ALERT BANNER -->
         <div id="expiry-alert-banner">
-            <h3>⚠️ Expiry Warning</h3>
+            <h3>⚠️ Expiry Notice (Within 1 Month)</h3>
             <div class="alert-item-list" id="expiry-alert-list"></div>
         </div>
 
         <main id="app-content"></main>
+    </div>
+
+    <!-- LOW STOCK MODAL -->
+    <div class="modal-overlay" id="lowStockModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚠️ Low Quantity Products (≤5)</h2>
+                <button class="close-btn" onclick="closeLowStockModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="low-stock-list">
+                <!-- Dynamically Populated -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="closeLowStockModal()">Close</button>
+            </div>
+        </div>
     </div>
 
     <!-- ADD NEW PRODUCT MODAL -->
@@ -538,6 +561,7 @@
             }
         }
 
+        /* UPDATED EXPIRATION STATUS WITH 1 MONTH (30 DAYS) COUNTDOWN NOTICE */
         function getExpiryStatus(expString) {
             if (expString === 'No Expiry') return { status: 'safe', label: '♾️ No Exp', daysLeft: 9999 };
             const expDate = new Date(expString);
@@ -549,8 +573,8 @@
 
             if (diffDays < 0) return { status: 'expired', label: `🔴 Expired`, daysLeft: diffDays };
             else if (diffDays === 0) return { status: 'danger', label: `⚠️ Exp Today!`, daysLeft: 0 };
-            else if (diffDays <= 7) return { status: 'warning', label: `⏳ ${diffDays}d left`, daysLeft: diffDays };
-            else if (diffDays <= 30) return { status: 'safe', label: `🗓️ ~${Math.ceil(diffDays / 7)}w left`, daysLeft: diffDays };
+            else if (diffDays <= 7) return { status: 'danger', label: `🚨 ${diffDays}d left`, daysLeft: diffDays };
+            else if (diffDays <= 30) return { status: 'warning', label: `⏳ ${diffDays}d left`, daysLeft: diffDays };
             else return { status: 'safe', label: `🗓️ Exp: ${expString}`, daysLeft: diffDays };
         }
 
@@ -604,7 +628,7 @@
                 group.items.forEach(item => {
                     item.batches.forEach(batch => {
                         let expInfo = getExpiryStatus(batch.exp);
-                        if (expInfo.daysLeft <= 7) expiringItemsHTML += `- ${item.name} (${batch.qty} pcs) - Expiry: ${batch.exp}\n`;
+                        if (expInfo.daysLeft <= 30) expiringItemsHTML += `- ${item.name} (${batch.qty} pcs) - Expiry: ${batch.exp} (${expInfo.daysLeft} days remaining)\n`;
                     });
                 });
             });
@@ -612,7 +636,7 @@
             if (expiringItemsHTML) {
                 emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                     to_name: nickname, to_email: email,
-                    message: "🤖 Daily Expiry Report:\n\n" + expiringItemsHTML
+                    message: "🤖 1-Month Expiry Notice Report:\n\n" + expiringItemsHTML
                 }).then(() => {
                     localStorage.setItem('lastAutoExpiryEmailDate', todayStr);
                 }).catch(err => console.log("Email dispatch failed", err));
@@ -623,6 +647,41 @@
             localStorage.setItem('premiumInventoryDataV3', JSON.stringify(inventoryData));
             if(!silent) showToast("Saved! 💾");
             renderApp();
+        }
+
+        function openLowStockModal() {
+            const listContainer = document.getElementById('low-stock-list');
+            listContainer.innerHTML = '';
+            let lowStockCount = 0;
+
+            inventoryData.forEach(group => {
+                group.items.forEach(item => {
+                    let totalQty = item.batches.reduce((sum, b) => sum + b.qty, 0);
+                    if (totalQty <= 5) {
+                        lowStockCount++;
+                        let statusText = totalQty === 0 ? '<span style="color:#ff4757; font-weight:700;">OUT OF STOCK</span>' : `<span style="color:#f1c40f; font-weight:700;">${totalQty} remaining</span>`;
+                        listContainer.innerHTML += `
+                            <div class="low-qty-item">
+                                <div>
+                                    <div style="font-weight:600; font-size:0.9rem;">${item.name}</div>
+                                    <div style="font-size:0.75rem; color:var(--text-muted);">Category: ${group.category}</div>
+                                </div>
+                                <div style="font-size:0.85rem; text-align:right;">${statusText}</div>
+                            </div>
+                        `;
+                    }
+                });
+            });
+
+            if (lowStockCount === 0) {
+                listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:0.85rem;">No products with low stock (≤5) found.</div>';
+            }
+
+            document.getElementById('lowStockModal').classList.add('active');
+        }
+
+        function closeLowStockModal() {
+            document.getElementById('lowStockModal').classList.remove('active');
         }
 
         function renderApp() {
@@ -668,9 +727,10 @@
                     gridHTML += renderProductCard(item); 
                     item.batches.forEach(b => {
                         let status = getExpiryStatus(b.exp);
-                        if (status.daysLeft <= 7) {
+                        /* NOTICE CLIENT 1 MONTH (30 DAYS) BEFORE EXPIRATION */
+                        if (status.daysLeft <= 30) {
                             urgentCount++;
-                            alertList.innerHTML += `<div>• <b>${item.name}</b> (${b.qty}) — <span style="color:#d63031; font-weight:600;">${status.label}</span></div>`;
+                            alertList.innerHTML += `<div>• <b>${item.name}</b> (${b.qty} pcs) — <span style="color:#d63031; font-weight:600;">${status.label}</span></div>`;
                         }
                     });
                 });
@@ -687,12 +747,13 @@
             let batchesHTML = '';
             let totalQty = item.batches.reduce((sum, b) => sum + b.qty, 0);
             let outOfStockBadge = totalQty === 0 
-                ? `<div style="margin-top: 2px;"><span style="background: #ff4757; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 700;">OUT OF STOCK</span></div>` : '';
+                ? `<div style="margin-top: 2px;"><span style="background: #ff4757; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 700;">OUT OF STOCK</span></div>` 
+                : (totalQty <= 5 ? `<div style="margin-top: 2px;"><span style="background: #f1c40f; color: #1A1C14; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: 700;">LOW STOCK (${totalQty})</span></div>` : '');
 
             item.batches.forEach((batch) => {
                 const expStatus = getExpiryStatus(batch.exp);
                 let badgeClass = batch.exp === 'No Expiry' ? 'no-exp' : (expStatus.status === 'expired' || expStatus.status === 'danger' ? 'exp-danger' : (expStatus.status === 'warning' ? 'exp-warning' : ''));
-                const expDisplayText = batch.exp === 'No Expiry' ? 'No Exp' : `Exp: ${batch.exp}`;
+                const expDisplayText = batch.exp === 'No Expiry' ? 'No Exp' : `${expStatus.label}`;
 
                 batchesHTML += `
                     <div class="batch-item ${badgeClass}">
